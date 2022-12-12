@@ -9,27 +9,15 @@ const NavbarMenu = () => {
     <Navbar expand="lg" bg="primary" variant="dark" className="shadow">
       <Container>
         <Nav className="me-auto">
-          {/* <Nav.Link
-            className="fw-bolder text-white"
-            to="/"
-            as={Link}
-          > */}
-          <a href="/" className="fw-bolder text-white ms-2 me-4">
+          <Nav.Link className="fw-bolder text-white me-4" to="/" as={Link}>
             Trang chủ
-          </a>
-          {/* </Nav.Link> */}
-          {/* <Nav.Link
-            className="fw-bolder text-white"
-            to="/"
-            as={Link}
-          > */}
-          <a href="/" className="fw-bolder text-white me-4">
+          </Nav.Link>
+          <Nav.Link className="fw-bolder text-white me-4" to="/" as={Link}>
             Cho thuê phòng trọ
-          </a>
-          {/* </Nav.Link> */}
-          <a href="/" className="fw-bolder text-white">
+          </Nav.Link>
+          <Nav.Link className="fw-bolder text-white" to="/" as={Link}>
             Cho thuê nguyên căn
-          </a>
+          </Nav.Link>
         </Nav>
       </Container>
     </Navbar>

@@ -1,9 +1,11 @@
 const express = require("express");
 const cors = require("cors");
-
+require('dotenv').config();
 const app = express();
 const port = 5000;
 const mongoose = require("mongoose");
+
+const authRouter = require('./routes/auth');
 
 const connectDB = async () => {
   try {
@@ -26,6 +28,8 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello world");
 });
+
+app.use('/api/auth', authRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
