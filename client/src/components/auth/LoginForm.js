@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import Card from "react-bootstrap/Card";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import AlertMessage from "../alertMessage.js/AlertMessage";
+import AlertMessage from "../alertMessage/AlertMessage";
 
 const LoginForm = () => {
   // Context

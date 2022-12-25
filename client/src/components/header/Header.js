@@ -48,7 +48,9 @@ const Header = () => {
           </>
         )}
         <div className="btn__post">
-          <Button>Đăng tin mới</Button>
+          <Link to="/me/create" >
+            <Button>Đăng tin mới</Button>
+          </Link>
         </div>
       </div>
     </Container>

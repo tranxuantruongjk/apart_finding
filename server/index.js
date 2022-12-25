@@ -6,6 +6,7 @@ const port = 5000;
 const mongoose = require("mongoose");
 
 const authRouter = require('./routes/auth');
+const postRouter = require("./routes/post");
 
 const connectDB = async () => {
   try {
@@ -25,11 +26,12 @@ connectDB();
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  res.send("Hello world");
-});
+// app.get("/", (req, res) => {
+//   res.send("Hello world");
+// });
 
 app.use('/api/auth', authRouter);
+app.use('/api/post', postRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
