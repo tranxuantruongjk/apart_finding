@@ -1,11 +1,12 @@
-import React from 'react';
+import React from "react";
+import PostsList from "../components/postsList/PostsList";
 
 const Home = () => {
   return (
-    <>
-      <div>Home</div>
-    </>
-  )
-}
+    <div className="container">
+      <PostsList />
+    </div>
+  );
+};
 
 export default Home;

@@ -41,6 +41,9 @@ const PostSchema = new Schema (
       ref: 'users',
       require: true,
     }
+  },
+  {
+    timestamps: true,
   }
 )
 

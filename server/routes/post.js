@@ -8,6 +8,18 @@ const Post = require("../model/Post");
 const verifyToken = require("../middleware/auth");
 // const districts = require("hanhchinhvn/dist/quan-huyen/01.json");
 
+// @route GET api/post/
+// @route Get all posts
+// @access Public
+router.get("/", async (req, res) => {
+  try {
+    const posts = await Post.find().populate('user', ['username', 'phone']);
+    res.json({success: true, posts});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({success: false, message: "Internal server error"});
+  }
+})
 
 // @route POST api/post/
 // @route Create new post

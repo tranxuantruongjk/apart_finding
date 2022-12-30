@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 const NavbarMenu = () => {
   return (
-    <Navbar expand="lg" bg="primary" variant="dark" className="shadow">
+    <Navbar expand="lg" bg="primary" variant="dark" className="shadow p-0">
       <Container>
         <Nav className="me-auto">
           <Nav.Link className="fw-bolder text-white me-4" to="/" as={Link}>

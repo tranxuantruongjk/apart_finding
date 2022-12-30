@@ -49,6 +49,19 @@ const AuthContextProvider = ({ children }) => {
     loadUser();
   }, []);
 
+  // Get information of a user 
+  const getUser = async (id) => {
+    try {
+      const response = await axios.get(`${apiUrl}/auth/${id}`);
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  }
+
   // User logins
   const loginUser = async (userForm) => {
     try {
@@ -101,7 +114,7 @@ const AuthContextProvider = ({ children }) => {
   };
 
   // Context data
-  const authContextData = { authState, loginUser, registerUser, logoutUser };
+  const authContextData = { authState, loginUser, registerUser, logoutUser, getUser };
 
   // Return provider
   return (

@@ -4,3 +4,6 @@ export const apiUrl =
     : "";
 
 export const LOCAL_STORAGE_TOKEN_NAME = 'apart-finding';
+
+export const POSTS_LOADED_SUCCESS = "POSTS_LOADED_SUCCESS";
+export const POSTS_LOADED_FAIL = "POSTS_LOADED_FAIL"; 
