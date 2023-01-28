@@ -8,6 +8,29 @@ const Post = require("../model/Post");
 const verifyToken = require("../middleware/auth");
 // const districts = require("hanhchinhvn/dist/quan-huyen/01.json");
 
+router.get("/rentTypes", verifyToken, async (req, res) => {
+  try {
+    const rentTypes = await RentType.find({});
+    res.json({success: true, rentTypes});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({success: false, message: "Internal server error"});
+  }
+})
+
+// @route GET api/post/:id
+// @route Get a post
+// @access Public
+router.get("/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).populate('user', ['username', 'phone']).populate('rentType', ['name']);
+    res.json({success: true, post});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({success: false, message: "Internal server error"});
+  }
+})
+
 // @route GET api/post/
 // @route Get all posts
 // @access Public
@@ -69,16 +92,5 @@ router.post("/", verifyToken, async (req, res) => {
     res.status(500).json({ success: false, message: "Internal server error" });
   }
 });
-
-// 
-router.get("/rentTypes", verifyToken, async (req, res) => {
-  try {
-    const rentTypes = await RentType.find({});
-    res.json({success: true, rentTypes});
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({success: false, message: "Internal server error"});
-  }
-})
 
 module.exports = router;

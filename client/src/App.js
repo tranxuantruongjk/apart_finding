@@ -7,6 +7,7 @@ import Auth from "./pages/Auth";
 import AuthContextProvider from "./contexts/AuthContext";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import Post from "./components/post/Post";
+import DetailPost from "./pages/detail/DetailPost";
 import PostContextProvider from "./contexts/PostContext";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
             <Route path="/me" element={<ProtectedRoute />}>
               <Route path="/me/create" element={<Post />} />
             </Route>
+            <Route path="/posts/:id" element={<DetailPost />} />
           </Routes>
         </Router>
       </PostContextProvider>

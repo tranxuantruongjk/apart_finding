@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -46,7 +47,9 @@ const PostsList = () => {
                         />
                       </Col>
                       <Col md={7}>
-                        <h5 className="post__title">{post.title}</h5>
+                        <Link to={`/posts/${post._id}`} className="text-decoration-none">
+                          <h5 className="post__title">{post.title}</h5>
+                        </Link>
                         <div className="post__detail">
                           <div className="d-flex justify-content-between align-items-center">
                             <div className="post__detail-price">
@@ -56,7 +59,7 @@ const PostsList = () => {
                             </div>
                             <div className="post__detail-area d-inline-flex align-items-center">
                               <FaChartArea />
-                              <span className="ms-1">{`${post.area}m2`}</span>
+                              <span className="ms-1">{`${post.area}m`}&sup2;</span>
                             </div>
                             <div className="post__detail-time d-inline-flex align-items-center">
                               <FaRegClock />

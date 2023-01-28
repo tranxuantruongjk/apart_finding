@@ -62,7 +62,7 @@ const Post = () => {
   useEffect(() => {
     const getRentTypes = async () => {
       const response = await axios.get(`${apiUrl}/post/rentTypes`);
-      // console.log(response);
+      // console.log(response.data.rentTypes);
       setRentTypes(response.data.rentTypes);
     };
 
@@ -126,7 +126,7 @@ const Post = () => {
                       <Form.Select onChange={onChangeDistrict}>
                         <option>--Quận/Huyện--</option>
                         {districts.map((district) => (
-                          <option value={district.code}>
+                          <option key={district.code} value={district.code}>
                             {district["name_with_type"]}
                           </option>
                         ))}
@@ -139,7 +139,7 @@ const Post = () => {
                       <Form.Select name="wardId" onChange={onChangeWardId}>
                         <option>--Phường/Xã--</option>
                         {wards.map((ward) => (
-                          <option value={ward.code}>
+                          <option key={ward.code} value={ward.code}>
                             {ward["name_with_type"]}
                           </option>
                         ))}
@@ -180,7 +180,7 @@ const Post = () => {
                       <Form.Select name="rentType" onChange={onChangePostForm}>
                         <option>--Chọn loại chuyên mục--</option>
                         {rentTypes.map((type) => (
-                          <option value={type._id}>{type["name"]}</option>
+                          <option key={type._id} value={type._id}>{type["name"]}</option>
                         ))}
                       </Form.Select>
                     </Form.Group>
