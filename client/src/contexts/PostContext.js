@@ -1,8 +1,7 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import axios from "axios";
 import { apiUrl, POSTS_LOADED_FAIL, POSTS_LOADED_SUCCESS } from "./constants";
 import { postReducer } from "../reducers/postReducer";
-import { AuthContext } from "./AuthContext";
 
 export const PostContext = createContext();
 
@@ -11,9 +10,6 @@ const PostContextProvider = ({ children }) => {
     postLoading: true,
     posts: [],
   });
-
-  //
-  const { getUser } = useContext(AuthContext);
 
   // Get all posts
   const getPosts = async () => {
@@ -33,8 +29,19 @@ const PostContextProvider = ({ children }) => {
     }
   }
 
+  // Create a new post 
+  const createPost = async (postForm) => {
+    try {
+      const response = await axios.post(`${apiUrl}/post`, postForm);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Context data
-  const postContextData = { postState, getPosts };
+  const postContextData = { postState, getPosts, createPost };
 
   // Return provider 
   return (

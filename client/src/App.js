@@ -6,7 +6,7 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import AuthContextProvider from "./contexts/AuthContext";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
-import Post from "./components/post/Post";
+import Post from "./pages/post/Post";
 import DetailPost from "./pages/detail/DetailPost";
 import PostContextProvider from "./contexts/PostContext";
 

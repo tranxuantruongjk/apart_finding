@@ -1,23 +1,43 @@
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
-import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import "./navbarMenu.scss";
+
+const navMenu = [
+  {
+    display: "Trang chủ",
+    path: "/",
+  },
+  {
+    display: "Cho thuê phòng trọ",
+    path: "/a",
+  },
+  {
+    display: "Cho thuê nhà nguyên căn",
+    path: "/b",
+  },
+];
 
 const NavbarMenu = () => {
+  const { pathname } = useLocation();
+
+  const active = navMenu.findIndex((e) => e.path === pathname);
+
   return (
     <Navbar expand="lg" bg="primary" variant="dark" className="shadow p-0">
       <Container>
         <Nav className="me-auto">
-          <Nav.Link className="fw-bolder text-white me-4" to="/" as={Link}>
-            Trang chủ
-          </Nav.Link>
-          <Nav.Link className="fw-bolder text-white me-4" to="/" as={Link}>
-            Cho thuê phòng trọ
-          </Nav.Link>
-          <Nav.Link className="fw-bolder text-white" to="/" as={Link}>
-            Cho thuê nguyên căn
-          </Nav.Link>
+          {navMenu.map((menu, i) => (
+            <Nav.Link
+              className={`menuItem ${i === active ? 'actived' : ''} fw-bolder text-white px-3`}
+              to={menu.path}
+              as={Link}
+              key={i}
+            >
+              {menu.display}
+            </Nav.Link>
+          ))}
         </Nav>
       </Container>
     </Navbar>
