@@ -41,3 +41,26 @@
   }
 }
 
+.list-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__icon {
+    opacity: 0.5;
+    margin-right: 5px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &__text {
+    text-decoration: none;
+    color: black;
+
+    &:hover {
+      color: blue;
+    }
+  }
+  
+}
+

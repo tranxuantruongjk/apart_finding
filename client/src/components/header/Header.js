@@ -31,7 +31,7 @@ const Header = () => {
               <NavDropdown.Item>Quản lý tin đăng</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item>
-                <Link to="/logout" className="btn__logout" onClick={logout}>
+                <Link to="/" className="btn__logout" onClick={logout}>
                   Đăng xuất
                 </Link>
               </NavDropdown.Item>

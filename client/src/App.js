@@ -25,7 +25,6 @@ function App() {
               <Route path="/search" element={<Home />} />
               <Route path="/login" element={<Auth authRoute="login" />} />
               <Route path="/register" element={<Auth authRoute="register" />} />
-              <Route path="/logout" element={<Home />} />
               <Route path="/" element={<Home />} />
               <Route path="/me" element={<ProtectedRoute />}>
                 <Route path="/me/create" element={<Post />} />

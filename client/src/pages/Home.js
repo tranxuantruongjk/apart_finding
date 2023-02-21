@@ -1,14 +1,25 @@
 import React from "react";
 import PostsList from "../components/postsList/PostsList";
 import SearchBar from "../components/searchBar/SearchBar";
-import FormExample from "../components/example/FormExample";
+import TypesList from "../components/typesList/TypesList";
+
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 const Home = () => {
   return (
     <div className="container">
       <SearchBar />
-      {/* <FormExample /> */}
-      <PostsList />
+      <div className="main-home my-3">
+        <Row>
+          <Col md={8}>
+            <PostsList />
+          </Col>
+          <Col md={4}>
+            <TypesList />
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
