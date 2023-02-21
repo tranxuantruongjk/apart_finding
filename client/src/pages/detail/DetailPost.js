@@ -18,14 +18,14 @@ import { apiUrl } from "../../contexts/constants";
 import { getWardDistrictName, getDetailDateTime } from "../../utils/post";
 
 const DetailPost = () => {
-  const { id } = useParams();
+  const { type, id } = useParams();
 
   const saveRef = useRef(null);
 
   const [post, setPost] = useState(null);
   useEffect(() => {
     const getDetail = async () => {
-      const response = await axios.get(`${apiUrl}/post/${id}`);
+      const response = await axios.get(`${apiUrl}/post/${type}/${id}`);
 
       setPost(response.data.post);
     };

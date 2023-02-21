@@ -1,0 +1,106 @@
+$range-length: 400px;
+
+.range-container {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.range-slider {
+  position: relative;
+  width: $range-length;
+  // width: 400px;
+}
+
+.range-slider__track,
+.range-slider__range,
+.range-slider__left-value,
+.range-slider__right-value {
+  position: absolute;
+}
+
+.range-slider__track,
+.range-slider__range {
+  border-radius: 3px;
+  height: 5px;
+}
+
+.range-slider__track {
+  background-color: #ced4da;
+  width: 100%;
+  z-index: 1;
+}
+
+.range-slider__range {
+  // background-color: #9fe5e1;
+  background-color: #0d6efd;
+  z-index: 2;
+}
+
+.range-slider__left-value,
+.range-slider__right-value {
+  // color: #dee2e6;
+  color: #000;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.range-slider__left-value {
+  left: 6px;
+}
+
+.range-slider__right-value {
+  right: -4px;
+}
+
+/* Removing the default appearance */
+.range-thumb,
+.range-thumb::-webkit-slider-thumb {
+  -webkit-appearance: none;
+}
+
+.range-thumb {
+  pointer-events: none;
+  position: absolute;
+  height: 0;
+  width: $range-length;
+  outline: none;
+}
+
+.range-thumb--left {
+  z-index: 3;
+}
+
+.range-thumb--right {
+  z-index: 4;
+}
+
+/* For Chrome browsers */
+.range-thumb::-webkit-slider-thumb {
+  background-color: #f1f5f7;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 1px 1px #ced4da;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  margin-top: 4px;
+  pointer-events: all;
+  position: relative;
+}
+
+/* For Firefox browsers */
+.range-thumb::-moz-range-thumb {
+  background-color: #f1f5f7;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 0 1px 1px #ced4da;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
+  margin-top: 4px;
+  pointer-events: all;
+  position: relative;
+}

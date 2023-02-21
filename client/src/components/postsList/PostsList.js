@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -17,15 +17,22 @@ import { PostContext } from "../../contexts/PostContext";
 
 const PostsList = () => {
 
+  const { type } = useParams();
+  const { pathname } = useLocation();
+
   const {
-    postState: { posts, postLoading },
+    postState: { posts },
     getPosts,
   } = useContext(PostContext);
 
   // Start: get all posts
   useEffect(() => {
-    getPosts();
-  }, []);
+    if (type) {
+      getPosts(type)
+    } else if (pathname === "/") {
+      getPosts();
+    }
+  }, [type, pathname]);
 
   return (
     <div className="posts-list my-3">
@@ -47,7 +54,7 @@ const PostsList = () => {
                         />
                       </Col>
                       <Col md={7}>
-                        <Link to={`/posts/${post._id}`} className="text-decoration-none">
+                        <Link to={`/${post.rentType}/${post._id}`} className="text-decoration-none">
                           <h5 className="post__title">{post.title}</h5>
                         </Link>
                         <div className="post__detail">

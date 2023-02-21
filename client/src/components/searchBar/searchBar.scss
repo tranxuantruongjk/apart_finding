@@ -1,0 +1,54 @@
+.search-bar {
+  min-height: 60px;
+  margin: 10px 0px;
+  border-radius: 5px;
+  background-color: #febb02;
+
+  &-top {
+    height: 100%;
+    padding: 10px;
+  }
+
+  &-item {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    height: 40px;
+    position: relative;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+  .search-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-right: 0px;
+    flex: 1;
+    font-weight: 600;
+  }
+}
+
+.icon-type,
+.icon-location,
+.address-default,
+.icon-price,
+.price-default,
+.icon-area,
+.area-default {
+  opacity: 0.5;
+}
+
+.item-type,
+.item-address,
+.item-price,
+.item-area,
+.address-default,
+.price-default,
+.area-default
+ {
+  margin-left: 3px;
+  font-weight: 600;
+}
