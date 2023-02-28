@@ -80,8 +80,19 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
+  // Get post(s) which a user posted
+  const getUserIdPosts = async (userId) => {
+    try {
+      const response = await axios.get(`${apiUrl}/post/${userId}/posts`);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  }
+
   // Context data
-  const postContextData = { postState, getPosts, createPost, searchPost };
+  const postContextData = { postState, getPosts, createPost, searchPost, getUserIdPosts };
 
   // Return provider
   return (

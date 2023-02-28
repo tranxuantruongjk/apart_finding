@@ -5,17 +5,17 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import FileBase64 from "react-file-base64";
 import InputGroup from "react-bootstrap/InputGroup";
-import { AuthContext } from "../../contexts/AuthContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 import districtsList from "hanhchinhvn/dist/quan-huyen/01.json";
 import axios from "axios";
-import { apiUrl } from "../../contexts/constants";
+import { apiUrl } from "../../../contexts/constants";
 import Button from "react-bootstrap/Button";
-import AlertMessage from "../../components/alertMessage/AlertMessage";
-import { compare } from "../../utils/compare";
-import "./post.scss";
-import { PostContext } from "../../contexts/PostContext";
+import AlertMessage from "../../../components/alertMessage/AlertMessage";
+import { compare } from "../../../utils/compare";
+import "./newPost.scss";
+import { PostContext } from "../../../contexts/PostContext";
 
-const Post = () => {
+const NewPost = () => {
   const districts = Object.values(districtsList).sort(compare("code"));
   const [wards, setWards] = useState([]);
   const [rentTypes, setRentTypes] = useState([]);
@@ -137,7 +137,7 @@ const Post = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <div className="post__header mt-3 pb-2 mx-2 border-bottom">
         <h2>Đăng tin mới</h2>
       </div>
@@ -328,4 +328,4 @@ const Post = () => {
   );
 };
 
-export default Post;
+export default NewPost;

@@ -6,8 +6,9 @@ import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import AuthContextProvider from "./contexts/AuthContext";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
-import Post from "./pages/post/Post";
 import DetailPost from "./pages/detail/DetailPost";
+import Management from "./pages/management/Management";
+
 import PostContextProvider from "./contexts/PostContext";
 import AddressProvider from "./contexts/AddressContext";
 
@@ -27,7 +28,9 @@ function App() {
               <Route path="/register" element={<Auth authRoute="register" />} />
               <Route path="/" element={<Home />} />
               <Route path="/me" element={<ProtectedRoute />}>
-                <Route path="/me/create" element={<Post />} />
+                <Route path="/me/posts" element={<Management manageRoute="posts"/>} />
+                <Route path="/me/create" element={<Management manageRoute="create"/>} />
+                <Route path="/me/profile" element={<Management manageRoute="profile"/>} />
               </Route>
             </Routes>
           </Router>

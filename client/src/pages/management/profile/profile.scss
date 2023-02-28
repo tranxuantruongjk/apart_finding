@@ -1,0 +1,38 @@
+.my-profile {
+
+  &__header {
+    padding-bottom: 0.5rem;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  &__body {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .change-password {
+    color: blue;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  .btn-update {
+    width: 100%;
+  }
+
+  // .avatar-wrapper {
+  //   text-align: center;
+  // }
+
+  // .avatar-preview {
+  //   width: 140px;
+  //   height: 140px;
+  //   border-radius: 50%;
+  // }
+}

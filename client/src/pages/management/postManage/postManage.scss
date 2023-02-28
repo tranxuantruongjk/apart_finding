@@ -1,0 +1,21 @@
+.post-manage {
+
+  &__header {
+    padding-bottom: 0.5rem;
+    margin-top: 1rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+
+  &__table {
+    margin-top: 1rem;
+  }
+
+  .delete-icon {
+    width: 18px;
+    height: 18px;
+    color: red;
+    cursor: pointer;
+  }
+}

@@ -102,7 +102,7 @@ const SearchBar = () => {
   }, [pathname, setData]);
 
   return (
-    <Container className="search-bar">
+    <div className="search-bar">
       <Row xs={1} md={3} lg={5} className="search-bar-top">
         <Col className="search-bar-item" onClick={handleTypeClick}>
           <BiBuildingHouse className="icon-type" />
@@ -180,7 +180,7 @@ const SearchBar = () => {
         setMaxAcreageVal={setMaxAcreageVal}
         handleClickAcreage={handleClickAcreage}
       />
-    </Container>
+    </div>
   );
 };
 

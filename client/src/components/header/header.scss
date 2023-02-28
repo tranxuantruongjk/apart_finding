@@ -1,0 +1,17 @@
+.btn__login, 
+.btn__logout,
+.btn__signup,
+.my-posts, 
+.my-profile {
+  text-decoration: none;
+
+  &:hover {
+    color: #000;
+  }
+}
+
+.my-item {
+  background-color: #fff !important;
+}
+
+

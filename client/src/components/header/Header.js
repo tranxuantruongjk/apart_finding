@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
+import "./header.scss";
+
 const Header = () => {
   const {
     authState: { isAuthenticated, user },
@@ -25,12 +27,24 @@ const Header = () => {
       <div className="header__btn d-flex justify-content-between align-items-center">
         {isAuthenticated ? (
           <>
-            <p className="mb-0 me-2">Xin chào {user.username}</p>
+            <p className="mb-0 me-2">Xin chào, 
+              <Link to={"/me/profile"} className="ms-1 text-decoration-none">
+                {user.username}
+              </Link>
+            </p>
             <NavDropdown className="me-4" >
-              <NavDropdown.Item>Thông tin cá nhân</NavDropdown.Item>
-              <NavDropdown.Item>Quản lý tin đăng</NavDropdown.Item>
+              <NavDropdown.Item className="my-item">
+                <Link to="/me/posts" className="my-posts">
+                  Quản lý tin đăng
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item className="my-item">
+                <Link to="/me/profile" className="my-profile">
+                  Thông tin cá nhân
+                </Link>  
+              </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item>
+              <NavDropdown.Item className="my-item">
                 <Link to="/" className="btn__logout" onClick={logout}>
                   Đăng xuất
                 </Link>

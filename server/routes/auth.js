@@ -25,6 +25,36 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
+// @route PUT api/auth
+// @desc Update user's info
+// @access Private
+router.put("/:id", verifyToken, async (req, res) => {
+  const { username, email } = req.body;
+
+  if (!username) {
+    return res.status(400).json({success: false, message: "Tên là thông tin bắt buộc."});
+  }
+
+  try {
+    let updatedUser = {
+      username,
+      email,
+    }
+
+    const userUpdateCondition = {_id: req.params.id, _id: req.userId};
+
+    updatedUser = await User.findOneAndUpdate(userUpdateCondition, updatedUser, {new: true});
+
+    if (!updatedUser)
+    return res.status(401).json({success: false, message: "Không tìm thấy người dùng."});
+
+    res.json({success: true, message: "Thông tin được cập nhật thành công.", user: updatedUser});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({success: false, message: "Đã xảy ra lỗi."});
+  }
+})
+
 // @route POST api/auth/register
 // @route Register user
 // @access Public

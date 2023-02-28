@@ -89,6 +89,19 @@ router.post("/search", async (req, res) => {
   }
 });
 
+// @route GET api/post/:userId
+// @route Get all posts which userId's user posted
+// @access Public
+router.get("/:userId/posts", verifyToken, async (req, res) => {
+  try {
+    const posts = await Post.find({ user: req.params.userId});
+    res.json({ success: true, posts });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
 // @route GET api/post/:type
 // @route Get all posts which have rentType = type
 // @access Public
