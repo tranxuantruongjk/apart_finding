@@ -7,3 +7,17 @@
 .btn-acreage {
   width: 100%;
 }
+
+.acreage-range {
+  margin-top: -15px;
+
+  &-col {
+    margin-bottom: 10px;
+  }
+
+  &-item {
+    font-size: 0.8rem !important;
+    width: 100%;
+    text-align: center;
+  }
+}

@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import "./multiRangeSlider.scss";
 
 const MultiRangeSlider = ({ min, max, minVal, maxVal, setMinVal, setMaxVal }) => {
-  const minValRef = useRef(minVal);
-  const maxValRef = useRef(maxVal);
+  let minValRef = (minVal);
+  let maxValRef = (maxVal);
+  // console.log(minValRef, maxValRef);
   const range = useRef(null);
 
   // Convert to percentage
@@ -15,7 +16,7 @@ const MultiRangeSlider = ({ min, max, minVal, maxVal, setMinVal, setMaxVal }) =>
   // Set width of the range to decrease from the left side
   useEffect(() => {
     const minPercent = getPercent(minVal);
-    const maxPercent = getPercent(maxValRef.current);
+    const maxPercent = getPercent(maxValRef);
 
     if (range.current) {
       range.current.style.left = `${minPercent}%`;
@@ -25,7 +26,7 @@ const MultiRangeSlider = ({ min, max, minVal, maxVal, setMinVal, setMaxVal }) =>
 
   // Set width of the range to decrease from the right side
   useEffect(() => {
-    const minPercent = getPercent(minValRef.current);
+    const minPercent = getPercent(minValRef);
     const maxPercent = getPercent(maxVal);
 
     if (range.current) {
@@ -43,8 +44,9 @@ const MultiRangeSlider = ({ min, max, minVal, maxVal, setMinVal, setMaxVal }) =>
         value={minVal}
         onChange={event => {
           const value = Math.min(Number(event.target.value), maxVal);
+          console.log(value);
           setMinVal(value);
-          minValRef.current = value;
+          minValRef = value;
         }}
         className="range-thumb range-thumb--left"
         style={{ zIndex: minVal > max - 100 && "5" }}
@@ -57,8 +59,9 @@ const MultiRangeSlider = ({ min, max, minVal, maxVal, setMinVal, setMaxVal }) =>
         value={maxVal}
         onChange={event => {
           const value = Math.max(Number(event.target.value), minVal);
+          console.log(value);
           setMaxVal(value);
-          maxValRef.current = value;
+          maxValRef = value;
         }}
         className="range-thumb range-thumb--right"
       />
