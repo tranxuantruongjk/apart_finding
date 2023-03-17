@@ -23,10 +23,10 @@ const NewPost = () => {
   const [preImage, setPreImage] = useState();
   // const [fullAddress, setFullAddress] = useState('');
 
-  const [ward, setWard] = useState('');
-  const [district, setDistrict] = useState('');
+  const [ward, setWard] = useState("");
+  const [district, setDistrict] = useState("");
   // const [street, setStreet] = useState('');
-  const province = 'Hà Nội';
+  const province = "Hà Nội";
   const fullAddressRef = useRef(null);
 
   const {
@@ -65,7 +65,7 @@ const NewPost = () => {
   };
 
   const onChangeWardId = (e) => {
-    const wardFind = wards.find(ward => ward.code === e.target.value);
+    const wardFind = wards.find((ward) => ward.code === e.target.value);
     const wardName = wardFind.name_with_type;
     setWard(wardName);
     // setFullAddress(`${wardName}, ${district}, ${province}`);
@@ -81,8 +81,8 @@ const NewPost = () => {
       ...postForm,
       address: e.target.value,
     });
-    fullAddressRef.current.value = `${e.target.value}, ${ward}, ${district}, ${province}`
-  }
+    fullAddressRef.current.value = `${e.target.value}, ${ward}, ${district}, ${province}`;
+  };
 
   useEffect(() => {
     const getRentTypes = async () => {
@@ -96,15 +96,15 @@ const NewPost = () => {
   useEffect(() => {
     return () => {
       preImage && URL.revokeObjectURL(preImage.preview);
-    }
+    };
   }, [preImage]);
 
   const handlePreviewImage = (fileImg) => {
     fileImg.preview = URL.createObjectURL(fileImg.file);
 
     setPreImage(fileImg);
-    setPostForm({ ...postForm, image: fileImg.base64 })
-  }
+    setPostForm({ ...postForm, image: fileImg.base64 });
+  };
 
   const create = async (e) => {
     e.preventDefault();
@@ -123,7 +123,7 @@ const NewPost = () => {
           price: "",
           image: "",
         });
-        fullAddressRef.current.value="";
+        fullAddressRef.current.value = "";
         setAlert({ type: "success", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
       } else {
@@ -152,17 +152,28 @@ const NewPost = () => {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <Row>
+                <Row className="mb-2">
                   <Col>
                     <Form.Group>
-                      <Form.Label>Tỉnh/Thành phố</Form.Label>
-                      <Form.Control disabled placeholder="Hà Nội" />
+                      <Form.Label>
+                        Tỉnh/Thành phố <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        disabled
+                        placeholder="Hà Nội"
+                        className="mt--5"
+                      />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Quận/Huyện</Form.Label>
-                      <Form.Select onChange={onChangeDistrict}>
+                      <Form.Label>
+                        Quận/Huyện <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Select
+                        onChange={onChangeDistrict}
+                        className="mt--5"
+                      >
                         <option>--Quận/Huyện--</option>
                         {districts.map((district) => (
                           <option key={district.code} value={district.code}>
@@ -174,8 +185,12 @@ const NewPost = () => {
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Phường/Xã</Form.Label>
-                      <Form.Select name="wardId" onChange={onChangeWardId}>
+                      <Form.Label>Phường/Xã <span className="text-danger">*</span></Form.Label>
+                      <Form.Select
+                        name="wardId"
+                        onChange={onChangeWardId}
+                        className="mt--5"
+                      >
                         <option>--Phường/Xã--</option>
                         {wards.map((ward) => (
                           <option key={ward.code} value={ward.code}>
@@ -186,25 +201,27 @@ const NewPost = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row>
+                <Row className="mb-2">
                   <Form.Group>
-                    <Form.Label>Số nhà, đường/phố</Form.Label>
+                    <Form.Label>Số nhà, đường/phố <span className="text-danger">*</span></Form.Label>
                     <Form.Control
                       type="text"
                       name="address"
                       value={address}
                       onChange={onChangeAddress}
+                      className="mt--5"
                     />
                   </Form.Group>
                 </Row>
-                <Row>
+                <Row className="mb-2">
                   <Form.Group>
-                    <Form.Label>Địa chỉ chính xác</Form.Label>
-                    <Form.Control 
+                    <Form.Label>Địa chỉ chính xác <span className="text-danger">*</span></Form.Label>
+                    <Form.Control
                       ref={fullAddressRef}
                       disabled
                       type="text"
                       // value={fullAddress}
+                      className="mt--5"
                     />
                   </Form.Group>
                 </Row>
@@ -217,11 +234,17 @@ const NewPost = () => {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <Row>
+                <Row className="mb-2">
                   <Col md={6}>
                     <Form.Group>
-                      <Form.Label>Loại chuyên mục</Form.Label>
-                      <Form.Select name="rentType" onChange={onChangePostForm}>
+                      <Form.Label>
+                        Loại chuyên mục <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Select
+                        name="rentType"
+                        onChange={onChangePostForm}
+                        className="mt--5"
+                      >
                         <option>--Chọn loại chuyên mục--</option>
                         {rentTypes.map((type) => (
                           <option key={type._id} value={type._id}>
@@ -232,46 +255,66 @@ const NewPost = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row>
+                <Row className="mb-2">
                   <Form.Group>
-                    <Form.Label>Tiêu đề</Form.Label>
+                    <Form.Label>
+                      Tiêu đề <span className="text-danger">*</span>
+                    </Form.Label>
                     <Form.Control
                       name="title"
                       value={title}
                       onChange={onChangePostForm}
+                      className="mt--5"
                     />
                   </Form.Group>
                 </Row>
-                <Row>
+                <Row className="mb-2">
                   <Form.Group>
-                    <Form.Label>Nội dung mô tả</Form.Label>
+                    <Form.Label>
+                      Nội dung mô tả <span className="text-danger">*</span>
+                    </Form.Label>
                     <Form.Control
                       as="textarea"
                       name="content"
                       rows={3}
                       value={content}
                       onChange={onChangePostForm}
+                      className="mt--5"
                     />
                   </Form.Group>
                 </Row>
-                <Row>
+                <Row className="mb-2">
                   <Col>
                     <Form.Group>
-                      <Form.Label>Thông tin liên hệ</Form.Label>
-                      <Form.Control disabled placeholder={user.username} />
+                      <Form.Label>
+                        Thông tin liên hệ <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        disabled
+                        placeholder={user.username}
+                        className="mt--5"
+                      />
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Số điện thoại</Form.Label>
-                      <Form.Control disabled placeholder={user.phone} />
+                      <Form.Label>
+                        Số điện thoại <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        disabled
+                        placeholder={user.phone}
+                        className="mt--5"
+                      />
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row>
+                <Row className="mb-2">
                   <Col>
-                    <Form.Label>Giá cho thuê</Form.Label>
-                    <InputGroup>
+                    <Form.Label>
+                      Giá cho thuê <span className="text-danger">*</span>
+                    </Form.Label>
+                    <InputGroup className="mt--5">
                       <Form.Control
                         name="price"
                         value={price}
@@ -282,8 +325,10 @@ const NewPost = () => {
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Diện tích</Form.Label>
-                      <InputGroup>
+                      <Form.Label>
+                        Diện tích <span className="text-danger">*</span>
+                      </Form.Label>
+                      <InputGroup className="mt--5">
                         <Form.Control
                           name="area"
                           value={area}
@@ -296,7 +341,7 @@ const NewPost = () => {
                 </Row>
               </Card.Body>
             </Card>
-            <Row>
+            <Row className="mb-2">
               <h3>Hình ảnh</h3>
             </Row>
             <Row className="mb-2">
@@ -306,14 +351,16 @@ const NewPost = () => {
                 type="file"
                 name="image"
                 value={image}
-                onDone={(fileImg) => 
-                    handlePreviewImage(fileImg)
-                  }
+                onDone={(fileImg) => handlePreviewImage(fileImg)}
               />
             </Row>
             <Row className="mb-2">
               {preImage && (
-                <img src={preImage.preview} alt="Phong tro" className="pre-image" />
+                <img
+                  src={preImage.preview}
+                  alt="Phong tro"
+                  className="pre-image"
+                />
               )}
             </Row>
             <Row>
@@ -321,6 +368,50 @@ const NewPost = () => {
                 Đăng bài
               </Button>
             </Row>
+          </Col>
+          <Col md={4}>
+            <Card className="post-note">
+              <Card.Header as="h5">Lưu ý khi đăng tin</Card.Header>
+              <Card.Body>
+                <ul className="post-note-list">
+                  <li>
+                    <Card.Text>
+                      Thông tin có dấu sao <span className="text-danger">*</span> là bắt buộc.
+                    </Card.Text>
+                  </li>
+                  <li>
+                    <Card.Text>
+                      Đăng tin bằng tài khoản đăng ký để dễ dàng quản lý bài đăng và được xét duyệt nhanh hơn.
+                    </Card.Text>
+                  </li>
+                  <li>
+                    <Card.Text>
+                      Điền đầy đủ thông tin một cách chính xác để người xem dễ tiếp cận và đưa ra quyết định giao dịch.
+                    </Card.Text>
+                  </li>
+                  <li>
+                    <Card.Text>
+                      Nội dung Tiếng Việt có dấu và không viết tắt, mô tả đầy đủ về phòng trọ/nhà trọ cho thuê.
+                    </Card.Text>
+                  </li>
+                  <li>
+                    <Card.Text>
+                      Số điện thoại liên hệ phải ở tình trạng liên lạc được.
+                    </Card.Text>
+                  </li>
+                  <li>
+                    <Card.Text>
+                      Các ảnh đại diện và ảnh chi tiết phải đúng là ảnh của phòng trọ/nhà trọ, các tin vi phạm sẽ không được duyệt lên website.
+                    </Card.Text>
+                  </li>
+                  <li>
+                    <Card.Text>
+                      Không đăng tin trùng lặp dưới bất kỳ hình thức tin đăng nào. Các tin trùng sẽ bị từ chối.
+                    </Card.Text>
+                  </li>
+                </ul>
+              </Card.Body>
+            </Card>
           </Col>
         </Row>
       </Form>

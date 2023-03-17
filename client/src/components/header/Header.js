@@ -22,7 +22,9 @@ const Header = () => {
   return (
     <Container className="d-flex justify-content-between">
       <div className="header__logo">
-        <img src={logo} />
+        <Link to={"/"}>
+          <img src={logo} alt="logo"/>
+        </Link>
       </div>
       <div className="header__btn d-flex justify-content-between align-items-center">
         {isAuthenticated ? (

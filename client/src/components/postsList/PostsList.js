@@ -5,6 +5,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
+import Pagination from "react-bootstrap/Pagination";
 
 import { FaRegClock } from "react-icons/fa";
 import { FaChartArea } from "react-icons/fa";
@@ -103,6 +104,16 @@ const PostsList = () => {
           </ListGroup>
         </Card.Body>
       </Card>
+      <Pagination className="justify-content-center mt-3" size="lg">
+        <Pagination.First />
+        <Pagination.Prev />
+        <Pagination.Item active>{1}</Pagination.Item>
+        <Pagination.Item>{2}</Pagination.Item>
+        <Pagination.Item>{3}</Pagination.Item>
+        <Pagination.Ellipsis />
+        <Pagination.Next />
+        <Pagination.Last />
+      </Pagination>
     </div>
   );
 };

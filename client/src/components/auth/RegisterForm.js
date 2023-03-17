@@ -66,7 +66,7 @@ const RegisterForm = () => {
         <AlertMessage info={alert} />
           <Form className="" onSubmit={register}>
             <Form.Group>
-              <Form.Label>HỌ TÊN</Form.Label>
+              <Form.Label>HỌ TÊN <span className="text-danger">*</span></Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Họ và tên"
@@ -78,7 +78,7 @@ const RegisterForm = () => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>SỐ ĐIỆN THOẠI</Form.Label>
+              <Form.Label>SỐ ĐIỆN THOẠI <span className="text-danger">*</span></Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Số điện thoại"
@@ -101,7 +101,7 @@ const RegisterForm = () => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>MẬT KHẨU</Form.Label>
+              <Form.Label>MẬT KHẨU <span className="text-danger">*</span></Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Mật khẩu"
@@ -113,7 +113,7 @@ const RegisterForm = () => {
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>XÁC NHẬN MẬT KHẨU</Form.Label>
+              <Form.Label>XÁC NHẬN MẬT KHẨU <span className="text-danger">*</span></Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Nhập lại mật khẩu"
