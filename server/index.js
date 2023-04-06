@@ -27,6 +27,8 @@ connectDB();
 app.use(express.json({limit: '50mb'}));
 app.use(cors());
 
+app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
 // app.get("/", (req, res) => {
 //   res.send("Hello world");
 // });

@@ -1,0 +1,47 @@
+.post {
+  &__thumb {
+    position: relative;
+
+    &__image {
+      height: 240px;
+      width: 100%;
+      border-radius: 5px;
+    }
+
+    .image-number {
+      position: absolute;
+      left: 20px;
+      bottom: 6px;
+      padding: 0px 4px;
+      background-color: rgb(0, 0, 0, 0.5);
+      border-radius: 5px;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+  }
+  
+  &__detail {
+    &-price {
+      .price {
+        font-size: 1em;
+      }
+    }
+
+    &-summary {
+      margin-bottom: 10px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
+  }
+
+  &__title {
+    padding-bottom: 5px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}

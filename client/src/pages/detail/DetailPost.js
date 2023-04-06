@@ -26,11 +26,11 @@ const DetailPost = () => {
   useEffect(() => {
     const getDetail = async () => {
       const response = await axios.get(`${apiUrl}/post/${type}/${id}`);
-
+      console.log((response.data.post));
       setPost(response.data.post);
     };
     getDetail();
-  }, [id]);
+  }, [type, id]);
 
   const handleSaveClick = () => {
     if (!saveRef.current.childNodes[0].classList.contains('saved')) {
@@ -50,13 +50,17 @@ const DetailPost = () => {
               <div className="post">
                 <div className="post__images">
                   <Carousel>
-                    <Carousel.Item>
-                      <img
-                        className="post-img"
-                        src={post.image}
-                        alt="First slide"
-                      />
-                    </Carousel.Item>
+                    {
+                      post.images.map(image => (
+                        <Carousel.Item>
+                          <img
+                            className="post-img"
+                            src={image}
+                            alt="First slide"
+                          />
+                        </Carousel.Item>
+                      )) 
+                    }
                   </Carousel>
                 </div>
                 <div className="post__overview mt-2">

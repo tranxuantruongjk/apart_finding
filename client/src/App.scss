@@ -19,37 +19,6 @@
   }
 }
 
-.post {
-  &__image {
-    height: 240px;
-    width: 100%;
-    border-radius: 5px;
-  }
-  &__detail {
-    &-price {
-      .price {
-        font-size: 1em;
-      }
-    }
-
-    &-summary {
-      margin-bottom: 10px;
-      overflow: hidden;
-      display: -webkit-box;
-      -webkit-box-orient: vertical;
-      -webkit-line-clamp: 2;
-    }
-  }
-
-  &__title {
-    padding-bottom: 5px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-}
-
 .list-item {
   display: flex;
   justify-content: center;

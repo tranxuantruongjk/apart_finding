@@ -16,6 +16,8 @@ import { getDate, getDistrictName } from "../../utils/post";
 
 import { PostContext } from "../../contexts/PostContext";
 
+import "./postsList.scss";
+
 const PostsList = () => {
   const { type } = useParams();
   const { pathname } = useLocation();
@@ -44,8 +46,9 @@ const PostsList = () => {
             {posts.map((post) => (
               <ListGroup.Item key={post._id} className="border-danger">
                 <Row>
-                  <Col md={5}>
-                    <img src={post.image} alt="anh" className="post__image" />
+                  <Col md={5} className="post__thumb">
+                    <img src={post.images[0]} alt="anh" className="post__thumb__image" />
+                    <span className="image-number">{post.images.length} ảnh</span>
                   </Col>
                   <Col md={7}>
                     <Link

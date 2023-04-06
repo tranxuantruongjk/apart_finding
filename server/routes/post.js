@@ -4,6 +4,15 @@ const router = express.Router();
 const User = require("../model/User");
 const RentType = require("../model/RentType");
 const Post = require("../model/Post");
+const PostImage = require("../model/PostImage");
+
+const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const { storage } = require("../firebase");
+
+var multer = require("multer");
+const upload = multer({
+  storage: multer.memoryStorage(),
+});
 
 const verifyToken = require("../middleware/auth");
 // const districts = require("hanhchinhvn/dist/quan-huyen/01.json");
@@ -39,7 +48,12 @@ router.post("/search", async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
-      }).populate("user", ["username", "phone"]);
+      }).populate("user", ["username", "phone"]).lean();
+      for (const post of posts) {
+        const postImages = await PostImage.find({ postId: post._id });
+        const images = postImages.map((postImage) => postImage.image);
+        post.images = images;
+      }
       res.json({ success: true, posts });
     } catch (error) {
       console.log(error);
@@ -94,7 +108,7 @@ router.post("/search", async (req, res) => {
 // @access Public
 router.get("/:userId/posts", verifyToken, async (req, res) => {
   try {
-    const posts = await Post.find({ user: req.params.userId});
+    const posts = await Post.find({ user: req.params.userId });
     res.json({ success: true, posts });
   } catch (error) {
     console.log(error);
@@ -107,7 +121,15 @@ router.get("/:userId/posts", verifyToken, async (req, res) => {
 // @access Public
 router.get("/:type", async (req, res) => {
   try {
-    const posts = await Post.find({rentType: req.params.type}).populate("user", ["username", "phone"]);
+    const posts = await Post.find({ rentType: req.params.type }).populate(
+      "user",
+      ["username", "phone"]
+    ).lean();
+    for (const post of posts) {
+      const postImages = await PostImage.find({ postId: post._id });
+      const images = postImages.map((postImage) => postImage.image);
+      post.images = images;
+    }
     res.json({ success: true, posts });
   } catch (error) {
     console.log(error);
@@ -122,7 +144,13 @@ router.get("/:type/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
       .populate("user", ["username", "phone"])
-      .populate("rentType", ["name"]);
+      .populate("rentType", ["name"]).lean();
+    
+    const postImages = await PostImage.find({ postId: req.params.id });
+    const images = postImages.map((postImage) => postImage.image);
+    post.images = images;
+    // console.log(post);
+
     res.json({ success: true, post });
   } catch (error) {
     console.log(error);
@@ -135,7 +163,13 @@ router.get("/:type/:id", async (req, res) => {
 // @access Public
 router.get("/", async (req, res) => {
   try {
-    const posts = await Post.find().populate("user", ["username", "phone"]);
+    const posts = await Post.find().populate("user", ["username", "phone"]).lean();
+    for (const post of posts) {
+      const postImages = await PostImage.find({ postId: post._id });
+      const images = postImages.map((postImage) => postImage.image);
+      post.images = images;
+    }
+    // console.log((posts));
     res.json({ success: true, posts });
   } catch (error) {
     console.log(error);
@@ -146,9 +180,9 @@ router.get("/", async (req, res) => {
 // @route POST api/post/
 // @route Create new post
 // @access Private
-router.post("/", verifyToken, async (req, res) => {
-  const { title, content, rentType, address, wardId, area, price, image } =
-    req.body;
+router.post("/", verifyToken, upload.array("image"), async (req, res) => {
+  const { title, content, rentType, address, wardId, area, price } = req.body;
+  const images = req.files;
 
   if (
     !title ||
@@ -158,7 +192,7 @@ router.post("/", verifyToken, async (req, res) => {
     !wardId ||
     !area ||
     !price ||
-    !image
+    images.length === 0
   )
     return res
       .status(400)
@@ -166,18 +200,33 @@ router.post("/", verifyToken, async (req, res) => {
 
   try {
     const newPost = new Post({
-      title,
+      title: req.body.title,
       content,
       rentType,
       address,
       wardId,
       area,
       price,
-      image,
       user: req.userId,
     });
 
     await newPost.save();
+
+    images.forEach(async (image) => {
+      const storageRef = ref(
+        storage,
+        `images/${newPost._id}/${image.originalname}`
+      );
+      const metadata = { contentType: image.mimetype };
+      const snapshot = await uploadBytes(storageRef, image.buffer, metadata);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+      const newPostImage = new PostImage({
+        postId: newPost._id,
+        image: downloadURL,
+      });
+
+      await newPostImage.save();
+    });
 
     res.json({
       success: true,

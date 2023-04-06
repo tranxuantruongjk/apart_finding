@@ -1,0 +1,22 @@
+.file-item {
+  .pre-image {
+    width: 100% !important;
+    aspect-ratio: 4/3;
+  }
+
+  .file-delete {
+    padding: 5px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    width: fit-content;
+    margin: auto;
+
+    .delete-icon {
+      opacity: 0.8;
+      margin-right: 3px;
+    }
+  }
+}

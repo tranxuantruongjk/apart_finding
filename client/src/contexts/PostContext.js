@@ -54,8 +54,15 @@ const PostContextProvider = ({ children }) => {
 
   // Create a new post
   const createPost = async (postForm) => {
+    for (const [key, value] of postForm) {
+      console.log(`${key}: ${value}\n`);
+    }
     try {
-      const response = await axios.post(`${apiUrl}/post`, postForm);
+      const response = await axios.post(`${apiUrl}/post`, postForm, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
       return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;

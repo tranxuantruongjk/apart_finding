@@ -32,10 +32,6 @@ const PostSchema = new Schema (
       type: Number,
       require: true,
     },
-    image: {
-      type: String,
-      require: true,
-    },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'users',

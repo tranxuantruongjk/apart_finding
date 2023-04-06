@@ -3,7 +3,6 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
-import FileBase64 from "react-file-base64";
 import InputGroup from "react-bootstrap/InputGroup";
 import { AuthContext } from "../../../contexts/AuthContext";
 import districtsList from "hanhchinhvn/dist/quan-huyen/01.json";
@@ -14,19 +13,21 @@ import AlertMessage from "../../../components/alertMessage/AlertMessage";
 import { compare } from "../../../utils/compare";
 import "./newPost.scss";
 import { PostContext } from "../../../contexts/PostContext";
+import FileUpload from "../../../components/fileUpload/FileUpload";
+import FileList from "../../../components/fileUpload/fileList/FileList";
 
+const province = "Hà Nội";
 const NewPost = () => {
   const districts = Object.values(districtsList).sort(compare("code"));
   const [wards, setWards] = useState([]);
   const [rentTypes, setRentTypes] = useState([]);
   const [alert, setAlert] = useState(null);
-  const [preImage, setPreImage] = useState();
-  // const [fullAddress, setFullAddress] = useState('');
 
   const [ward, setWard] = useState("");
   const [district, setDistrict] = useState("");
-  // const [street, setStreet] = useState('');
-  const province = "Hà Nội";
+  const [districtId, setDistrictId] = useState("");
+
+  const [files, setFiles] = useState([]);
   const fullAddressRef = useRef(null);
 
   const {
@@ -43,10 +44,10 @@ const NewPost = () => {
     wardId: "",
     area: "",
     price: "",
-    image: "",
   });
 
-  const { title, content, address, area, price, image } = postForm;
+  const { title, content, rentType, address, wardId, area, price } =
+    postForm;
 
   const onChangePostForm = (e) => {
     setPostForm({
@@ -58,6 +59,7 @@ const NewPost = () => {
   const onChangeDistrict = (e) => {
     const districtName = districtsList[e.target.value]["name_with_type"];
     setDistrict(districtName);
+    setDistrictId(e.target.value);
     // setFullAddress(`${districtName}, ${province}`);
     fullAddressRef.current.value = `${districtName}, ${province}`;
     const wardsList = require(`hanhchinhvn/dist/xa-phuong/${e.target.value}.json`);
@@ -93,24 +95,46 @@ const NewPost = () => {
     getRentTypes();
   }, []);
 
-  useEffect(() => {
-    return () => {
-      preImage && URL.revokeObjectURL(preImage.preview);
-    };
-  }, [preImage]);
-
-  const handlePreviewImage = (fileImg) => {
-    fileImg.preview = URL.createObjectURL(fileImg.file);
-
-    setPreImage(fileImg);
-    setPostForm({ ...postForm, image: fileImg.base64 });
+  const removeFile = (fileName) => {
+    setFiles(files.filter((file) => file.name !== fileName));
+  };
+  
+  const uploadHandler = (e) => {
+    if (e.target.files.length === 0) return;
+    else if (e.target.files.length === 1) {
+      const file = e.target.files[0];
+      if (files.find((f) => f.name === file.name)) return;
+      file.preview = URL.createObjectURL(file);
+      setFiles([...files, file]);
+    }
+    else {
+      for (let i = 0; i < e.target.files.length; i++) {
+        const file = e.target.files[i];
+        
+        if (files.find((f) => f.name === file.name)) return;
+        file.preview = URL.createObjectURL(file);
+      }
+      setFiles([...files, ...Object.values(e.target.files)]);
+    }
+    e.target.value = null;
   };
 
   const create = async (e) => {
+    
     e.preventDefault();
 
     try {
-      const postRes = await createPost(postForm);
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("rentType", rentType);
+      formData.append("address", address);
+      formData.append("wardId", wardId);
+      formData.append("area", area);
+      formData.append("price", price);
+      files.forEach(file => formData.append("image", file));
+
+      const postRes = await createPost(formData);
       if (postRes.success) {
         window.scrollTo(0, 0);
         setPostForm({
@@ -121,9 +145,10 @@ const NewPost = () => {
           wardId: "",
           area: "",
           price: "",
-          image: "",
         });
+        setDistrictId("");
         fullAddressRef.current.value = "";
+        setFiles([]);
         setAlert({ type: "success", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
       } else {
@@ -142,7 +167,11 @@ const NewPost = () => {
         <h2>Đăng tin mới</h2>
       </div>
       <AlertMessage info={alert} />
-      <Form className="my-3 mx-2" onSubmit={create}>
+      <Form
+        className="my-3 mx-2"
+        onSubmit={create}
+        encType="multipart/form-data"
+      >
         <Row>
           <Col md={8}>
             <Card border="primary" className="shadow mb-3">
@@ -173,8 +202,9 @@ const NewPost = () => {
                       <Form.Select
                         onChange={onChangeDistrict}
                         className="mt--5"
+                        value={districtId}
                       >
-                        <option>--Quận/Huyện--</option>
+                        <option value="">--Quận/Huyện--</option>
                         {districts.map((district) => (
                           <option key={district.code} value={district.code}>
                             {district["name_with_type"]}
@@ -185,13 +215,16 @@ const NewPost = () => {
                   </Col>
                   <Col>
                     <Form.Group>
-                      <Form.Label>Phường/Xã <span className="text-danger">*</span></Form.Label>
+                      <Form.Label>
+                        Phường/Xã <span className="text-danger">*</span>
+                      </Form.Label>
                       <Form.Select
                         name="wardId"
                         onChange={onChangeWardId}
                         className="mt--5"
+                        value={wardId}
                       >
-                        <option>--Phường/Xã--</option>
+                        <option value="">--Phường/Xã--</option>
                         {wards.map((ward) => (
                           <option key={ward.code} value={ward.code}>
                             {ward["name_with_type"]}
@@ -203,7 +236,9 @@ const NewPost = () => {
                 </Row>
                 <Row className="mb-2">
                   <Form.Group>
-                    <Form.Label>Số nhà, đường/phố <span className="text-danger">*</span></Form.Label>
+                    <Form.Label>
+                      Số nhà, đường/phố <span className="text-danger">*</span>
+                    </Form.Label>
                     <Form.Control
                       type="text"
                       name="address"
@@ -215,7 +250,9 @@ const NewPost = () => {
                 </Row>
                 <Row className="mb-2">
                   <Form.Group>
-                    <Form.Label>Địa chỉ chính xác <span className="text-danger">*</span></Form.Label>
+                    <Form.Label>
+                      Địa chỉ chính xác <span className="text-danger">*</span>
+                    </Form.Label>
                     <Form.Control
                       ref={fullAddressRef}
                       disabled
@@ -244,8 +281,9 @@ const NewPost = () => {
                         name="rentType"
                         onChange={onChangePostForm}
                         className="mt--5"
+                        value={rentType}
                       >
-                        <option>--Chọn loại chuyên mục--</option>
+                        <option value="">--Chọn loại chuyên mục--</option>
                         {rentTypes.map((type) => (
                           <option key={type._id} value={type._id}>
                             {type["name"]}
@@ -345,23 +383,10 @@ const NewPost = () => {
               <h3>Hình ảnh</h3>
             </Row>
             <Row className="mb-2">
-              <FileBase64
-                accept="image/*"
-                mutiple={false}
-                type="file"
-                name="image"
-                value={image}
-                onDone={(fileImg) => handlePreviewImage(fileImg)}
-              />
+              <FileUpload uploadHandler={uploadHandler}/>
             </Row>
-            <Row className="mb-2">
-              {preImage && (
-                <img
-                  src={preImage.preview}
-                  alt="Phong tro"
-                  className="pre-image"
-                />
-              )}
+            <Row className="mb-2" md={4}>
+              <FileList files={files} removeFile={removeFile} />
             </Row>
             <Row>
               <Button variant="primary" type="submit" className="mx-2">
@@ -376,22 +401,26 @@ const NewPost = () => {
                 <ul className="post-note-list">
                   <li>
                     <Card.Text>
-                      Thông tin có dấu sao <span className="text-danger">*</span> là bắt buộc.
+                      Thông tin có dấu sao{" "}
+                      <span className="text-danger">*</span> là bắt buộc.
                     </Card.Text>
                   </li>
                   <li>
                     <Card.Text>
-                      Đăng tin bằng tài khoản đăng ký để dễ dàng quản lý bài đăng và được xét duyệt nhanh hơn.
+                      Đăng tin bằng tài khoản đăng ký để dễ dàng quản lý bài
+                      đăng và được xét duyệt nhanh hơn.
                     </Card.Text>
                   </li>
                   <li>
                     <Card.Text>
-                      Điền đầy đủ thông tin một cách chính xác để người xem dễ tiếp cận và đưa ra quyết định giao dịch.
+                      Điền đầy đủ thông tin một cách chính xác để người xem dễ
+                      tiếp cận và đưa ra quyết định giao dịch.
                     </Card.Text>
                   </li>
                   <li>
                     <Card.Text>
-                      Nội dung Tiếng Việt có dấu và không viết tắt, mô tả đầy đủ về phòng trọ/nhà trọ cho thuê.
+                      Nội dung Tiếng Việt có dấu và không viết tắt, mô tả đầy đủ
+                      về phòng trọ/nhà trọ cho thuê.
                     </Card.Text>
                   </li>
                   <li>
@@ -401,12 +430,15 @@ const NewPost = () => {
                   </li>
                   <li>
                     <Card.Text>
-                      Các ảnh đại diện và ảnh chi tiết phải đúng là ảnh của phòng trọ/nhà trọ, các tin vi phạm sẽ không được duyệt lên website.
+                      Các ảnh đại diện và ảnh chi tiết phải đúng là ảnh của
+                      phòng trọ/nhà trọ, các tin vi phạm sẽ không được duyệt lên
+                      website.
                     </Card.Text>
                   </li>
                   <li>
                     <Card.Text>
-                      Không đăng tin trùng lặp dưới bất kỳ hình thức tin đăng nào. Các tin trùng sẽ bị từ chối.
+                      Không đăng tin trùng lặp dưới bất kỳ hình thức tin đăng
+                      nào. Các tin trùng sẽ bị từ chối.
                     </Card.Text>
                   </li>
                 </ul>
