@@ -26,20 +26,19 @@ const DetailPost = () => {
   useEffect(() => {
     const getDetail = async () => {
       const response = await axios.get(`${apiUrl}/post/${type}/${id}`);
-      console.log((response.data.post));
+      console.log(response.data.post);
       setPost(response.data.post);
     };
     getDetail();
   }, [type, id]);
 
   const handleSaveClick = () => {
-    if (!saveRef.current.childNodes[0].classList.contains('saved')) {
-      saveRef.current.childNodes[0].classList.add('saved');
+    if (!saveRef.current.childNodes[0].classList.contains("saved")) {
+      saveRef.current.childNodes[0].classList.add("saved");
+    } else {
+      saveRef.current.childNodes[0].classList.remove("saved");
     }
-    else {
-      saveRef.current.childNodes[0].classList.remove('saved');
-    }
-  }
+  };
 
   return (
     <div className="container mt-3">
@@ -50,43 +49,51 @@ const DetailPost = () => {
               <div className="post">
                 <div className="post__images">
                   <Carousel>
-                    {
-                      post.images.map(image => (
-                        <Carousel.Item>
+                    {post.files.map((file) => (
+                      <Carousel.Item key={file._id}>
+                        {file.type === "image" ? (
                           <img
                             className="post-img"
-                            src={image}
+                            src={file.file}
                             alt="First slide"
                           />
-                        </Carousel.Item>
-                      )) 
-                    }
+                        ) : (
+                          <video src={file.file} controls className="post-img"/>
+                        )}
+                      </Carousel.Item>
+                    ))}
                   </Carousel>
                 </div>
                 <div className="post__overview mt-2">
                   <h2 className="post__overview-title">{post.title}</h2>
                   <div className="post__overview-type mb-1">
-                    <span className="fw-bold">Chuyên mục:</span> {post.rentType.name}
+                    <span className="fw-bold">Chuyên mục:</span>{" "}
+                    {post.rentType.name}
                   </div>
                   <div className="post__overview-address mb-1">
                     <FaSearchLocation className="text-primary me-1" />
-                    <span className="fw-bold">Địa chỉ:</span> {`${post.address}, ${getWardDistrictName(post.wardId)}`}
+                    <span className="fw-bold">Địa chỉ:</span>{" "}
+                    {`${post.address}, ${getWardDistrictName(post.wardId)}`}
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="d-inline-flex align-items-center">
-                      <MdAttachMoney className="cash-icon"/>
+                      <MdAttachMoney className="cash-icon" />
                       <span className="price">{post.price}/tháng</span>
                     </div>
                     <div className="d-inline-flex align-items-center">
-                      <FaChartArea className="area-icon"/>
+                      <FaChartArea className="area-icon" />
                       {post.area}m&sup2;
                     </div>
                     <div className="d-inline-flex align-items-center">
-                      <FaRegClock className="clock-icon"/>
+                      <FaRegClock className="clock-icon" />
                       {getDetailDateTime(post.createdAt)}
                     </div>
-                    <div ref={saveRef} onClick={handleSaveClick} className="post--save d-inline-flex align-items-center">
-                      <FaHeart className="heart-icon"/>
+                    <div
+                      ref={saveRef}
+                      onClick={handleSaveClick}
+                      className="post--save d-inline-flex align-items-center"
+                    >
+                      <FaHeart className="heart-icon" />
                       Lưu tin
                     </div>
                   </div>
@@ -122,13 +129,24 @@ const DetailPost = () => {
                   <RxAvatar className="avatar-img" />
                 </div>
                 <h4 className="name">{post.user.username}</h4>
-                <Button variant="success" className="phone" as="a" href={`tel:${post.user.phone}`}>
+                <Button
+                  variant="success"
+                  className="phone"
+                  as="a"
+                  href={`tel:${post.user.phone}`}
+                >
                   <FaPhoneAlt className="phone-icon" />
-                  <span className="phone-number" >{post.user.phone}</span>
+                  <span className="phone-number">{post.user.phone}</span>
                 </Button>
-                <Button variant="light" className="zalo" as="a" target="_blank" href={`https://zalo.me/${post.user.phone}`}>
-                  <img src={zaloIcon} alt="zalo-icon" className="zalo-icon"/>
-                  <span className="zalo-text" >Zalo</span>
+                <Button
+                  variant="light"
+                  className="zalo"
+                  as="a"
+                  target="_blank"
+                  href={`https://zalo.me/${post.user.phone}`}
+                >
+                  <img src={zaloIcon} alt="zalo-icon" className="zalo-icon" />
+                  <span className="zalo-text">Zalo</span>
                 </Button>
               </div>
             </Col>

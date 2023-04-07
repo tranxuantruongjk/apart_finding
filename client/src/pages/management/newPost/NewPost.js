@@ -132,7 +132,7 @@ const NewPost = () => {
       formData.append("wardId", wardId);
       formData.append("area", area);
       formData.append("price", price);
-      files.forEach(file => formData.append("image", file));
+      files.forEach(file => formData.append("files", file));
 
       const postRes = await createPost(formData);
       if (postRes.success) {
@@ -383,13 +383,22 @@ const NewPost = () => {
               <h3>Hình ảnh</h3>
             </Row>
             <Row className="mb-2">
-              <FileUpload uploadHandler={uploadHandler}/>
+              <FileUpload type="image" uploadHandler={uploadHandler}/>
             </Row>
             <Row className="mb-2" md={4}>
-              <FileList files={files} removeFile={removeFile} />
+              <FileList type="image" files={files} removeFile={removeFile} />
             </Row>
-            <Row>
-              <Button variant="primary" type="submit" className="mx-2">
+            <Row className="mb-2">
+              <h3>Video</h3>
+            </Row>
+            <Row className="mb-2">
+              <FileUpload type="video" uploadHandler={uploadHandler}/>
+            </Row>
+            <Row className="mb-2" md={4}>
+              <FileList type="video" files={files} removeFile={removeFile} />
+            </Row>
+            <Row className="me-1">
+              <Button variant="primary" type="submit" className="mx-2 btn-create">
                 Đăng bài
               </Button>
             </Row>

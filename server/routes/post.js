@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../model/User");
 const RentType = require("../model/RentType");
 const Post = require("../model/Post");
-const PostImage = require("../model/PostImage");
+const PostFile = require("../model/PostFile");
 
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { storage } = require("../firebase");
@@ -50,9 +50,9 @@ router.post("/search", async (req, res) => {
         },
       }).populate("user", ["username", "phone"]).lean();
       for (const post of posts) {
-        const postImages = await PostImage.find({ postId: post._id });
-        const images = postImages.map((postImage) => postImage.image);
-        post.images = images;
+        const postFiles = await PostFile.find({ postId: post._id });
+        const files = postFiles.map((postFile) => postFile.file);
+        post.files = files;
       }
       res.json({ success: true, posts });
     } catch (error) {
@@ -126,9 +126,9 @@ router.get("/:type", async (req, res) => {
       ["username", "phone"]
     ).lean();
     for (const post of posts) {
-      const postImages = await PostImage.find({ postId: post._id });
-      const images = postImages.map((postImage) => postImage.image);
-      post.images = images;
+      const postFiles = await PostFile.find({ postId: post._id });
+      const files = postFiles.map((postFile) => postFile.file);
+      post.files = files;
     }
     res.json({ success: true, posts });
   } catch (error) {
@@ -146,9 +146,9 @@ router.get("/:type/:id", async (req, res) => {
       .populate("user", ["username", "phone"])
       .populate("rentType", ["name"]).lean();
     
-    const postImages = await PostImage.find({ postId: req.params.id });
-    const images = postImages.map((postImage) => postImage.image);
-    post.images = images;
+    const postFiles = await PostFile.find({ postId: req.params.id });
+    // const files = postFiles.map((postFile) => postFile.file);
+    post.files = postFiles;
     // console.log(post);
 
     res.json({ success: true, post });
@@ -165,9 +165,9 @@ router.get("/", async (req, res) => {
   try {
     const posts = await Post.find().populate("user", ["username", "phone"]).lean();
     for (const post of posts) {
-      const postImages = await PostImage.find({ postId: post._id });
-      const images = postImages.map((postImage) => postImage.image);
-      post.images = images;
+      const postFiles = await PostFile.find({ postId: post._id });
+      const files = postFiles.map((postFile) => postFile.file);
+      post.files = files;
     }
     // console.log((posts));
     res.json({ success: true, posts });
@@ -180,9 +180,10 @@ router.get("/", async (req, res) => {
 // @route POST api/post/
 // @route Create new post
 // @access Private
-router.post("/", verifyToken, upload.array("image"), async (req, res) => {
+router.post("/", verifyToken, upload.array("files"), async (req, res) => {
   const { title, content, rentType, address, wardId, area, price } = req.body;
-  const images = req.files;
+  const files = req.files;
+  console.log(files);
 
   if (
     !title ||
@@ -192,7 +193,7 @@ router.post("/", verifyToken, upload.array("image"), async (req, res) => {
     !wardId ||
     !area ||
     !price ||
-    images.length === 0
+    files.length === 0
   )
     return res
       .status(400)
@@ -212,20 +213,21 @@ router.post("/", verifyToken, upload.array("image"), async (req, res) => {
 
     await newPost.save();
 
-    images.forEach(async (image) => {
+    files.forEach(async (file) => {
       const storageRef = ref(
         storage,
-        `images/${newPost._id}/${image.originalname}`
+        `files/${newPost._id}/${file.originalname}`
       );
-      const metadata = { contentType: image.mimetype };
-      const snapshot = await uploadBytes(storageRef, image.buffer, metadata);
+      const metadata = { contentType: file.mimetype };
+      const snapshot = await uploadBytes(storageRef, file.buffer, metadata);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      const newPostImage = new PostImage({
+      const newPostFile = new PostFile({
         postId: newPost._id,
-        image: downloadURL,
+        type: file.mimetype.includes("image/") ? "image" : "video",
+        file: downloadURL,
       });
 
-      await newPostImage.save();
+      await newPostFile.save();
     });
 
     res.json({

@@ -47,8 +47,8 @@ const PostsList = () => {
               <ListGroup.Item key={post._id} className="border-danger">
                 <Row>
                   <Col md={5} className="post__thumb">
-                    <img src={post.images[0]} alt="anh" className="post__thumb__image" />
-                    <span className="image-number">{post.images.length} ảnh</span>
+                    <img src={post.files[0]} alt="anh" className="post__thumb__image" />
+                    <span className="image-number">{post.files.length} ảnh</span>
                   </Col>
                   <Col md={7}>
                     <Link

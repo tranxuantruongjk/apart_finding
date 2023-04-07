@@ -1,13 +1,17 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const PostImageSchema = new Schema(
+const PostFileSchema = new Schema(
   {
     postId: {
       type: Schema.Types.ObjectId,
-      require: true
+      require: true,
     },
-    image: {
+    type: {
+      type: String,
+      require: true,
+    },
+    file: {
       type: String,
       require: true,
     }
@@ -17,4 +21,4 @@ const PostImageSchema = new Schema(
   }
 )
 
-module.exports = mongoose.model("postimages", PostImageSchema);
+module.exports = mongoose.model("postfiles", PostFileSchema);
