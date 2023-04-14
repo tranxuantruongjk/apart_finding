@@ -59,7 +59,7 @@ router.put("/:id", verifyToken, async (req, res) => {
 // @route Register user
 // @access Public
 router.post("/register", async (req, res) => {
-  const { username, phone, email, password } = req.body;
+  const { username, phone, email, password, role } = req.body;
   // console.log(req.body);
 
   // Simple validation
@@ -83,7 +83,7 @@ router.post("/register", async (req, res) => {
 
     // All pass
     const hashedPassword = await argon2.hash(password);
-    const newUser = new User({ username, phone, email, password: hashedPassword });
+    const newUser = new User({ username, phone, email, password: hashedPassword, role });
     console.log('newUser', newUser);
     await newUser.save();
     // console.log(newUser);
@@ -149,6 +149,13 @@ router.post("/login", async (req, res) => {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
   }
+});
+
+// @route GET api/auth/admin
+// @route Login admin
+// @access Private
+router.get("/admin", async (req, res) => {
+
 });
 
 module.exports = router;

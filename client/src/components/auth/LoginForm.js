@@ -34,7 +34,13 @@ const LoginForm = () => {
     try {
       const loginData = await loginUser(loginForm);
       if (loginData.success) {
-        navigate('/');
+        console.log(loginData);
+        if (loginData.user.role === 1) {
+          navigate('/admin');
+        }
+        else {
+          navigate('/');
+        }
       }
       else {
         setAlert({type: 'danger', message: loginData.message});

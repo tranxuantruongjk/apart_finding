@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header/Header";
 import NavbarMenu from "./components/navbarMenu/NavbarMenu";
@@ -11,6 +11,10 @@ import Management from "./pages/management/Management";
 
 import PostContextProvider from "./contexts/PostContext";
 import AddressProvider from "./contexts/AddressContext";
+
+import Dashboard from "./pages/admin/Dashboard";
+import UsersList from "./components/admin/userList/UsersList";
+import Starter from "./components/admin/starter/Starter";
 
 function App() {
   return (
@@ -31,6 +35,11 @@ function App() {
                 <Route path="/me/posts" element={<Management manageRoute="posts"/>} />
                 <Route path="/me/create" element={<Management manageRoute="create"/>} />
                 <Route path="/me/profile" element={<Management manageRoute="profile"/>} />
+              </Route>
+              <Route path="/admin" element={<Dashboard />}>
+                <Route path="/admin" element={<Navigate to="/admin/starter" />} />
+                <Route path="/admin/starter" element={<Starter />} />
+                <Route path="/admin/usersList" element={<UsersList />}/>
               </Route>
             </Routes>
           </Router>

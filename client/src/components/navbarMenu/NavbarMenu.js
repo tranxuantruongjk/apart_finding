@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
@@ -8,7 +8,13 @@ import "./navbarMenu.scss";
 import axios from "axios";
 import { apiUrl } from "../../contexts/constants";
 
+import { AuthContext } from "../../contexts/AuthContext";
+
 const NavbarMenu = () => {
+  const {
+    authState: { user },
+  } = useContext(AuthContext);
+
   const [rentTypes, setRentTypes] = useState([]);
   const [navMenu, setNavMenu] = useState([]);
 
@@ -41,31 +47,37 @@ const NavbarMenu = () => {
     const homePath = [
       {
         display: "Trang chủ",
-        path: "/"
-      }
-    ]
+        path: "/",
+      },
+    ];
     setNavMenu([...homePath, ...navArr]);
   }, [rentTypes, setRentTypes]);
 
   return (
-    <Navbar expand="lg" bg="primary" variant="dark" className="shadow p-0">
-      <Container>
-        <Nav className="me-auto">
-          {navMenu.map((menu, i) => (
-            <Nav.Link
-              className={`menuItem ${
-                i === active ? "actived" : ""
-              } fw-bolder text-white px-3`}
-              to={menu.path}
-              as={Link}
-              key={i}
-            >
-              {menu.display}
-            </Nav.Link>
-          ))}
-        </Nav>
-      </Container>
-    </Navbar>
+    <>
+      {user && user.role === 1 ? (
+        <></>
+      ) : (
+        <Navbar expand="lg" bg="primary" variant="dark" className="shadow p-0">
+          <Container>
+            <Nav className="me-auto">
+              {navMenu.map((menu, i) => (
+                <Nav.Link
+                  className={`menuItem ${
+                    i === active ? "actived" : ""
+                  } fw-bolder text-white px-3`}
+                  to={menu.path}
+                  as={Link}
+                  key={i}
+                >
+                  {menu.display}
+                </Nav.Link>
+              ))}
+            </Nav>
+          </Container>
+        </Navbar>
+      )}
+    </>
   );
 };
 

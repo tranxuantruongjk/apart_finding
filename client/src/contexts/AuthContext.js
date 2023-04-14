@@ -31,6 +31,7 @@ const AuthContextProvider = ({ children }) => {
           },
         });
       }
+      return response.data;
     } catch (error) {
       localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
       setAuthToken(null);
@@ -71,9 +72,9 @@ const AuthContextProvider = ({ children }) => {
           LOCAL_STORAGE_TOKEN_NAME,
           response.data.accessToken
         );
-
-      await loadUser();
-      return response.data;
+  
+      const res = await loadUser();
+      return {...response.data, user: res.user};
     } catch (error) {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
