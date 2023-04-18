@@ -1,0 +1,46 @@
+.card-header {
+  button {
+    position: relative;
+
+    &:hover, &.active {
+      color : #0d6efd !important;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      transition: width 0.5s ease;
+      height: 2px;
+      background-color: #0d6efd;
+    }
+    &.active::after,
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  &:hover > :not(:hover) {
+    opacity: 0.4;
+  }
+}
+
+.font-size-sm {
+  font-size: 0.875rem;
+}
+
+.btn-action {
+  cursor: pointer;
+  padding: 6px 6px;
+  width: 32px;
+  height: 32px;
+
+  &:hover {
+    background-color: #ced4da;
+    border-radius: 50%;
+    box-shadow: 3px#ced4da, -3px #ced4da;
+  }
+}

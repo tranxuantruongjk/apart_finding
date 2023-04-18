@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Navbar,
   Collapse,
@@ -20,7 +20,11 @@ import { BsThreeDotsVertical, BsList, BsX } from "react-icons/bs";
 
 import "./header.scss";
 
+import { AuthContext } from "../../../contexts/AuthContext";
+
 const Header = () => {
+  const { logoutUser } = useContext(AuthContext);
+
   const [isOpen, setIsOpen] = React.useState(false);
 
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
@@ -32,6 +36,13 @@ const Header = () => {
   const showMobilemenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+
+  const navigate = useNavigate();
+  const logout = async () => {
+    await logoutUser();
+    navigate("/");
+  };
+
   return (
     <Navbar color="white" light expand="md" className="fix-header">
       <div className="d-flex align-items-center">
@@ -96,7 +107,7 @@ const Header = () => {
             <DropdownItem header>Info</DropdownItem>
             <DropdownItem>My profile</DropdownItem>
             <DropdownItem divider />
-            <DropdownItem>Logout</DropdownItem>
+            <DropdownItem onClick={logout}>Logout</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </Collapse>

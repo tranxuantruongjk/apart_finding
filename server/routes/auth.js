@@ -5,11 +5,11 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../model/User");
 const verifyToken = require("../middleware/auth");
+const verifyAdminToken = require("../middleware/authAdmin");
 
 // @route GET api/auth
 // @desc Check it user is logged in
 // @access Public
-
 router.get("/", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.userId).select("-password");
@@ -71,10 +71,11 @@ router.post("/register", async (req, res) => {
         message: "Missing username and/or password and/or phone",
       });
 
+  if (role === 1) verifyAdminToken(req, res);
+
   try {
     // Check for existing user
     const user = await User.findOne({ phone });
-    console.log('user', user);
 
     if (user)
       return res
@@ -84,7 +85,7 @@ router.post("/register", async (req, res) => {
     // All pass
     const hashedPassword = await argon2.hash(password);
     const newUser = new User({ username, phone, email, password: hashedPassword, role });
-    console.log('newUser', newUser);
+
     await newUser.save();
     // console.log(newUser);
     // Sau khi user register thi se tra lai access token
@@ -151,11 +152,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// @route GET api/auth/admin
-// @route Login admin
+// @route GET api/auth/admin/usersList
+// @route Admin gets list of users
 // @access Private
-router.get("/admin", async (req, res) => {
+router.get("/admin/usersList", verifyAdminToken, async (req, res) => {
+  try {
+    const users = await User.find().select("-password");
 
+    res.json({ success: true, users });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
 });
 
 module.exports = router;

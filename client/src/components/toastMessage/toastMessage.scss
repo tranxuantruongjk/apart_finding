@@ -1,0 +1,10 @@
+.toast-container {
+  position: fixed !important;
+  top: 20px;
+  right: 20px;
+
+  .toast-body {
+    color: white;
+    font-weight: 600;
+  }
+}

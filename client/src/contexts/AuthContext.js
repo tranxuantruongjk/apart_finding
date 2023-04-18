@@ -50,7 +50,7 @@ const AuthContextProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  // Get information of a user 
+  // Get information of a user
   const getUser = async (id) => {
     try {
       const response = await axios.get(`${apiUrl}/auth/${id}`);
@@ -61,7 +61,7 @@ const AuthContextProvider = ({ children }) => {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }
-  }
+  };
 
   // User logins
   const loginUser = async (userForm) => {
@@ -72,28 +72,30 @@ const AuthContextProvider = ({ children }) => {
           LOCAL_STORAGE_TOKEN_NAME,
           response.data.accessToken
         );
-  
+
       const res = await loadUser();
-      return {...response.data, user: res.user};
+      return { ...response.data, user: res.user };
     } catch (error) {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }
   };
   // User registers
-  const registerUser = async (registerForm) => {
+  const registerUser = async (registerForm, role = "user") => {
     try {
       const response = await axios.post(
         `${apiUrl}/auth/register`,
         registerForm
       );
-      if (response.data.success)
-        localStorage.setItem(
-          LOCAL_STORAGE_TOKEN_NAME,
-          response.data.accessToken
-        );
+      if (role === "user") {
+        if (response.data.success)
+          localStorage.setItem(
+            LOCAL_STORAGE_TOKEN_NAME,
+            response.data.accessToken
+          );
 
-      await loadUser();
+        await loadUser();
+      }
       return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;
@@ -111,8 +113,8 @@ const AuthContextProvider = ({ children }) => {
           type: "SET_AUTH",
           payload: {
             isAuthenticated: true,
-            user: response.data.user
-          }
+            user: response.data.user,
+          },
         });
         return response.data;
       }
@@ -121,7 +123,7 @@ const AuthContextProvider = ({ children }) => {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }
-  }
+  };
 
   // User exits
   const logoutUser = async () => {
@@ -136,8 +138,31 @@ const AuthContextProvider = ({ children }) => {
     });
   };
 
+  // Admin
+  // Get all users
+  const getAllUsers = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/auth/admin/usersList`);
+
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Context data
-  const authContextData = { authState, loginUser, registerUser, logoutUser, getUser, updateUserInfo };
+  const authContextData = {
+    authState,
+    loginUser,
+    registerUser,
+    logoutUser,
+    getUser,
+    updateUserInfo,
+    getAllUsers,
+  };
 
   // Return provider
   return (

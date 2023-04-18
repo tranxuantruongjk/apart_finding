@@ -23,6 +23,10 @@ const UserSchema = new Schema(
       type: Number,
       default: 0,
     },
+    state: {
+      type: String,
+      default: "active"
+    }
   },
   {
     timestamps: true,
