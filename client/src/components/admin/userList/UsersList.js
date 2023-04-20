@@ -1,36 +1,31 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 
-import { AuthContext } from "../../../contexts/AuthContext";
+import { UserContext } from "../../../contexts/admin/UserContext";
 import NewUser from "../newUser/NewUser";
+import ActionModal from "../actionModal/ActionModal";
 
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
 import { BsFillPersonPlusFill } from "react-icons/bs";
-import { TbLock } from "react-icons/tb";
+import { TbLock, TbLockOpen } from "react-icons/tb";
 import { MdOutlineDelete } from "react-icons/md";
 
 import "./usersList.scss";
 import avatar from "../../../assets/images/default-user.png";
 
 const UsersList = () => {
-  const [users, setUsers] = useState([]);
-  const { getAllUsers } = useContext(AuthContext);
+  const {
+    userState: { users },
+    blockUser,
+    unBlockUser,
+    deleteUser,
+  } = useContext(UserContext);
 
   const [showNewUserModal, setShowNewUserModal] = useState(false);
-
-  useEffect(() => {
-    const getUsers = async () => {
-      const response = await getAllUsers();
-
-      if (response.success) {
-        setUsers(response.users);
-      }
-    };
-
-    getUsers();
-  }, []);
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [action, setAction] = useState(null);
 
   const handleClickList = (e) => {
     const btnsList = Object.values(
@@ -41,6 +36,36 @@ const UsersList = () => {
     for (let btn of remainList) {
       btn.classList.remove("active");
     }
+  };
+
+  const handleActionBlock = (userId) => {
+    setShowActionModal(true);
+    setAction({
+      object: userId,
+      action: blockUser,
+      message: "Bạn chắc chắn muốn khóa tài khoản này?",
+      button: "Xác nhận",
+    });
+  };
+
+  const handleActionUnBlock = (userId) => {
+    setShowActionModal(true);
+    setAction({
+      object: userId,
+      action: unBlockUser,
+      message: "Bạn chắc chắn muốn mở khóa tài khoản này?",
+      button: "Xác nhận",
+    });
+  };
+
+  const handleActionDelete = (userId) => {
+    setShowActionModal(true);
+    setAction({
+      object: userId,
+      action: deleteUser,
+      message: "Bạn chắc chắn muốn xóa tài khoản này?",
+      button: "Xác nhận",
+    });
   };
 
   return (
@@ -117,7 +142,7 @@ const UsersList = () => {
                   <td>{tdata.phone}</td>
                   <td>{tdata.email ? tdata.email : ""}</td>
                   <td>
-                    {tdata.status === "blocked" ? (
+                    {tdata.state === "blocked" ? (
                       <span className="p-2 bg-danger rounded-circle d-inline-block ms-3"></span>
                     ) : (
                       <span className="p-2 bg-success rounded-circle d-inline-block ms-3"></span>
@@ -126,8 +151,21 @@ const UsersList = () => {
                   <td>{tdata.role === 0 ? "User" : "Admin"}</td>
                   <td>
                     <div className="d-flex align-items-center justify-content-around fs-5">
-                      <TbLock className="btn-action" />
-                      <MdOutlineDelete className="btn-action" />
+                      {tdata.state === "active" ? (
+                        <TbLockOpen
+                          className="btn-action"
+                          onClick={() => handleActionBlock(tdata._id)}
+                        />
+                      ) : (
+                        <TbLock
+                          className="btn-action"
+                          onClick={() => handleActionUnBlock(tdata._id)}
+                        />
+                      )}
+                      <MdOutlineDelete
+                        className="btn-action"
+                        onClick={() => handleActionDelete(tdata._id)}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -136,7 +174,15 @@ const UsersList = () => {
           </Table>
         </Card.Body>
       </Card>
-      <NewUser showNewUserModal={showNewUserModal} setShowNewUserModal={setShowNewUserModal}/>
+      <ActionModal
+        showActionModal={showActionModal}
+        setShowActionModal={setShowActionModal}
+        action={action}
+      />
+      <NewUser
+        showNewUserModal={showNewUserModal}
+        setShowNewUserModal={setShowNewUserModal}
+      />
     </div>
   );
 };

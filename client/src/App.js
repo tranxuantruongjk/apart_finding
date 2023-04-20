@@ -11,6 +11,7 @@ import Management from "./pages/management/Management";
 
 import PostContextProvider from "./contexts/PostContext";
 import AddressProvider from "./contexts/AddressContext";
+import UserContextProvider from "./contexts/admin/UserContext";
 
 import Dashboard from "./pages/admin/Dashboard";
 import UsersList from "./components/admin/userList/UsersList";
@@ -21,28 +22,30 @@ function App() {
     <AuthContextProvider>
       <PostContextProvider>
         <AddressProvider>
-          <Router>
-            <Header />
-            <NavbarMenu />
-            <Routes>
-              <Route path="/:type/:id" element={<DetailPost />} />
-              <Route path="/:type" element={<Home />} />
-              <Route path="/search" element={<Home />} />
-              <Route path="/login" element={<Auth authRoute="login" />} />
-              <Route path="/register" element={<Auth authRoute="register" />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/me" element={<ProtectedRoute />}>
-                <Route path="/me/posts" element={<Management manageRoute="posts"/>} />
-                <Route path="/me/create" element={<Management manageRoute="create"/>} />
-                <Route path="/me/profile" element={<Management manageRoute="profile"/>} />
-              </Route>
-              <Route path="/admin" element={<Dashboard />}>
-                <Route path="/admin" element={<Navigate to="/admin/starter" />} />
-                <Route path="/admin/starter" element={<Starter />} />
-                <Route path="/admin/usersList" element={<UsersList />}/>
-              </Route>
-            </Routes>
-          </Router>
+          <UserContextProvider>
+            <Router>
+              <Header />
+              <NavbarMenu />
+              <Routes>
+                <Route path="/:type/:id" element={<DetailPost />} />
+                <Route path="/:type" element={<Home />} />
+                <Route path="/search" element={<Home />} />
+                <Route path="/login" element={<Auth authRoute="login" />} />
+                <Route path="/register" element={<Auth authRoute="register" />} />
+                <Route path="/" element={<Home />} />
+                <Route path="/me" element={<ProtectedRoute />}>
+                  <Route path="/me/posts" element={<Management manageRoute="posts"/>} />
+                  <Route path="/me/create" element={<Management manageRoute="create"/>} />
+                  <Route path="/me/profile" element={<Management manageRoute="profile"/>} />
+                </Route>
+                <Route path="/admin" element={<Dashboard />}>
+                  <Route path="/admin" element={<Navigate to="/admin/starter" />} />
+                  <Route path="/admin/starter" element={<Starter />} />
+                  <Route path="/admin/usersList" element={<UsersList />}/>
+                </Route>
+              </Routes>
+            </Router>
+          </UserContextProvider>
         </AddressProvider>
       </PostContextProvider>
     </AuthContextProvider>

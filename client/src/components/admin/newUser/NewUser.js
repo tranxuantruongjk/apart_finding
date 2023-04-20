@@ -5,13 +5,13 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
-import { AuthContext } from "../../../contexts/AuthContext";
+import { UserContext } from "../../../contexts/admin/UserContext";
 import ToastMessage from "../../toastMessage/ToastMessage";
 import AlertMessage from "../../alertMessage/AlertMessage";
 
 const NewUser = ({ showNewUserModal, setShowNewUserModal }) => {
   // Context
-  const { registerUser } = useContext(AuthContext);
+  const { registerUser } = useContext(UserContext);
 
   // State
   const [registerForm, setRegisterForm] = useState({
