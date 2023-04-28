@@ -2,12 +2,24 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
-const ActionModal = ({ showActionModal, setShowActionModal, action }) => {
+const ActionModal = ({ showActionModal, setShowActionModal, action, setAction }) => {
   const handleClose = () => setShowActionModal(false);
   const handleAction = async () => {
-    await action.action(action.object);
+    if (action.setPost) {
+      const newRes = await action.action(action.object);
+      
+      if (newRes.success) {
+        action.setPost((prev) => {
+          return { ...prev, state: newRes.post.state };
+        });
+
+        setAction((action) => ({...action, success: true}));
+      }
+    } else {
+      await action.action(action.object);
+    }
     handleClose();
-  }
+  };
 
   return action === null ? null : (
     <Modal show={showActionModal} onHide={handleClose}>

@@ -1,0 +1,26 @@
+.pending {
+  cursor: pointer;
+  background-color: #f790091f;
+  color: #b54708;
+  padding: 3px 8px 5px 8px;
+  border-radius: 15px;
+  font-weight: 600;
+}
+
+.rejected {
+  cursor: pointer;
+  background-color: #f044381f;
+  color: #b42318;
+  padding: 3px 8px 5px 8px;
+  border-radius: 15px;
+  font-weight: 600;
+}
+
+.accepted {
+  cursor: pointer;
+  background-color: #10b9811f;
+  color: #0b815a;
+  padding: 3px 8px 5px 8px;
+  border-radius: 15px;
+  font-weight: 600;
+}

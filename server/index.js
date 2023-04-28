@@ -7,6 +7,8 @@ const mongoose = require("mongoose");
 
 const authRouter = require('./routes/auth');
 const postRouter = require("./routes/post");
+const adminUserRouter = require("./routes/admin/user");
+const adminPostRouter = require("./routes/admin/post");
 
 const connectDB = async () => {
   try {
@@ -35,6 +37,8 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 
 app.use('/api/auth', authRouter);
 app.use('/api/post', postRouter);
+app.use('/api/admin/users', adminUserRouter);
+app.use('/api/admin/posts', adminPostRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

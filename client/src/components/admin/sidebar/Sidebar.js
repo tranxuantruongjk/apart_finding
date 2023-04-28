@@ -4,8 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./sideBar.scss";
 
 import { BsX } from "react-icons/bs";
-import { MdDashboard } from "react-icons/md";
-import { MdPeople } from "react-icons/md";
+import { MdDashboard, MdPeople, MdArticle } from "react-icons/md";
 
 const navigation = [
   {
@@ -17,6 +16,11 @@ const navigation = [
     title: "Người dùng",
     href: "/admin/usersList",
     icon: <MdPeople />,
+  },
+  {
+    title: "Bài đăng",
+    href: "/admin/postsList",
+    icon: <MdArticle />,
   },
 ];
 

@@ -36,6 +36,11 @@ const PostSchema = new Schema (
       type: Schema.Types.ObjectId,
       ref: 'users',
       require: true,
+    }, 
+    state: {
+      type: String,
+      default: "pending",
+      require: true,
     }
   },
   {

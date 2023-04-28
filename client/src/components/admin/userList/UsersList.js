@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../../../contexts/admin/UserContext";
 import NewUser from "../newUser/NewUser";
@@ -18,6 +18,7 @@ import avatar from "../../../assets/images/default-user.png";
 const UsersList = () => {
   const {
     userState: { users },
+    getAllUsers,
     blockUser,
     unBlockUser,
     deleteUser,
@@ -47,6 +48,14 @@ const UsersList = () => {
       button: "Xác nhận",
     });
   };
+
+  useEffect(() => {
+    const getUsers = async () => {
+      await getAllUsers();
+    };
+
+    getUsers();
+  }, []);
 
   const handleActionUnBlock = (userId) => {
     setShowActionModal(true);

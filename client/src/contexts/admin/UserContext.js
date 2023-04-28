@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer } from "react";
 import axios from "axios";
 import { apiUrl, USERS_LOADED_SUCCESS, USERS_LOADED_FAILED } from "../constants";
 import { userReducer } from "../../reducers/admin/userReducer";
@@ -14,8 +14,7 @@ const UserContextProvider = ({ children }) => {
   // Get all users
   const getAllUsers = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/auth/admin/usersList`);
-
+      const response = await axios.get(`${apiUrl}/admin/users`);
       if (response.data.success) {
         dispatch({
           type: USERS_LOADED_SUCCESS,
@@ -28,10 +27,6 @@ const UserContextProvider = ({ children }) => {
       })
     }
   };
-
-  useEffect(() => {
-    getAllUsers();
-  }, []);
 
   const registerUser = async (registerForm) => {
     try {
@@ -51,7 +46,7 @@ const UserContextProvider = ({ children }) => {
   const blockUser = async (userId) => {
     try {
       const response = await axios.put(
-        `${apiUrl}/auth/admin/usersList/block/${userId}`
+        `${apiUrl}/admin/users/block/${userId}`
       );
 
       await getAllUsers();
@@ -65,7 +60,7 @@ const UserContextProvider = ({ children }) => {
   const unBlockUser = async (userId) => {
     try {
       const response = await axios.put(
-        `${apiUrl}/auth/admin/usersList/unblock/${userId}`
+        `${apiUrl}/admin/users/unblock/${userId}`
       );
 
       await getAllUsers();
@@ -79,7 +74,7 @@ const UserContextProvider = ({ children }) => {
   const deleteUser = async (userId) => {
     try {
       const response = await axios.delete(
-        `${apiUrl}/auth/admin/usersList/delete/${userId}`
+        `${apiUrl}/admin/users/${userId}`
       );
 
       await getAllUsers();
@@ -97,6 +92,7 @@ const UserContextProvider = ({ children }) => {
     blockUser,
     unBlockUser,
     deleteUser,
+    getAllUsers,
   };
 
   // Return provider
