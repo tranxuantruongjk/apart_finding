@@ -1,9 +1,15 @@
-.menuItem {
-  &:hover {
-    background-color: red;
-  }
-}
+@use "../../assets//scss/style.scss" as *;
 
-.actived {
-  background-color: red;
+nav {
+  background-color: $main-color;
+
+  .menuItem {
+    &:hover {
+      background-color: $actived-color;
+    }
+  }
+  
+  .actived {
+    background-color: $actived-color;
+  }
 }

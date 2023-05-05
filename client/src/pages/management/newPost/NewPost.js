@@ -162,20 +162,20 @@ const NewPost = () => {
   };
 
   return (
-    <div>
-      <div className="post__header mt-3 pb-2 mx-2 border-bottom">
+    <div className="new-post">
+      <div className="new-post__header mt-3 pb-2 mx-2 border-bottom">
         <h2>Đăng tin mới</h2>
       </div>
       <AlertMessage info={alert} />
       <Form
-        className="my-3 mx-2"
+        className="new-post__body my-3 mx-2"
         onSubmit={create}
         encType="multipart/form-data"
       >
         <Row>
-          <Col md={8}>
-            <Card border="primary" className="shadow mb-3">
-              <Card.Header className="text-bg-primary">
+          <Col md={8} className="new-post__info">
+            <Card className="shadow mb-3">
+              <Card.Header>
                 <Row>
                   <h3>Địa chỉ cho thuê</h3>
                 </Row>
@@ -264,8 +264,8 @@ const NewPost = () => {
                 </Row>
               </Card.Body>
             </Card>
-            <Card border="primary" className="shadow mb-3">
-              <Card.Header className="text-bg-primary">
+            <Card className="shadow mb-3">
+              <Card.Header>
                 <Row>
                   <h3>Thông tin mô tả</h3>
                 </Row>
@@ -398,7 +398,7 @@ const NewPost = () => {
               <FileList type="video" files={files} removeFile={removeFile} />
             </Row>
             <Row className="me-1">
-              <Button variant="primary" type="submit" className="mx-2 btn-create">
+              <Button type="submit" className="mx-2 btn-create">
                 Đăng bài
               </Button>
             </Row>

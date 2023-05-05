@@ -5,6 +5,7 @@ import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import NavDropdown from "react-bootstrap/NavDropdown";
+import { AiOutlinePlusCircle } from "react-icons/ai";
 
 import "./header.scss";
 
@@ -24,7 +25,7 @@ const Header = () => {
       {user && user.role === 1 ? (
         <></>
       ) : (
-        <Container className="d-flex justify-content-between">
+        <Container className="d-flex justify-content-between header">
           <div className="header__logo">
             <Link to={"/"}>
               <img src={logo} alt="logo" />
@@ -72,8 +73,11 @@ const Header = () => {
               </>
             )}
             <div className="btn__post">
-              <Link to="/me/create">
-                <Button>Đăng tin mới</Button>
+              <Link to="/me/create" className="text-decoration-none">
+                <Button className="d-flex align-items-center">
+                  <span>Đăng tin mới</span>
+                  <AiOutlinePlusCircle className="ms-1"/>
+                </Button>
               </Link>
             </div>
           </div>

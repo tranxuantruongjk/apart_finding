@@ -1,17 +1,32 @@
-.btn__login, 
-.btn__logout,
-.btn__signup,
-.my-posts, 
-.my-profile {
-  text-decoration: none;
+@use "../../assets//scss/style.scss" as *;
 
-  &:hover {
-    color: #000;
+.header {
+  .btn__login,
+  .btn__logout,
+  .btn__signup,
+  .my-posts,
+  .my-profile {
+    text-decoration: none;
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  .btn__post button {
+    background-color: $actived-color;
+    font-weight: 600;
+    
+    &:hover {
+      background-color: #f20a32;
+    }
+
+    &:active {
+      background-color: $actived-color;
+    }
+  }
+
+  .my-item {
+    background-color: #fff !important;
   }
 }
-
-.my-item {
-  background-color: #fff !important;
-}
-
-

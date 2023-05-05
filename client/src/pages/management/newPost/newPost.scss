@@ -1,8 +1,27 @@
-.post-note {
-  color: #856404;
-  background-color: #fff3cd !important;
+@use "../../../assets/scss/style.scss" as *;
 
-  ul {
-    padding-left: 1.2rem !important;
+.new-post {
+  .post-note {
+    color: #856404;
+    background-color: #fff3cd !important;
+
+    ul {
+      padding-left: 1.2rem !important;
+    }
+  }
+
+  &__info {
+    .card {
+      border: 1px solid $main-color;
+    }
+  
+    .card-header {
+      color: white;
+      background-color: $main-color;
+    }
+
+    button {
+      background-color: $main-color;
+    }
   }
 }
