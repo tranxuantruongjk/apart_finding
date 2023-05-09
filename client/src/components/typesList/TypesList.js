@@ -13,17 +13,27 @@ import "./typesList.scss";
 
 const TypesList = () => {
   const [rentTypes, setRentTypes] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-  const { postState: { posts} } = useContext(PostContext)
+  const { getTotalPosts } = useContext(PostContext)
 
   useEffect(() => {
     const getRentTypes = async () => {
-      const response = await axios.get(`${apiUrl}/post/rentTypes`);
+      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
       setRentTypes(response.data.rentTypes);
     };
 
     getRentTypes();
   }, []);
+
+  useEffect(() => {
+    const getPosts = async () => {
+      const response = await getTotalPosts();
+      setPosts(response.posts);
+    }
+
+    getPosts();
+  }, [])
 
 
   return (

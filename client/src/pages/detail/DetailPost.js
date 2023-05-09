@@ -25,8 +25,8 @@ const DetailPost = () => {
   const [post, setPost] = useState(null);
   useEffect(() => {
     const getDetail = async () => {
-      const response = await axios.get(`${apiUrl}/post/${type}/${id}`);
-      console.log(response.data.post);
+      const response = await axios.get(`${apiUrl}/posts/${type}/${id}`);
+
       setPost(response.data.post);
     };
     getDetail();

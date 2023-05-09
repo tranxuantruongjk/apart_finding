@@ -13,29 +13,22 @@ import "./postManage.scss";
 const PostManage = () => {
   const [posts, setPosts] = useState([]);
 
-  const { postState, getUserIdPosts } = useContext(PostContext);
+  const { getUserIdPosts } = useContext(PostContext);
   const {
     authState: { user },
   } = useContext(AuthContext);
 
   useEffect(() => {
     const getPosts = async () => {
-      if (postState.posts.length !== 0) {
-        const postsFilter = postState.posts.filter(
-          (post) => post.user._id === user._id
-        );
-        setPosts(postsFilter);
-      } else {
-        const res = await getUserIdPosts(user._id);
+      const res = await getUserIdPosts(user._id);
 
-        if (res.posts.length !== 0) {
-          setPosts(res.posts);
-        }
+      if (res.posts.length !== 0) {
+        setPosts(res.posts);
       }
     };
 
     getPosts();
-  }, [postState.posts]);
+  }, []);
 
   return (
     <div className="post-manage">

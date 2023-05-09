@@ -88,7 +88,7 @@ const NewPost = () => {
 
   useEffect(() => {
     const getRentTypes = async () => {
-      const response = await axios.get(`${apiUrl}/post/rentTypes`);
+      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
       setRentTypes(response.data.rentTypes);
     };
 

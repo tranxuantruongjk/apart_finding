@@ -5,7 +5,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Badge from "react-bootstrap/Badge";
-import Pagination from "react-bootstrap/Pagination";
 
 import { FaRegClock } from "react-icons/fa";
 import { FaChartArea } from "react-icons/fa";
@@ -15,6 +14,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { getDate, getDistrictName } from "../../utils/post";
 
 import { PostContext } from "../../contexts/PostContext";
+import Paging from "../paging/Paging";
 
 import "./postsList.scss";
 
@@ -23,9 +23,14 @@ const PostsList = () => {
   const { pathname } = useLocation();
 
   const {
-    postState: { posts },
+    postState: { posts, page, limit, total },
     getPosts,
+    changePage,
   } = useContext(PostContext);
+
+  useEffect(() => {
+    changePage(1);
+  }, [pathname])
 
   // Start: get all posts
   useEffect(() => {
@@ -34,7 +39,7 @@ const PostsList = () => {
     } else if (pathname === "/") {
       getPosts();
     }
-  }, [type, pathname]);
+  }, [type, pathname, page]);
 
   return (
     <div className="posts-list">
@@ -43,7 +48,7 @@ const PostsList = () => {
           <Card.Title>Danh sách tin đăng</Card.Title>
           <ListGroup variant="flush">
             <ListGroup.Item className="border-danger" />
-            {posts.map((post) => (
+            {posts && posts.map((post) => (
               <ListGroup.Item key={post._id} className="border-danger">
                 <Row>
                   <Col md={5} className="post__thumb">
@@ -107,16 +112,7 @@ const PostsList = () => {
           </ListGroup>
         </Card.Body>
       </Card>
-      <Pagination className="justify-content-center mt-3" size="lg">
-        <Pagination.First />
-        <Pagination.Prev />
-        <Pagination.Item active>{1}</Pagination.Item>
-        <Pagination.Item>{2}</Pagination.Item>
-        <Pagination.Item>{3}</Pagination.Item>
-        <Pagination.Ellipsis />
-        <Pagination.Next />
-        <Pagination.Last />
-      </Pagination>
+      <Paging page={page} limit={limit} totalPosts={total} changePage={changePage} />
     </div>
   );
 };

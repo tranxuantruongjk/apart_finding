@@ -6,7 +6,6 @@ import Spinner from "react-bootstrap/Spinner";
 const ProtectedRoute = () => {
   const { authState: { authLoading, isAuthenticated }} = useContext(AuthContext);
   
-  console.log("prev ", authLoading, isAuthenticated);
   if (authLoading)
     return (
       <div className="spinner-container">
@@ -14,7 +13,6 @@ const ProtectedRoute = () => {
       </div>
     );
 
-  console.log(authLoading, isAuthenticated);
   return isAuthenticated ? <><Outlet /></> : <Navigate to="/login" />
 };
 

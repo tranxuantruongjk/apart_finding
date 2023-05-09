@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import "./searchBar.scss";
-import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { BiSearch } from "react-icons/bi";
@@ -16,7 +15,7 @@ import AcreageModal from "./acreageModal/AcreageModal";
 
 import useAddressContext from "../../hooks/useAddressContext";
 import { PostContext } from "../../contexts/PostContext";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const minPrice = 0;
 const maxPrice = 10;
@@ -46,7 +45,7 @@ const SearchBar = () => {
     setPage,
   } = useAddressContext();
 
-  const { searchPost } = useContext(PostContext);
+  const { postState: { page }, searchPost } = useContext(PostContext);
 
   const handleTypeClick = () => {
     setShowTypeModal(true);
@@ -98,8 +97,10 @@ const SearchBar = () => {
         wardName: "",
         address: "",
       });
+    } else {
+      handleSubmit();
     }
-  }, [pathname, setData]);
+  }, [pathname, setData, page]);
 
   return (
     <div className="search-bar">

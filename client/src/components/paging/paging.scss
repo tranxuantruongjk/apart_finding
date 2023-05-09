@@ -1,0 +1,42 @@
+$btn-size: 50px;
+$btn-border: 2px;
+
+.paging {
+  ul {
+    font-size: 17px;
+    font-weight: 500;
+    height: $btn-size !important;
+
+    li {
+      width: $btn-size;
+      height: 100% !important;
+
+      a {
+        height: 100%;
+        line-height: calc($btn-size - $btn-border * 2);
+
+        &.ant-pagination-item-link {
+          line-height: $btn-size;
+
+          .anticon {
+            font-size: 15px !important;
+            vertical-align: middle;
+          }
+        }
+      }
+
+      button {
+        font-size: 15px !important;
+
+        span {
+          vertical-align: unset;
+        }
+      }
+    }
+
+    .ant-pagination-item {
+      border-width: $btn-border;
+    }
+
+  }
+}

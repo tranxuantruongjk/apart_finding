@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 // });
 
 app.use('/api/auth', authRouter);
-app.use('/api/post', postRouter);
+app.use('/api/posts', postRouter);
 app.use('/api/admin/users', adminUserRouter);
 app.use('/api/admin/posts', adminPostRouter);
 
