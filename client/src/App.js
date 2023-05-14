@@ -29,7 +29,7 @@ function App() {
             <AdminPostContextProvider>
               <Router>
                 <Header />
-                <NavbarMenu />
+                {/* <NavbarMenu /> */}
                 <Routes>
                   <Route path="/:type/:id" element={<DetailPost />} />
                   <Route path="/:type" element={<Home />} />

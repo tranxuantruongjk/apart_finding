@@ -30,7 +30,7 @@ const PostsList = () => {
 
   useEffect(() => {
     changePage(1);
-  }, [pathname])
+  }, [pathname]);
 
   // Start: get all posts
   useEffect(() => {

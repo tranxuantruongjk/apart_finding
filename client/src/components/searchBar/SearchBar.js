@@ -45,7 +45,7 @@ const SearchBar = () => {
     setPage,
   } = useAddressContext();
 
-  const { postState: { page }, searchPost } = useContext(PostContext);
+  const { postState: { page }, changePage, searchPost } = useContext(PostContext);
 
   const handleTypeClick = () => {
     setShowTypeModal(true);
@@ -81,6 +81,10 @@ const SearchBar = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    changePage(1);
+  }, [pathname]);
 
   useEffect(() => {
     if (pathname !== "/search") {

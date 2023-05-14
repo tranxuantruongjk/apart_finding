@@ -1,15 +1,19 @@
 @use "../../assets//scss/style.scss" as *;
 
 nav {
-  background-color: $main-color;
-
   .menuItem {
+    color: $main-color;
+
     &:hover {
-      background-color: $actived-color;
+      background-color: $main-color;
+      color: white;
+      border-radius: 20px;
     }
   }
   
   .actived {
-    background-color: $actived-color;
+    background-color: $main-color;
+    color: white;
+    border-radius: 20px;
   }
 }

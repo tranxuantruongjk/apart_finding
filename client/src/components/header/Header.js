@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import Container from "react-bootstrap/Container";
-import logo from "../../assets/images/apart_logo.svg";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { AiOutlinePlusCircle } from "react-icons/ai";
+import Logo from "../logo/Logo";
+import NavbarMenu from "../navbarMenu/NavbarMenu";
 
 import "./header.scss";
 
@@ -15,7 +16,6 @@ const Header = () => {
     logoutUser,
   } = useContext(AuthContext);
 
-  // console.log(user);
   const logout = async () => {
     await logoutUser();
   };
@@ -27,10 +27,11 @@ const Header = () => {
       ) : (
         <Container className="d-flex justify-content-between header">
           <div className="header__logo">
-            <Link to={"/"}>
-              <img src={logo} alt="logo" />
+            <Link to={"/"} className="text-decoration-none">
+              <Logo />
             </Link>
           </div>
+          <NavbarMenu />
           <div className="header__btn d-flex justify-content-between align-items-center">
             {isAuthenticated ? (
               <>

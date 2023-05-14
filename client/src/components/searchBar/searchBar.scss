@@ -4,11 +4,12 @@
   min-height: 60px;
   margin: 10px 0px;
   border-radius: 5px;
-  background-color: #febb02;
+  // background-color: #80c4b3;
+  background-color: $main-color;
 
   &-top {
     height: 100%;
-    padding: 10px;
+    padding: 30px;
     margin-left: 0px !important;
     margin-right: 0px !important;
   }
@@ -18,7 +19,7 @@
     display: flex;
     align-items: center;
     border-radius: 5px;
-    height: 40px;
+    height: 45px;
     position: relative;
     margin-right: 5px;
     cursor: pointer;
@@ -31,9 +32,10 @@
     position: relative;
     margin-right: 0px;
     flex: 1;
-    font-weight: 600;
-    background-color: $main-color;
-    color: white;
+    font-size: 1.1rem;
+    font-weight: 700;
+    background-color: #febb02;
+    color: black;
   }
 }
 

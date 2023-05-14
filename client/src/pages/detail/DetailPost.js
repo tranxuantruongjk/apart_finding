@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -23,6 +24,7 @@ const DetailPost = () => {
   const saveRef = useRef(null);
 
   const [post, setPost] = useState(null);
+
   useEffect(() => {
     const getDetail = async () => {
       const response = await axios.get(`${apiUrl}/posts/${type}/${id}`);
@@ -44,7 +46,7 @@ const DetailPost = () => {
     <div className="container mt-3">
       {post && (
         <>
-          <Row>
+          <Row className="mb-5">
             <Col md={8}>
               <div className="post">
                 <div className="post__images">
@@ -58,7 +60,11 @@ const DetailPost = () => {
                             alt="First slide"
                           />
                         ) : (
-                          <video src={file.file} controls className="post-img"/>
+                          <video
+                            src={file.file}
+                            controls
+                            className="post-img"
+                          />
                         )}
                       </Carousel.Item>
                     ))}
@@ -120,6 +126,23 @@ const DetailPost = () => {
                       </tr>
                     </tbody>
                   </table>
+                </div>
+                <div className="post__map">
+                  <h3>Bản đồ</h3>
+                  <div id="maps" style={{ height: "300px", width: "100%" }}>
+                    <iframe
+                      title="frame-detail-address"
+                      width="100%"
+                      height="100%"
+                      style={{ border: "0" }}
+                      loading="lazy"
+                      allowFullScreen
+                      referrerPolicy="no-referrer-when-downgrade"
+                      src={`https://www.google.com/maps/embed/v1/place?key=${
+                        process.env.REACT_APP_API_KEY
+                      }&q=${post.address}, ${getWardDistrictName(post.wardId)}`}
+                    ></iframe>
+                  </div>
                 </div>
               </div>
             </Col>

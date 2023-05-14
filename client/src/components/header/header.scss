@@ -1,6 +1,8 @@
 @use "../../assets//scss/style.scss" as *;
 
 .header {
+  padding: 5px 0px;
+
   .btn__login,
   .btn__logout,
   .btn__signup,

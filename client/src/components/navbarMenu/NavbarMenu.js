@@ -58,14 +58,14 @@ const NavbarMenu = () => {
       {user && user.role === 1 ? (
         <></>
       ) : (
-        <Navbar expand="lg" variant="dark" className="shadow p-0">
+        <Navbar expand="lg" variant="dark" className="p-0">
           <Container>
             <Nav className="me-auto">
               {navMenu.map((menu, i) => (
                 <Nav.Link
                   className={`menuItem ${
                     i === active ? "actived" : ""
-                  } fw-bolder text-white px-3`}
+                  } fw-bolder px-3`}
                   to={menu.path}
                   as={Link}
                   key={i}
