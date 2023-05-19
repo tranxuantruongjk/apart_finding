@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
@@ -11,6 +11,7 @@ import {
 } from "react-icons/md";
 
 import { AdminPostContext } from "../../../contexts/admin/PostContext";
+import ActionModal from "../actionModal/ActionModal";
 
 import "./postsList.scss";
 import { Link } from "react-router-dom";
@@ -19,7 +20,11 @@ const PostsList = () => {
   const {
     adminPostState: { posts },
     getAllPosts,
+    deletePost,
   } = useContext(AdminPostContext);
+
+  const [showActionModal, setShowActionModal] = useState(false);
+  const [action, setAction] = useState(null);
 
   const handleClickList = (e) => {
     const btnsList = Object.values(
@@ -39,6 +44,16 @@ const PostsList = () => {
 
     getPosts();
   }, []);
+
+  const handleActionDelete = (postId) => {
+    setShowActionModal(true);
+    setAction({
+      object: postId,
+      action: deletePost,
+      message: "Bạn chắc chắn muốn xóa bài đăng này?",
+      button: "Xác nhận",
+    });
+  };
 
   return (
     <div>
@@ -125,7 +140,7 @@ const PostsList = () => {
                       <Link to={`/admin/postsList/${tdata._id}`}>
                         <MdOutlineRemoveRedEye className="btn-action" />
                       </Link>
-                      <MdOutlineDelete className="btn-action" />
+                      <MdOutlineDelete className="btn-action" onClick={() => handleActionDelete(tdata._id)}/>
                     </div>
                   </td>
                 </tr>
@@ -134,6 +149,11 @@ const PostsList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <ActionModal
+        showActionModal={showActionModal}
+        setShowActionModal={setShowActionModal}
+        action={action}
+      />
     </div>
   );
 };

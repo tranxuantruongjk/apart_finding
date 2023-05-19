@@ -14,14 +14,56 @@
     .card {
       border: 1px solid $main-color;
     }
-  
+
     .card-header {
       color: white;
       background-color: $main-color;
     }
 
-    button {
+    .btn-create {
       background-color: $main-color;
+    }
+
+    .btn-submit-address {
+      width: 100%;
+      background-color: $main-color;
+    }
+
+    .btn-util {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 5px;
+
+      svg,
+      img {
+        width: 1.2rem;
+        height: 1.2rem;
+      }
+
+      .title {
+        margin-left: 3px;
+      }
+
+      &:hover {
+        color: $main-color;
+        outline: solid 1px $main-color !important;
+
+        img {
+          filter: invert(16%) sepia(100%) saturate(2704%) hue-rotate(187deg)
+            brightness(97%) contrast(99%);
+        }
+      }
+    }
+
+    .actived {
+      color: $main-color;
+      outline: solid 1px $main-color !important;
+
+      img {
+        filter: invert(16%) sepia(100%) saturate(2704%) hue-rotate(187deg)
+          brightness(97%) contrast(99%);
+      }
     }
   }
 }

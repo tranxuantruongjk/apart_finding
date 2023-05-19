@@ -29,7 +29,7 @@ export const postReducer = (state, action) => {
     case DELETE_POST:
       return {
         ...state,
-        posts: state.posts.filter((post) => post._id !== payload),
+        posts: state.posts.filter((post) => post._id !== payload._id),
       };
     case UPDATE_POST:
       const newPosts = state.posts.map((post) =>

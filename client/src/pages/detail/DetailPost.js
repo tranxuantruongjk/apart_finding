@@ -16,7 +16,7 @@ import zaloIcon from "../../assets/images/zalo-icon.png";
 import "./detailPost.scss";
 import axios from "axios";
 import { apiUrl } from "../../contexts/constants";
-import { getWardDistrictName, getDetailDateTime } from "../../utils/post";
+import { getDetailDateTime } from "../../utils/post";
 
 const DetailPost = () => {
   const { type, id } = useParams();
@@ -41,6 +41,19 @@ const DetailPost = () => {
       saveRef.current.childNodes[0].classList.remove("saved");
     }
   };
+
+  // const [pos, setPos] = useState(null);
+  // useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     const pos = {
+  //       lat: position.coords.latitude,
+  //       lng: position.coords.longitude,
+  //     };
+
+  //     // console.log(pos);
+  //     setPos(pos);
+  //   });
+  // }, []);
 
   return (
     <div className="container mt-3">
@@ -79,7 +92,7 @@ const DetailPost = () => {
                   <div className="post__overview-address mb-1">
                     <FaSearchLocation className="text-primary me-1" />
                     <span className="fw-bold">Địa chỉ:</span>{" "}
-                    {`${post.address}, ${getWardDistrictName(post.wardId)}`}
+                    {`${post.address}`}
                   </div>
                   <div className="d-flex justify-content-between align-items-center">
                     <div className="d-inline-flex align-items-center">
@@ -129,20 +142,18 @@ const DetailPost = () => {
                 </div>
                 <div className="post__map">
                   <h3>Bản đồ</h3>
-                  <div id="maps" style={{ height: "300px", width: "100%" }}>
-                    <iframe
-                      title="frame-detail-address"
-                      width="100%"
-                      height="100%"
-                      style={{ border: "0" }}
-                      loading="lazy"
-                      allowFullScreen
-                      referrerPolicy="no-referrer-when-downgrade"
-                      src={`https://www.google.com/maps/embed/v1/place?key=${
-                        process.env.REACT_APP_API_KEY
-                      }&q=${post.address}, ${getWardDistrictName(post.wardId)}`}
-                    ></iframe>
-                  </div>
+                    <div id="maps" style={{ height: "300px", width: "100%" }}>
+                      <iframe
+                        title="frame-detail-address"
+                        width="100%"
+                        height="100%"
+                        style={{ border: "0" }}
+                        loading="lazy"
+                        allowFullScreen
+                        referrerPolicy="no-referrer-when-downgrade"
+                        src={`https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_API_KEY}&q=${post.address}`}
+                      ></iframe>
+                    </div>
                 </div>
               </div>
             </Col>

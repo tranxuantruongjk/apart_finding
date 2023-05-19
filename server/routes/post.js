@@ -15,7 +15,7 @@ const upload = multer({
 });
 
 const verifyToken = require("../middleware/auth");
-// const districts = require("hanhchinhvn/dist/quan-huyen/01.json");
+const districtsList = require("hanhchinhvn/dist/quan-huyen/01.json");
 
 // @route GET api/posts/postsCount
 // @route GET number of posts
@@ -26,7 +26,7 @@ router.get("/postsCount", async (req, res) => {
     res.json({ success: true, posts });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi"});
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
@@ -52,7 +52,7 @@ router.post("/search", async (req, res) => {
   const minPriceFind = minPrice * 1000000;
   const maxPriceFind = maxPrice * 1000000;
 
-  const {page, limit} = req.query;
+  const { page, limit } = req.query;
   const skip = (page - 1) * limit;
 
   if (district === "000") {
@@ -64,9 +64,11 @@ router.post("/search", async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
-      }).populate("user", ["username", "phone"]).lean();
+      })
+        .populate("user", ["username", "phone"])
+        .lean();
 
-      const slicePosts = posts.slice(skip, limit*page);
+      const slicePosts = posts.slice(skip, limit * page);
 
       for (const post of slicePosts) {
         const postFiles = await PostFile.find({ postId: post._id });
@@ -93,9 +95,11 @@ router.post("/search", async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
-      }).populate("user", ["username", "phone"]).lean();
+      })
+        .populate("user", ["username", "phone"])
+        .lean();
 
-      const slicePosts = posts.slice(skip, limit*page);
+      const slicePosts = posts.slice(skip, limit * page);
 
       for (const post of slicePosts) {
         const postFiles = await PostFile.find({ postId: post._id });
@@ -119,9 +123,11 @@ router.post("/search", async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
-      }).populate("user", ["username", "phone"]).lean();
+      })
+        .populate("user", ["username", "phone"])
+        .lean();
 
-      const slicePosts = posts.slice(skip, limit*page);
+      const slicePosts = posts.slice(skip, limit * page);
 
       for (const post of posts) {
         const postFiles = await PostFile.find({ postId: post._id });
@@ -156,15 +162,14 @@ router.get("/:userId/posts", verifyToken, async (req, res) => {
 // @access Public
 router.get("/:type", async (req, res) => {
   try {
-    const {page, limit} = req.query;
+    const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find({ rentType: req.params.type }).populate(
-      "user",
-      ["username", "phone"]
-    ).lean();
+    const posts = await Post.find({ rentType: req.params.type })
+      .populate("user", ["username", "phone"])
+      .lean();
 
-    const slicePosts = posts.slice(skip, limit*page);
+    const slicePosts = posts.slice(skip, limit * page);
 
     for (const post of slicePosts) {
       const postFiles = await PostFile.find({ postId: post._id });
@@ -185,8 +190,9 @@ router.get("/:type/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
       .populate("user", ["username", "phone"])
-      .populate("rentType", ["name"]).lean();
-    
+      .populate("rentType", ["name"])
+      .lean();
+
     const postFiles = await PostFile.find({ postId: req.params.id });
     // const files = postFiles.map((postFile) => postFile.file);
     post.files = postFiles;
@@ -204,19 +210,21 @@ router.get("/:type/:id", async (req, res) => {
 // @access Public
 router.get("/", async (req, res) => {
   try {
-    const {page, limit} = req.query;
+    const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find().populate("user", ["username", "phone"]).lean();
+    const posts = await Post.find()
+      .populate("user", ["username", "phone"])
+      .lean();
 
-    const slicePosts = posts.slice(skip, limit*page);
+    const slicePosts = posts.slice(skip, limit * page);
 
     for (const post of slicePosts) {
       const postFiles = await PostFile.find({ postId: post._id });
       const files = postFiles.map((postFile) => postFile.file);
       post.files = files;
     }
-    
+
     res.json({ success: true, posts: slicePosts, total: posts.length });
   } catch (error) {
     console.log(error);
@@ -228,7 +236,7 @@ router.get("/", async (req, res) => {
 // @route Create new post
 // @access Private
 router.post("/", verifyToken, upload.array("files"), async (req, res) => {
-  const { title, content, rentType, address, wardId, area, price } = req.body;
+  const { title, content, rentType, address, location, gender, area, price, utils } = req.body;
   const files = req.files;
 
   if (
@@ -236,9 +244,11 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
     !content ||
     !rentType ||
     !address ||
-    !wardId ||
+    !gender ||
     !area ||
     !price ||
+    !location ||
+    utils.length === 0 ||
     files.length === 0
   )
     return res
@@ -246,14 +256,67 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
       .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
 
   try {
+    const addressArray = address.split(", ");
+    const length = addressArray.length;
+    const districts = Object.values(districtsList);
+    const districtFind = districts.find(
+      (district) => district.name === addressArray[length - 3]
+    );
+    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
+    const wards = Object.values(wardsList);
+    const wardFind = wards.find(
+      (ward) => ward.name === addressArray[length - 4]
+    );
+    let detailStreet;
+    let index = -1;
+    if (addressArray[length - 5]) {
+      detailStreet =
+        addressArray[length - 5] && addressArray[length - 5].split(" ");
+      for (let i = 0; i < detailStreet.length; i++) {
+        if (detailStreet[i].match(/\d/)) {
+          index = i;
+        }
+      }
+    }
+
+    const fullAddressObject = {
+      city: {
+        code: "01",
+        text: "Hà Nội",
+      },
+      district: {
+        code: districtFind.code,
+        text: districtFind.name_with_type,
+        cityCode: districtFind.parent_code,
+      },
+      ward: {
+        code: wardFind.code,
+        text: wardFind.name_with_type,
+        districtCode: wardFind.parent_code,
+      },
+      streetName:
+        detailStreet &&
+        detailStreet.slice(index + 1, detailStreet.length).join(" "),
+      houseName: detailStreet && detailStreet.slice(0, index + 1).join(" "),
+    };
+
+    const utilsArray = utils.split(",");
+    const geocode = location.split(",");
+    const locationCode = {
+      lat: geocode[0],
+      lng: geocode[1],
+    } 
+
     const newPost = new Post({
       title: req.body.title,
       content,
       rentType,
       address,
-      wardId,
+      fullAddressObject,
+      location: locationCode,
       area,
       price,
+      utils: utilsArray,
       user: req.userId,
     });
 

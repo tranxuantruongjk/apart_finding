@@ -20,8 +20,16 @@ const PostSchema = new Schema (
       type: String,
       require: true,
     },
-    wardId: {
-      type: Number,
+    fullAddressObject: {
+      type: Schema.Types.Mixed,
+      require: true,
+    },
+    location: {
+      type: Schema.Types.Mixed,
+      require: true,
+    },
+    utils: {
+      type: Array,
       require: true,
     },
     area: {
