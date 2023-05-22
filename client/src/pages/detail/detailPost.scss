@@ -1,5 +1,6 @@
-.post {
-  background-color: #f5f5f5;
+@use "../../assets/scss/style.scss" as *;
+
+.detail-post {
   &__images {
     height: 314px;
     background-color: #333;
@@ -14,82 +15,140 @@
     }
   }
 
+  &__title {
+    color: $main-color;
+    font-weight: bolder;
+    margin-top: 1rem;
+  }
+
   &__overview {
-    &-title {
-      color: red;
-      // font-weight: bold;
-    }
+    &-table {
+      table {
+        .info {
+          color: $main-color;
+          font-weight: 500;
 
-    .cash-icon {
-      height: 20px;
-      width: 20px;
-      transform: translateY(5%);
-    }
-
-    .area-icon, .clock-icon {
-      height: 20px;
-      width: 20px;
-      margin-right: 4px;
-    }
-
-    .heart-icon {
-      height: 20px;
-      width: 20px;
-      margin-right: 4px;
-      cursor: pointer;
-    }
-
-    .price {
-      font-size: 1.3rem;
-      font-weight: bold;
-      color: #198754;
-    }
-
-    .post--save {
-      cursor: pointer;
-    }
-
-    .saved {
-      color: red;
+          &:hover {
+            color: $main-color;
+          }
+        }
+      }
     }
   }
-  
-  &__overview, &__description, &__contact, &__map {
-    padding: 0 20px;
-    margin-bottom: 10px;
+
+  &__utils {
+    &-items {
+      .item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.7rem;
+
+        svg, img {
+          width: 1.9rem;
+          height: 1.9rem;
+          opacity: 0.8;
+        }
+
+        span {
+          margin-left: 0.5rem;
+          font-size: 17px;
+        }
+      }
+    }
   }
 
-  .carousel, .carousel-inner, .carousel-item {
+  &__description {
+    &-content {
+      font-size: 1rem;
+    }
+  }
+
+  &__overview,
+  &__utils,
+  &__description,
+  &__contact {
+    background-color: #f6f5f2;
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 1rem;
+
+    &-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #dddcd9;
+      border-radius: 24px;
+      width: fit-content;
+      padding-right: 12px;
+      margin-bottom: 1rem;
+
+      .header-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px;
+        background-color: white;
+        border: 1px solid #dddcd9;
+        border-radius: 24px;
+
+        .icon {
+          color: $main-color;
+          width: 2rem;
+          height: 2rem;
+        }
+      }
+
+      span {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .carousel,
+  .carousel-inner,
+  .carousel-item {
     height: 100%;
   }
 }
 
 .contact-info {
   height: 314px;
-  background-color: #febb02;
+  background-color: $main-color;
   border-radius: 5px;
   text-align: center;
-  padding: 15px;
+  padding: 30px 50px;
 
-  .avatar {
-    height: 80px;
-    width: 80px;
-    margin: 0 auto 10px;
+  .title {
+    color: white;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #fff;
+  }
 
-    &-img {
-      height: 100%;
-      width: 100%;
+  .user-info {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+
+    .avatar {
+      width: 3rem;
+      height: 3rem;
     }
   }
 
   .phone {
-    margin-top: 40px;
     width: 100%;
     height: 40px;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: $main-color;
 
     &-icon {
       height: 20px;
@@ -101,27 +160,36 @@
       font-size: 20px;
       font-weight: 700;
     }
+
+    &:hover,
+    &:focus {
+      color: $main-color;
+    }
   }
 
-  .zalo {
-    margin-top: 10px;
+  .post--save {
     width: 100%;
     height: 40px;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
 
-    &-icon {
-      height: 30px;
-      width: 30px;
+    .heart-icon {
+      height: 1.5rem;
+      width: 1.5rem;
     }
 
-    &-text {
+    .save-text {
       margin-left: 7px;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 500;
     }
+  }
+
+  .saved {
+    color: red;
   }
 }
 

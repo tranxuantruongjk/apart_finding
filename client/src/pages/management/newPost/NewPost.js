@@ -128,7 +128,7 @@ const NewPost = () => {
 
   const create = async (e) => {
     e.preventDefault();
-    
+
     try {
       const formData = new FormData();
       formData.append("title", title);
@@ -155,6 +155,14 @@ const NewPost = () => {
           price: "",
         });
         setFiles([]);
+        setUtils([]);
+        setLocation([]);
+        originRef.current.value = "";
+        setAddressMap(province);
+        const utilEls = document.querySelectorAll(".btn-util");
+        for (const utilEl of utilEls) {
+          utilEl.classList.remove("actived");
+        }
         setAlert({ type: "success", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
       } else {

@@ -32,6 +32,11 @@ const PostSchema = new Schema (
       type: Array,
       require: true,
     },
+    gender: {
+      type: String,
+      default: "any",
+      require: true,
+    },
     area: {
       type: Number,
       require: true,

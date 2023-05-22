@@ -316,6 +316,7 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
       location: locationCode,
       area,
       price,
+      gender,
       utils: utilsArray,
       user: req.userId,
     });
