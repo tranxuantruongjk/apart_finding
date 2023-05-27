@@ -4,27 +4,15 @@ import ListGroup from "react-bootstrap/ListGroup";
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
-import axios from "axios";
-import { apiUrl } from "../../contexts/constants";
-
 import { PostContext } from "../../contexts/PostContext";
 
 import "./typesList.scss";
 
 const TypesList = () => {
-  const [rentTypes, setRentTypes] = useState([]);
+  const { rentTypes } = useContext(PostContext);
   const [posts, setPosts] = useState([]);
 
   const { getTotalPosts } = useContext(PostContext)
-
-  useEffect(() => {
-    const getRentTypes = async () => {
-      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
-      setRentTypes(response.data.rentTypes);
-    };
-
-    getRentTypes();
-  }, []);
 
   useEffect(() => {
     const getPosts = async () => {

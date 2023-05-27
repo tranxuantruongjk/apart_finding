@@ -1,13 +1,13 @@
 import React from "react";
-import useAddressContext from "../../../hooks/useAddressContext";
+import useSearchContext from "../../../hooks/useSearchContext";
 
 import Form from "react-bootstrap/Form";
 
 const WardsForm = () => {
-  const { data, handleChangeWard, handleChangeAllWards } =
-    useAddressContext();
+  const { addressState, handleChangeWard, handleChangeAllWards } =
+    useSearchContext();
 
-  const wardsList = require(`hanhchinhvn/dist/xa-phuong/${data.district}.json`);
+  const wardsList = require(`hanhchinhvn/dist/xa-phuong/${addressState.district}.json`);
   const wards = Object.values(wardsList);
 
   const handleChange = () => {
@@ -20,13 +20,13 @@ const WardsForm = () => {
           type="radio"
           name="ward"
           id="00000"
-          checked={data.ward === "00000"}
+          checked={addressState.ward === "00000"}
           onChange={handleChangeAllWards}
         />
         <Form.Check.Label
           as="button"
           className={
-            data.ward === "00000" ? "type-actived btn btn-link" : "btn btn-link"
+            addressState.ward === "00000" ? "type-actived btn btn-link" : "btn btn-link"
           }
           htmlFor="00000"
         >
@@ -43,14 +43,14 @@ const WardsForm = () => {
             type="radio"
             name="ward"
             id={`${ward.code}`}
-            checked={data.ward === ward.code}
+            checked={addressState.ward === ward.code}
             onClick={handleChangeWard}
             onChange={handleChange}
           />
           <Form.Check.Label
             as="button"
             className={
-              data.ward === ward.code
+              addressState.ward === ward.code
                 ? "type-actived btn btn-link"
                 : "btn btn-link"
             }

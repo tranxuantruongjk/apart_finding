@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+import useSearchContext from "../../../hooks/useSearchContext";
 
 import "./acreageModal.scss";
 
@@ -10,17 +12,14 @@ import MultiRangeSlider from "../../multiRangeSlider/MultiRangeSlider";
 
 import { ACREAGE_RANGE } from "../../../contexts/constants";
 
-const AcreageModal = ({
-  show,
-  onHide,
-  minAcreage,
-  maxAcreage,
-  minAcreageVal,
-  maxAcreageVal,
-  setMinAcreageVal,
-  setMaxAcreageVal,
-  handleClickAcreage,
-}) => {
+const AcreageModal = ({ show, setShowAcreageModal }) => {
+  const {
+    minAcreage,
+    maxAcreage,
+    searchState: { minAcreageVal, maxAcreageVal },
+    changeSearchState,
+  } = useSearchContext();
+
   const handleClick = (e, acreage1, acreage2 = 0) => {
     const btnRangesList = document.getElementsByClassName("acreage-range-item");
     const btnRangesFilter = Object.values(btnRangesList).filter(
@@ -33,20 +32,19 @@ const AcreageModal = ({
 
     if (acreage2 === 0) {
       if (acreage1 === ACREAGE_RANGE[0]) {
-        setMinAcreageVal(0);
-        setMaxAcreageVal(acreage1);
+        changeSearchState("minAcreageVal", 0);
+        changeSearchState("maxAcreageVal", acreage1);
       } else {
-        setMinAcreageVal(acreage1);
-        setMaxAcreageVal(acreage1);
+        changeSearchState("minAcreageVal", acreage1);
+        changeSearchState("maxAcreageVal", acreage1);
       }
     } else {
-      setMinAcreageVal(acreage1);
-      setMaxAcreageVal(acreage2);
+      changeSearchState("minAcreageVal", acreage1);
+      changeSearchState("maxAcreageVal", acreage2);
     }
   };
 
   useEffect(() => {
-    // console.log(minAcreageVal, maxAcreageVal);
     const btnRangesList = Object.values(
       document.getElementsByClassName("acreage-range-item")
     );
@@ -93,9 +91,13 @@ const AcreageModal = ({
     }
   }, [show, minAcreageVal, maxAcreageVal]);
 
+  const closeAcreageModal = () => {
+    setShowAcreageModal(false);
+  };
+
   return (
     <>
-      <Modal show={show} onHide={onHide}>
+      <Modal show={show} onHide={closeAcreageModal}>
         <Modal.Header closeButton>
           <Modal.Title>Chọn giá</Modal.Title>
         </Modal.Header>
@@ -108,8 +110,8 @@ const AcreageModal = ({
             max={maxAcreage}
             minVal={minAcreageVal}
             maxVal={maxAcreageVal}
-            setMinVal={setMinAcreageVal}
-            setMaxVal={setMaxAcreageVal}
+            setMinVal={(value) => changeSearchState("minAcreageVal", value)}
+            setMaxVal={(value) => changeSearchState("maxAcreageVal", value)}
           />
           <div className="acreage-range">
             <Row xs={2} md={3}>
@@ -172,7 +174,7 @@ const AcreageModal = ({
           <Button
             variant="primary"
             className="btn-acreage"
-            onClick={handleClickAcreage}
+            onClick={closeAcreageModal}
           >
             Áp dụng
           </Button>
@@ -182,4 +184,4 @@ const AcreageModal = ({
   );
 };
 
-export default AcreageModal;
+export default memo(AcreageModal);

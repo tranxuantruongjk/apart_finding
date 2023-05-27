@@ -5,17 +5,16 @@ import Container from "react-bootstrap/Container";
 import { Link, useLocation } from "react-router-dom";
 import "./navbarMenu.scss";
 
-import axios from "axios";
-import { apiUrl } from "../../contexts/constants";
-
 import { AuthContext } from "../../contexts/AuthContext";
+import { PostContext } from "../../contexts/PostContext";
 
 const NavbarMenu = () => {
   const {
     authState: { user },
   } = useContext(AuthContext);
 
-  const [rentTypes, setRentTypes] = useState([]);
+  const { rentTypes } = useContext(PostContext);
+
   const [navMenu, setNavMenu] = useState([]);
 
   const { pathname } = useLocation();
@@ -31,15 +30,6 @@ const NavbarMenu = () => {
   }
 
   useEffect(() => {
-    const getRentTypes = async () => {
-      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
-      setRentTypes(response.data.rentTypes);
-    };
-
-    getRentTypes();
-  }, []);
-
-  useEffect(() => {
     const navArr = rentTypes.map((rentType) => ({
       display: rentType.name,
       path: `/${rentType._id}`,
@@ -51,7 +41,7 @@ const NavbarMenu = () => {
       },
     ];
     setNavMenu([...homePath, ...navArr]);
-  }, [rentTypes, setRentTypes]);
+  }, [rentTypes]);
 
   return (
     <>

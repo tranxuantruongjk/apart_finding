@@ -1,0 +1,50 @@
+@use "../../assets/scss//style.scss" as *;
+
+.more-filter {
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    h5 {
+      margin-bottom: 0;
+    }
+
+    button {
+      &:hover {
+        background-color: unset;
+      }
+
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .item-header {
+    button {
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+  }
+
+  .items {
+    .util-item, .gender-item {
+      font-size: 1.2rem;
+      font-weight: 500;
+
+      label {
+        margin-left: 10px;
+      }
+    }
+  }
+
+  .utils-footer {
+    text-align: center;
+    cursor: pointer;
+    
+    .btn-add {
+      color: $main-color;
+    }
+  }
+}

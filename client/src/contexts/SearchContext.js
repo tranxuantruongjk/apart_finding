@@ -1,20 +1,35 @@
 import { createContext, useState } from "react";
 
-export const AddressContext = createContext({});
+export const SearchContext = createContext({});
 
-const AddressProvider = ({children}) => {
+const minPrice = 0;
+const maxPrice = 10;
+const minAcreage = 0;
+const maxAcreage = 50;
+
+const SearchProvider = ({children}) => {
   const title = {
     0: "Chọn Quận/Huyện",
     1: "Chọn Phường/Xã"
   };
 
   const [page, setPage] = useState(0);
-  const [data, setData] = useState({
+  const [addressState, setAddressState] = useState({
     district: "000",
     districtName: "",
     ward: "00000",
     wardName: "",
     address: ""    
+  });
+
+  const [searchState, setSearchState] = useState({
+    rentType: {},
+    minPriceVal: minPrice,
+    maxPriceVal: maxPrice,
+    minAcreageVal: minAcreage,
+    maxAcreageVal: maxAcreage,
+    utils: [],
+    gender: "any",
   });
 
   const [displayAddressModal, setDisplayAddressModal] = useState(false);
@@ -27,8 +42,15 @@ const AddressProvider = ({children}) => {
     setDisplayAddressModal(false);
   }
 
+  const changeSearchState = (state, value) => {
+    setSearchState((prevData) => ({
+      ...prevData,
+      [state]: value,
+    }));
+  }
+
   const handleChangeAllDistricts = (e) => {
-    setData({
+    setAddressState({
       district: "000",
       districtName: "",
       ward: "00000",
@@ -38,7 +60,7 @@ const AddressProvider = ({children}) => {
   }
 
   const handleChangeDistrict = (e) => {
-    setData({
+    setAddressState({
       district: e.target.id,
       districtName: e.target.nextSibling.innerText,
       address: e.target.nextSibling.innerText,
@@ -50,29 +72,29 @@ const AddressProvider = ({children}) => {
   }
 
   const handleChangeAllWards = (e) => {
-    setData((prevData) => ({
+    setAddressState((prevData) => ({
       ...prevData,
       ward: e.target.id,
       wardName: "",
-      address: data.districtName,
+      address: addressState.districtName,
     }));
     hideAddressModal();
   }
 
   const handleChangeWard = (e) => {
-    setData((prevData) => ({
+    setAddressState((prevData) => ({
       ...prevData,
       ward: e.target.id,
       wardName: e.target.nextSibling.innerText,
-      address: `${e.target.nextSibling.innerText}, ${data.districtName}`
+      address: `${e.target.nextSibling.innerText}, ${addressState.districtName}`
     }));
     hideAddressModal();
   }
 
-  const addressValue = {
+  const searchValue = {
     title,
-    data,
-    setData,
+    addressState,
+    setAddressState,
     page,
     setPage,
     handleChangeDistrict,
@@ -82,13 +104,20 @@ const AddressProvider = ({children}) => {
     displayAddressModal,
     showAddressModal,
     hideAddressModal,
+    searchState,
+    setSearchState,
+    changeSearchState,
+    minPrice,
+    maxPrice,
+    minAcreage,
+    maxAcreage,
   };
 
   return (
-    <AddressContext.Provider value={addressValue}>
+    <SearchContext.Provider value={searchValue}>
       {children}
-    </AddressContext.Provider>
+    </SearchContext.Provider>
   );
 };
 
-export default AddressProvider;
+export default SearchProvider;

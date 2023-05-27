@@ -5,7 +5,7 @@ const RentTypeSchema = new Schema(
   {
     name: {
       type: String,
-      require
+      required: true,
     }
   }
 )

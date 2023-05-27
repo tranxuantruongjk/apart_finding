@@ -1,58 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext, useEffect, memo } from "react";
+import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import { apiUrl } from "../../../contexts/constants";
-import axios from "axios";
+import { PostContext } from "../../../contexts/PostContext";
+import useSearchContext from "../../../hooks/useSearchContext";
 
 import "./typeModal.scss";
-import { useLocation, useParams } from "react-router-dom";
 
-const TypeModal = ({ show, onHide, setType }) => {
-  const [rentTypes, setRentTypes] = useState([]);
+const TypeModal = ({ show, setShowTypeModal }) => {
+  const { rentTypes } = useContext(PostContext);
+  const { searchState: {rentType}, changeSearchState } = useSearchContext();
+
   const [typeChecked, setTypeChecked] = useState();
 
-  const { type } = useParams();
+  const { type }  = useParams();
 
-  const { pathname } = useLocation();
-  
-  useEffect(() => {
-    const getRentTypes = async () => {
-      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
-      setRentTypes(response.data.rentTypes);
-    };
-
-    getRentTypes();
-  }, []);
-
-  useEffect(() => {
-    if (rentTypes.length !== 0) {
-      setTypeChecked(rentTypes[0]._id);
-      setType(rentTypes[0]);
-    }
-  }, [rentTypes, setType]);
+  const handleChecked = (e) => {
+    setTypeChecked(e.target.id);
+    const typeFind = rentTypes.find((rentType) => rentType._id === e.target.id);
+    changeSearchState("rentType", typeFind);
+  };
 
   useEffect(() => {
     if (rentTypes.length !== 0) {
       if (type) {
-        const typeFind = rentTypes.find(rentType => rentType._id === type);
+        const typeFind = rentTypes.find((rentType1) => rentType1._id === type);
         setTypeChecked(typeFind._id);
-        setType(typeFind);
-      } else if (pathname === "/") {
-        setTypeChecked(rentTypes[0]._id);
-        setType(rentTypes[0]);
+        changeSearchState("rentType", typeFind);
       }
     }
-  }, [rentTypes, type, setType, pathname]);
+  }, [rentTypes, type, rentType])
 
-  const handleChecked = (e) => {
-    setTypeChecked(e.target.id);
-    const typeFind = rentTypes.find(rentType => rentType._id === e.target.id);
-    setType(typeFind);
+  useEffect(() => {
+    if (rentTypes.length !== 0) {
+      if (Object.keys(rentType).length !== 0) {
+        const typeFind = rentTypes.find((rentType1) => rentType1._id === rentType._id);
+        setTypeChecked(typeFind._id);
+      }
+    }
+  }, [show, rentTypes]);
+
+  const closeTypeModal = () => {
+    setShowTypeModal(false);
   };
 
   return (
     <>
-     <Modal show={show} onHide={onHide}>
+      <Modal show={show} onHide={closeTypeModal}>
         <Modal.Header closeButton>
           <Modal.Title>Chọn loại</Modal.Title>
         </Modal.Header>
@@ -68,23 +62,26 @@ const TypeModal = ({ show, onHide, setType }) => {
                   type="radio"
                   name="type"
                   checked={typeChecked === rentType._id}
-            
                   id={`${rentType._id}`}
                   onChange={handleChecked}
-                  onClick={onHide}
+                  onClick={closeTypeModal}
                 />
                 <Form.Check.Label
                   as="button"
-                  className={typeChecked === rentType._id ? "type-actived btn btn-link" : "btn btn-link" }
+                  className={
+                    typeChecked === rentType._id
+                      ? "type-actived btn btn-link"
+                      : "btn btn-link"
+                  }
                   htmlFor={`${rentType._id}`}
                 >{`${rentType.name}`}</Form.Check.Label>
               </Form.Check>
             ))}
           </Form>
         </Modal.Body>
-      </Modal> 
+      </Modal>
     </>
   );
 };
 
-export default TypeModal;
+export default memo(TypeModal);

@@ -5,15 +5,15 @@ const PostFileSchema = new Schema(
   {
     postId: {
       type: Schema.Types.ObjectId,
-      require: true,
+      required: true,
     },
     type: {
       type: String,
-      require: true,
+      required: true,
     },
     file: {
       type: String,
-      require: true,
+      required: true,
     }
   }, 
   {

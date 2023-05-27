@@ -1,9 +1,9 @@
 import DistrictsForm from "./DistrictsForm";
 import WardsForm from "./WardsForm";
-import useAddressContext from "../../../hooks/useAddressContext";
+import useSearchContext from "../../../hooks/useSearchContext";
 
 const FormInputs = () => {
-  const { page } = useAddressContext();
+  const { page } = useSearchContext();
 
   const display = {
     0: <DistrictsForm />,

@@ -16,6 +16,9 @@ const upload = multer({
 
 const verifyToken = require("../middleware/auth");
 const districtsList = require("hanhchinhvn/dist/quan-huyen/01.json");
+const mongoose = require("mongoose");
+
+const utilsChecker = (arr, target) => target.every((t) => arr.includes(t));
 
 // @route GET api/posts/postsCount
 // @route GET number of posts
@@ -47,8 +50,17 @@ router.get("/rentTypes", async (req, res) => {
 // @route Get post which...
 // @access Public
 router.post("/search", async (req, res) => {
-  const { typeId, district, ward, minPrice, maxPrice, minAcreage, maxAcreage } =
-    req.body;
+  const {
+    typeId,
+    district,
+    ward,
+    minPrice,
+    maxPrice,
+    minAcreage,
+    maxAcreage,
+    utils,
+    gender,
+  } = req.body;
   const minPriceFind = minPrice * 1000000;
   const maxPriceFind = maxPrice * 1000000;
 
@@ -58,17 +70,31 @@ router.post("/search", async (req, res) => {
   if (district === "000") {
     try {
       const posts = await Post.find({
-        rentType: typeId,
+        rentType: mongoose.Types.ObjectId(typeId),
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
+        gender:
+          gender !== "any"
+            ? gender === "male"
+              ? { $in: ["any", "male"] }
+              : { $in: ["any", "female"] }
+            : { $in: ["any", "male", "female"] },
       })
         .populate("user", ["username", "phone"])
         .lean();
 
-      const slicePosts = posts.slice(skip, limit * page);
+      let slicePosts;
+
+      if (utils && utils.length !== 0) {
+        slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+
+        slicePosts = slicePosts.slice(skip, limit * page);
+      } else {
+        slicePosts = posts.slice(skip, limit * page);
+      }
 
       for (const post of slicePosts) {
         const postFiles = await PostFile.find({ postId: post._id });
@@ -83,23 +109,34 @@ router.post("/search", async (req, res) => {
         .json({ success: false, message: "Internal server error" });
     }
   } else if (ward === "00000") {
-    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${district}.json`);
-    const wards = Object.values(wardsList);
-    const wardsId = wards.map((ward) => ward.code);
     try {
       const posts = await Post.find({
-        rentType: typeId,
-        wardId: { $in: wardsId },
+        rentType: mongoose.Types.ObjectId(typeId),
+        "fullAddressObject.district.code": district,
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
+        gender:
+          gender !== "any"
+            ? gender === "male"
+              ? { $in: ["any", "male"] }
+              : { $in: ["any", "female"] }
+            : { $in: ["any", "male", "female"] },
       })
         .populate("user", ["username", "phone"])
         .lean();
 
-      const slicePosts = posts.slice(skip, limit * page);
+      let slicePosts;
+
+      if (utils && utils.length !== 0) {
+        slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+
+        slicePosts = slicePosts.slice(skip, limit * page);
+      } else {
+        slicePosts = posts.slice(skip, limit * page);
+      }
 
       for (const post of slicePosts) {
         const postFiles = await PostFile.find({ postId: post._id });
@@ -116,18 +153,32 @@ router.post("/search", async (req, res) => {
   } else {
     try {
       const posts = await Post.find({
-        rentType: typeId,
-        wardId: ward,
+        rentType: mongoose.Types.ObjectId(typeId),
+        "fullAddressObject.ward.code": ward,
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
+        gender:
+          gender !== "any"
+            ? gender === "male"
+              ? { $in: ["any", "male"] }
+              : { $in: ["any", "female"] }
+            : { $in: ["any", "male", "female"] },
       })
         .populate("user", ["username", "phone"])
         .lean();
 
-      const slicePosts = posts.slice(skip, limit * page);
+      let slicePosts;
+
+      if (utils && utils.length !== 0) {
+        slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+
+        slicePosts = slicePosts.slice(skip, limit * page);
+      } else {
+        slicePosts = posts.slice(skip, limit * page);
+      }
 
       for (const post of posts) {
         const postFiles = await PostFile.find({ postId: post._id });
@@ -236,7 +287,17 @@ router.get("/", async (req, res) => {
 // @route Create new post
 // @access Private
 router.post("/", verifyToken, upload.array("files"), async (req, res) => {
-  const { title, content, rentType, address, location, gender, area, price, utils } = req.body;
+  const {
+    title,
+    content,
+    rentType,
+    address,
+    location,
+    gender,
+    area,
+    price,
+    utils,
+  } = req.body;
   const files = req.files;
 
   if (
@@ -305,7 +366,7 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
     const locationCode = {
       lat: geocode[0],
       lng: geocode[1],
-    } 
+    };
 
     const newPost = new Post({
       title: req.body.title,

@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+
+import useSearchContext from "../../../hooks/useSearchContext";
 
 import "./priceModal.scss";
 
@@ -10,17 +12,14 @@ import MultiRangeSlider from "../../multiRangeSlider/MultiRangeSlider";
 
 import { PRICE_RANGE } from "../../../contexts/constants";
 
-const PriceModal = ({
-  show,
-  onHide,
-  minPrice,
-  maxPrice,
-  minPriceVal,
-  maxPriceVal,
-  setMinPriceVal,
-  setMaxPriceVal,
-  handleClickPrice,
-}) => {
+const PriceModal = ({ show, setShowPriceModal }) => {
+  const {
+    minPrice,
+    maxPrice,
+    searchState: { minPriceVal, maxPriceVal },
+    changeSearchState,
+  } = useSearchContext();
+
   const handleClick = (e, price1, price2 = 0) => {
     const btnRangesList = document.getElementsByClassName("price-range-item");
     const btnRangesFilter = Object.values(btnRangesList).filter(
@@ -33,15 +32,15 @@ const PriceModal = ({
 
     if (price2 === 0) {
       if (price1 === PRICE_RANGE[0]) {
-        setMinPriceVal(0);
-        setMaxPriceVal(price1);
+        changeSearchState("minPriceVal", 0);
+        changeSearchState("maxPriceVal", price1);
       } else {
-        setMinPriceVal(price1);
-        setMaxPriceVal(price1);
+        changeSearchState("minPriceVal", price1);
+        changeSearchState("maxPriceVal", price1);
       }
     } else {
-      setMinPriceVal(price1);
-      setMaxPriceVal(price2);
+      changeSearchState("minPriceVal", price1);
+      changeSearchState("maxPriceVal", price2);
     }
   };
 
@@ -92,9 +91,13 @@ const PriceModal = ({
     }
   }, [show, minPriceVal, maxPriceVal]);
 
+  const closePriceModal = () => {
+    setShowPriceModal(false);
+  };
+  
   return (
     <>
-      <Modal show={show} onHide={onHide}>
+      <Modal show={show} onHide={closePriceModal}>
         <Modal.Header closeButton>
           <Modal.Title>Chọn giá</Modal.Title>
         </Modal.Header>
@@ -105,8 +108,8 @@ const PriceModal = ({
             max={maxPrice}
             minVal={minPriceVal}
             maxVal={maxPriceVal}
-            setMinVal={setMinPriceVal}
-            setMaxVal={setMaxPriceVal}
+            setMinVal={(value) => changeSearchState("minPriceVal", value)}
+            setMaxVal={(value) => changeSearchState("maxPriceVal", value)}
           />
           <div className="price-range">
             <Row xs={2} md={3}>
@@ -169,7 +172,7 @@ const PriceModal = ({
           <Button
             variant="primary"
             className="btn-price"
-            onClick={handleClickPrice}
+            onClick={closePriceModal}
           >
             Áp dụng
           </Button>
@@ -179,4 +182,4 @@ const PriceModal = ({
   );
 };
 
-export default PriceModal;
+export default memo(PriceModal);

@@ -1,4 +1,4 @@
-.homeTop {
+.slider {
   height: 400px;
   background-image: url("../../assets/images/slider-bg.png");
   background-repeat: no-repeat;
@@ -16,5 +16,9 @@
 
   .search {
     margin-top: 30px;
+
+    .search-bar-top {
+      padding: 30px;
+    }
   }
 }

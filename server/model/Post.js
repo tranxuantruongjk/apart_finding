@@ -5,55 +5,100 @@ const PostSchema = new Schema (
   {
     title: {
       type: String,
-      require: true,
+      required: true,
     },
     content: {
       type: String,
-      require: true,
+      required: true,
     },
     rentType: {
       type: Schema.Types.ObjectId,
       ref: 'rentTypes',
-      require: true,
+      required: true,
     },
     address: {
       type: String,
-      require: true,
+      required: true,
     },
     fullAddressObject: {
       type: Schema.Types.Mixed,
-      require: true,
+      required: true,
+      // city: {
+      //   code: {
+      //     type: String,
+      //     default: "01",
+      //   },
+      //   text: {
+      //     type: String,
+      //     default: "Hà Nội"
+      //   }
+      // },
+      // district: {
+      //   code: {
+      //     type: String,
+      //     required: true,
+      //   },
+      //   text: {
+      //     type: String,
+      //     required: true,
+      //   },
+      //   cityCode: {
+      //     type: String,
+      //     required: true,
+      //   }
+      // },
+      // ward: {
+      //   code: {
+      //     type: String,
+      //     required: true,
+      //   },
+      //   text: {
+      //     type: String,
+      //     required: true,
+      //   },
+      //   districtCode: {
+      //     type: String,
+      //     required: true,
+      //   }
+      // },
+      // streetName: {
+      //   type: String,
+      //   required: true,
+      // },
+      // houseName: {
+      //   type: String
+      // }
     },
     location: {
       type: Schema.Types.Mixed,
-      require: true,
+      required: true,
     },
     utils: {
       type: Array,
-      require: true,
+      required: true,
     },
     gender: {
       type: String,
       default: "any",
-      require: true,
+      required: true,
     },
     area: {
       type: Number,
-      require: true,
+      required: true,
     },
     price: {
       type: Number,
-      require: true,
+      required: true,
     },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'users',
-      require: true,
+      required: true,
     }, 
     state: {
       type: String,
       default: "pending",
-      require: true,
+      required: true,
     }
   },
   {

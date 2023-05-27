@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import Modal from "react-bootstrap/Modal";
 import "./addressModal.scss";
 
@@ -6,14 +6,14 @@ import { MdArrowBack } from "react-icons/md";
 
 import FormInputs from "./FormInputs";
 
-import useAddressContext from "../../../hooks/useAddressContext";
+import useSearchContext from "../../../hooks/useSearchContext";
 
 const AddressModal = ({ show, onHide }) => {
   const {
     page,
     setPage,
     title,
-  } = useAddressContext();
+  } = useSearchContext();
 
   const handlePrev = () => {
     if (page === 0) {
@@ -36,4 +36,4 @@ const AddressModal = ({ show, onHide }) => {
   )
 };
 
-export default AddressModal;
+export default memo(AddressModal);

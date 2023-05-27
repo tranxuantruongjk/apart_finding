@@ -13,55 +13,46 @@ import AddressModal from "./addressModal/AddressModal";
 import PriceModal from "./priceModal/PriceModal";
 import AcreageModal from "./acreageModal/AcreageModal";
 
-import useAddressContext from "../../hooks/useAddressContext";
+import useSearchContext from "../../hooks/useSearchContext";
 import { PostContext } from "../../contexts/PostContext";
 import { useLocation, useNavigate } from "react-router-dom";
-
-const minPrice = 0;
-const maxPrice = 10;
-const minAcreage = 0;
-const maxAcreage = 50;
 
 const SearchBar = () => {
   const [showTypeModal, setShowTypeModal] = useState(false);
   const [showPriceModal, setShowPriceModal] = useState(false);
   const [showAcreageModal, setShowAcreageModal] = useState(false);
-  const [rentType, setRentType] = useState("");
-  const [fullAddress, setFullAddress] = useState("");
-  const [minPriceVal, setMinPriceVal] = useState(minPrice);
-  const [maxPriceVal, setMaxPriceVal] = useState(maxPrice);
-  const [minAcreageVal, setMinAcreageVal] = useState(minAcreage);
-  const [maxAcreageVal, setMaxAcreageVal] = useState(maxAcreage);
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
   const {
-    data: { district, ward, address },
+    minPrice,
+    maxPrice,
+    minAcreage,
+    maxAcreage,
+    addressState: { district, ward, address },
+    searchState: {
+      rentType,
+      minPriceVal,
+      maxPriceVal,
+      minAcreageVal,
+      maxAcreageVal,
+      utils,
+      gender,
+    },
+    setSearchState,
     displayAddressModal,
     showAddressModal,
     hideAddressModal,
-    setData,
+    setAddressState,
     setPage,
-  } = useAddressContext();
+  } = useSearchContext();
 
-  const { postState: { page }, changePage, searchPost } = useContext(PostContext);
-
-  const handleTypeClick = () => {
-    setShowTypeModal(true);
-  };
-
-  useEffect(() => {
-    setFullAddress(address);
-  }, [address]);
-
-  const handleClickPrice = () => {
-    setShowPriceModal(false);
-  };
-
-  const handleClickAcreage = () => {
-    setShowAcreageModal(false);
-  };
+  const {
+    postState: { page },
+    changePage,
+    searchPost,
+  } = useContext(PostContext);
 
   const handleSubmit = async () => {
     const searchForm = {
@@ -72,6 +63,8 @@ const SearchBar = () => {
       maxPrice: maxPriceVal,
       minAcreage: minAcreageVal,
       maxAcreage: maxAcreageVal,
+      utils,
+      gender,
     };
 
     try {
@@ -89,12 +82,16 @@ const SearchBar = () => {
   useEffect(() => {
     if (pathname !== "/search") {
       setPage(0);
-      setFullAddress("");
-      setMinPriceVal(minPrice);
-      setMaxPriceVal(maxPrice);
-      setMinAcreageVal(minAcreage);
-      setMaxAcreageVal(maxAcreage);
-      setData({
+      setSearchState({
+        rentType: {},
+        minPriceVal: minPrice,
+        maxPriceVal: maxPrice,
+        minAcreageVal: minAcreage,
+        maxAcreageVal: maxAcreage,
+        utils: [],
+        gender: "any",
+      });
+      setAddressState({
         district: "000",
         districtName: "",
         ward: "00000",
@@ -104,19 +101,25 @@ const SearchBar = () => {
     } else {
       handleSubmit();
     }
-  }, [pathname, setData, page]);
+  }, [pathname, page]);
+
+  console.log("111");
 
   return (
     <div className="search-bar">
       <Row xs={1} md={3} lg={5} className="search-bar-top">
-        <Col className="search-bar-item" onClick={handleTypeClick}>
+        <Col className="search-bar-item" onClick={() => setShowTypeModal(true)}>
           <BiBuildingHouse className="icon-type" />
-          <span className="item-type">{rentType ? rentType.name : ""}</span>
+          {rentType.name ? (
+            <span className="item-type">{rentType.name}</span>
+          ) : (
+            <span className="type-default">Loại tin</span>
+          )}
         </Col>
         <Col className="search-bar-item" onClick={showAddressModal}>
           <MdLocationPin className="icon-location" />
-          {fullAddress ? (
-            <span className="item-address">{fullAddress}</span>
+          {address ? (
+            <span className="item-address">{address}</span>
           ) : (
             <span className="address-default">Hà Nội</span>
           )}
@@ -157,33 +160,20 @@ const SearchBar = () => {
         </Col>
       </Row>
       <TypeModal
-        type={rentType}
-        setType={setRentType}
         show={showTypeModal}
-        onHide={() => setShowTypeModal(false)}
+        setShowTypeModal={setShowTypeModal}
       />
-      <AddressModal show={displayAddressModal} onHide={hideAddressModal} />
+      <AddressModal 
+        show={displayAddressModal} 
+        onHide={hideAddressModal} 
+      />
       <PriceModal
         show={showPriceModal}
-        onHide={() => setShowPriceModal(false)}
-        minPrice={minPrice}
-        maxPrice={maxPrice}
-        minPriceVal={minPriceVal}
-        maxPriceVal={maxPriceVal}
-        setMinPriceVal={setMinPriceVal}
-        setMaxPriceVal={setMaxPriceVal}
-        handleClickPrice={handleClickPrice}
+        setShowPriceModal={setShowPriceModal}
       />
       <AcreageModal
         show={showAcreageModal}
-        onHide={() => setShowAcreageModal(false)}
-        minAcreage={minAcreage}
-        maxAcreage={maxAcreage}
-        minAcreageVal={minAcreageVal}
-        maxAcreageVal={maxAcreageVal}
-        setMinAcreageVal={setMinAcreageVal}
-        setMaxAcreageVal={setMaxAcreageVal}
-        handleClickAcreage={handleClickAcreage}
+        setShowAcreageModal={setShowAcreageModal}
       />
     </div>
   );

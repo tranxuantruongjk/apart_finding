@@ -1,12 +1,10 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import InputGroup from "react-bootstrap/InputGroup";
 import { AuthContext } from "../../../contexts/AuthContext";
-import axios from "axios";
-import { apiUrl } from "../../../contexts/constants";
 import Button from "react-bootstrap/Button";
 import AlertMessage from "../../../components/alertMessage/AlertMessage";
 import "./newPost.scss";
@@ -21,7 +19,6 @@ import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
 const province = "Hà Nội";
 
 const NewPost = () => {
-  const [rentTypes, setRentTypes] = useState([]);
   const [alert, setAlert] = useState(null);
 
   const [addressMap, setAddressMap] = useState(province);
@@ -43,7 +40,7 @@ const NewPost = () => {
     authState: { user },
   } = useContext(AuthContext);
 
-  const { createPost } = useContext(PostContext);
+  const { rentTypes, createPost } = useContext(PostContext);
 
   const [postForm, setPostForm] = useState({
     title: "",
@@ -74,15 +71,6 @@ const NewPost = () => {
       setUtils((prev) => [...prev, utilId]);
     }
   };
-
-  useEffect(() => {
-    const getRentTypes = async () => {
-      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
-      setRentTypes(response.data.rentTypes);
-    };
-
-    getRentTypes();
-  }, []);
 
   const removeFile = (fileName) => {
     setFiles(files.filter((file) => file.name !== fileName));

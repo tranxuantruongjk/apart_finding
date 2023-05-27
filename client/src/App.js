@@ -10,7 +10,7 @@ import DetailPost from "./pages/detail/DetailPost";
 import Management from "./pages/management/Management";
 
 import PostContextProvider from "./contexts/PostContext";
-import AddressProvider from "./contexts/AddressContext";
+import SearchProvider from "./contexts/SearchContext";
 import UserContextProvider from "./contexts/admin/UserContext";
 import AdminPostContextProvider from "./contexts/admin/PostContext";
 
@@ -24,7 +24,7 @@ function App() {
   return (
     <AuthContextProvider>
       <PostContextProvider>
-        <AddressProvider>
+        <SearchProvider>
           <UserContextProvider>
             <AdminPostContextProvider>
               <Router>
@@ -53,7 +53,7 @@ function App() {
               </Router>
             </AdminPostContextProvider>
           </UserContextProvider>
-        </AddressProvider>
+        </SearchProvider>
       </PostContextProvider>
     </AuthContextProvider>
   );

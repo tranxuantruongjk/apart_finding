@@ -9,7 +9,7 @@
 
   &-top {
     height: 100%;
-    padding: 30px;
+    padding: 10px;
     margin-left: 0px !important;
     margin-right: 0px !important;
   }
@@ -36,6 +36,8 @@
     font-weight: 700;
     background-color: #febb02;
     color: black;
+    border: none;
+    outline: none;
   }
 }
 
@@ -45,7 +47,8 @@
 .icon-price,
 .price-default,
 .icon-area,
-.area-default {
+.area-default,
+.type-default {
   opacity: 0.5;
 }
 
@@ -55,7 +58,8 @@
 .item-area,
 .address-default,
 .price-default,
-.area-default
+.area-default,
+.type-default
  {
   margin-left: 3px;
   font-weight: 600;

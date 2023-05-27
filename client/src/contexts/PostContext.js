@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import {
   apiUrl,
@@ -21,7 +21,19 @@ const PostContextProvider = ({ children }) => {
     total: 0,
   });
 
+  const [rentTypes, setRentTypes] = useState([]);
+
   const { page, limit } = postState;
+
+  // Get all rent types
+  const getRentTypes = async () => {
+    const response = await axios.get(`${apiUrl}/posts/rentTypes`);
+    setRentTypes(response.data.rentTypes);
+  };
+
+  useEffect(() => {
+    getRentTypes();
+  }, []);
 
   // Get total of posts
   const getTotalPosts = async () => {
@@ -139,6 +151,7 @@ const PostContextProvider = ({ children }) => {
   // Context data
   const postContextData = {
     postState,
+    rentTypes,
     getPosts,
     createPost,
     searchPost,
