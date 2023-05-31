@@ -103,8 +103,6 @@ const SearchBar = () => {
     }
   }, [pathname, page]);
 
-  console.log("111");
-
   return (
     <div className="search-bar">
       <Row xs={1} md={3} lg={5} className="search-bar-top">

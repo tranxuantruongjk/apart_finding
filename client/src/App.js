@@ -41,6 +41,7 @@ function App() {
                     <Route path="/me/posts" element={<Management manageRoute="posts"/>} />
                     <Route path="/me/create" element={<Management manageRoute="create"/>} />
                     <Route path="/me/profile" element={<Management manageRoute="profile"/>} />
+                    <Route path="/me/savedPosts" element={<Management manageRoute="savedPosts"/>} />
                   </Route>
                   <Route path="/admin" element={<Dashboard />}>
                     <Route path="/admin" element={<Navigate to="/admin/starter" />} />

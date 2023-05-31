@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import PostsList from "../components/postsList/PostsList";
 import TypesList from "../components/typesList/TypesList";
 import PricesList from "../components/pricesList/PricesList";
@@ -8,10 +9,31 @@ import HomeTop from "../components/homeTop/HomeTop";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { useLocation } from "react-router-dom";
+
+import { PostContext } from "../contexts/PostContext";
 
 const Home = () => {
+  const { type } = useParams();
   const { pathname } = useLocation();
+
+  const {
+    postState: { posts, total, page },
+    getPosts,
+    changePage,
+  } = useContext(PostContext);
+
+  useEffect(() => {
+    changePage(1);
+  }, [pathname]);
+
+  // Start: get all posts
+  useEffect(() => {
+    if (type) {
+      getPosts(type);
+    } else if (pathname === "/") {
+      getPosts();
+    }
+  }, [type, pathname, page]);
 
   return (
     <div className="home">
@@ -22,7 +44,7 @@ const Home = () => {
             pathname === "/" ? (
               <>
                 <Col md={8}>
-                  <PostsList />
+                  <PostsList posts={posts} total={total} />
                 </Col>
                 <Col md={4}>
                   <TypesList />
@@ -36,7 +58,7 @@ const Home = () => {
                   <Utils />
                 </Col>
                 <Col md={9}>
-                  <PostsList />
+                  <PostsList posts={posts} total={total} />
                 </Col>
               </>
             )

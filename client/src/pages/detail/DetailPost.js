@@ -1,12 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../../contexts/AuthContext";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Carousel from "react-bootstrap/Carousel";
+import Modal from "react-bootstrap/Modal";
 
 import { FaPhoneAlt, FaRegHeart, FaHeart } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
@@ -22,11 +24,24 @@ import { utilities } from "../../utils/post";
 
 const DetailPost = () => {
   const { type, id } = useParams();
+  const navigate = useNavigate();
+
+  const {
+    authState: { isAuthenticated, user },
+    updateUserInfo,
+  } = useContext(AuthContext);
+
+  const [showLoginRequestModal, setShowLoginRequestModal] = useState(false);
 
   const saveRef = useRef(null);
 
   const [post, setPost] = useState(null);
-  const [postSaved, setPostSaved] = useState(<FaRegHeart className="heart-icon"/>);
+  const [postSaved, setPostSaved] = useState(
+    <FaRegHeart className="heart-icon" />
+  );
+
+  const handleClose = () => setShowLoginRequestModal(false);
+  const handleShow = () => setShowLoginRequestModal(true);
 
   useEffect(() => {
     const getDetail = async () => {
@@ -37,15 +52,30 @@ const DetailPost = () => {
     getDetail();
   }, [type, id]);
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (!saveRef.current.classList.contains("save-click")) {
-      saveRef.current.classList.add("save-click");
-      setPostSaved(<FaHeart className="heart-icon saved"/>);
+      if (isAuthenticated) {
+        saveRef.current.classList.add("save-click");
+        setPostSaved(<FaHeart className="heart-icon saved" />);
+        user.savedPost.push(post._id);
+        await updateUserInfo(user._id, { savedPost: user.savedPost });
+      } else {
+        handleShow();
+      }
     } else {
       saveRef.current.classList.remove("save-click");
-      setPostSaved(<FaRegHeart className="heart-icon"/>);
+      setPostSaved(<FaRegHeart className="heart-icon" />);
+      user.savedPost = user.savedPost.filter((p) => p !== post._id);
+      await updateUserInfo(user._id, { savedPost: user.savedPost });
     }
   };
+
+  useEffect(() => {
+    if (post && user.savedPost.includes(post._id)) {
+      saveRef.current.classList.add("save-click");
+      setPostSaved(<FaHeart className="heart-icon saved" />);
+    }
+  }, [post]);
 
   // const [pos, setPos] = useState(null);
   // useEffect(() => {
@@ -240,6 +270,22 @@ const DetailPost = () => {
                 </div>
               </Col>
             </Row>
+            <Modal
+              show={showLoginRequestModal}
+              onHide={handleClose}
+              className="login-request-modal"
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Vui lòng đăng nhập</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                Vui lòng đăng nhập hoặc đăng ký để lưu tin
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={() => navigate("/login")}>Đăng nhập</Button>
+                <Button onClick={() => navigate("/register")}>Đăng ký</Button>
+              </Modal.Footer>
+            </Modal>
           </>
         )}
       </div>

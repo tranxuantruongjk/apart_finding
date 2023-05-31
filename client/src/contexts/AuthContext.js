@@ -104,7 +104,6 @@ const AuthContextProvider = ({ children }) => {
   // Update user's info
   const updateUserInfo = async (userId, updateForm) => {
     try {
-      console.log(updateForm);
       const response = await axios.put(`${apiUrl}/auth/${userId}`, updateForm);
       if (response.data.success) {
         dispatch({
@@ -117,7 +116,6 @@ const AuthContextProvider = ({ children }) => {
         return response.data;
       }
     } catch (error) {
-      console.log(2);
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }

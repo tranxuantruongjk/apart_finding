@@ -4,6 +4,7 @@ import { useLocation, Link } from "react-router-dom";
 import PostManage from "./postManage/PostManage";
 import NewPost from "./newPost/NewPost";
 import Profile from "./profile/Profile";
+import SavedPost from "./savedPost/SavedPost";
 
 const Management = ({ manageRoute }) => {
   const { pathname } = useLocation();
@@ -14,6 +15,7 @@ const Management = ({ manageRoute }) => {
       {manageRoute === "posts" && <PostManage />}
       {manageRoute === "profile" && <Profile />}
       {manageRoute === "create" && <NewPost />}
+      {manageRoute === "savedPosts" && <SavedPost />}
     </>
   );
 
@@ -52,6 +54,14 @@ const Management = ({ manageRoute }) => {
             to="/me/create"
           >
             Đăng tin mới
+          </Link>
+        </li>
+        <li className="nav-item">
+          <Link 
+            className="nav-link manage-link"
+            to="/me/savedPosts"
+          >
+            Tin đã lưu
           </Link>
         </li>
       </ul>

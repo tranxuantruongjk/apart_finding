@@ -51,6 +51,11 @@ const Header = () => {
                     </Link>
                   </NavDropdown.Item>
                   <NavDropdown.Item className="my-item">
+                    <Link to="/me/savedPosts" className="my-savedPosts">
+                      Tin đã lưu
+                    </Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className="my-item">
                     <Link to="/me/profile" className="my-profile">
                       Thông tin cá nhân
                     </Link>

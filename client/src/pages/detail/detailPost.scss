@@ -196,3 +196,26 @@
 .post-action {
   min-width: 150px;
 }
+
+.login-request-modal {
+  .modal-body {
+    text-align: center;
+  }
+
+  .modal-footer {
+    justify-content: center;
+
+    button {
+      border: 2px solid $main-color;
+      outline: none;
+      min-width: 125px;
+      background-color: $main-color;
+      font-weight: 500;
+
+      &:hover, &:focus {
+        background-color: transparent;
+        color: $main-color;
+      }
+    }
+  }
+}

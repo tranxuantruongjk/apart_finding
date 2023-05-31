@@ -26,6 +26,9 @@ const UserSchema = new Schema(
     state: {
       type: String,
       default: "active"
+    },
+    savedPost: {
+      type: Array,
     }
   },
   {

@@ -29,9 +29,9 @@ router.get("/", verifyToken, async (req, res) => {
 // @desc Update user's info
 // @access Private
 router.put("/:id", verifyToken, async (req, res) => {
-  const { username, email } = req.body;
+  const { username, email, savedPost } = req.body;
 
-  if (!username) {
+  if (!username && !savedPost) {
     return res.status(400).json({success: false, message: "Tên là thông tin bắt buộc."});
   }
 
@@ -39,6 +39,7 @@ router.put("/:id", verifyToken, async (req, res) => {
     let updatedUser = {
       username,
       email,
+      savedPost,
     }
 
     const userUpdateCondition = {_id: req.params.id, _id: req.userId};

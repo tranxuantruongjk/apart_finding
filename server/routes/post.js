@@ -195,9 +195,9 @@ router.post("/search", async (req, res) => {
   }
 });
 
-// @route GET api/posts/:userId
+// @route GET api/posts/:userId/posts
 // @route Get all posts which userId's user posted
-// @access Public
+// @access Private
 router.get("/:userId/posts", verifyToken, async (req, res) => {
   try {
     const posts = await Post.find({ user: req.params.userId });
@@ -205,6 +205,33 @@ router.get("/:userId/posts", verifyToken, async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+// @route GET api/posts/userId/savedPosts
+// @route Get all posts which userId's user saved
+// @access Private
+router.get("/:userId/savedPosts", verifyToken, async (req, res) => {
+  try {
+    const savedPostsId = await User.findById(req.params.userId).select("savedPost");
+
+    let savedPosts = [];
+    if (savedPostsId.savedPost.length === 0) {
+      res.json({ success: true, savedPosts });
+    }
+    
+    for (let i = 0; i < savedPostsId.savedPost.length; i++) {
+      const savedPost = await Post.findById(savedPostsId.savedPost[i]).populate("user", ["username", "phone"]).lean();
+      const postFiles = await PostFile.find({ postId: savedPostsId.savedPost[i] });
+      const files = postFiles.map((postFile) => postFile.file);
+      savedPost.files = files;
+      savedPosts.push(savedPost);
+    }
+    
+    res.json({ success: true, savedPosts });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 

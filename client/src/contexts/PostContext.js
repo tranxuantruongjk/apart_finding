@@ -148,6 +148,17 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
+  // Get post(s) which a user saved 
+  const getSavedPosts = async (userId) => {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/${userId}/savedPosts`);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  }
+
   // Context data
   const postContextData = {
     postState,
@@ -158,6 +169,7 @@ const PostContextProvider = ({ children }) => {
     getUserIdPosts,
     changePage,
     getTotalPosts,
+    getSavedPosts,
   };
 
   // Return provider
