@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../model/User");
 const RentType = require("../model/RentType");
 const Post = require("../model/Post");
-const PostFile = require("../model/PostFile");
+// const PostFile = require("../model/PostFile");
 
 const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
 const { storage } = require("../firebase");
@@ -96,11 +96,11 @@ router.post("/search", async (req, res) => {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      for (const post of slicePosts) {
-        const postFiles = await PostFile.find({ postId: post._id });
-        const files = postFiles.map((postFile) => postFile.file);
-        post.files = files;
-      }
+      // for (const post of slicePosts) {
+      //   const postFiles = await PostFile.find({ postId: post._id });
+      //   const files = postFiles.map((postFile) => postFile.file);
+      //   post.files = files;
+      // }
       res.json({ success: true, posts: slicePosts, total: posts.length });
     } catch (error) {
       console.log(error);
@@ -138,11 +138,11 @@ router.post("/search", async (req, res) => {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      for (const post of slicePosts) {
-        const postFiles = await PostFile.find({ postId: post._id });
-        const files = postFiles.map((postFile) => postFile.file);
-        post.files = files;
-      }
+      // for (const post of slicePosts) {
+      //   const postFiles = await PostFile.find({ postId: post._id });
+      //   const files = postFiles.map((postFile) => postFile.file);
+      //   post.files = files;
+      // }
       res.json({ success: true, posts: slicePosts, total: posts.length });
     } catch (error) {
       console.log(error);
@@ -180,11 +180,11 @@ router.post("/search", async (req, res) => {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      for (const post of posts) {
-        const postFiles = await PostFile.find({ postId: post._id });
-        const files = postFiles.map((postFile) => postFile.file);
-        post.files = files;
-      }
+      // for (const post of posts) {
+      //   const postFiles = await PostFile.find({ postId: post._id });
+      //   const files = postFiles.map((postFile) => postFile.file);
+      //   post.files = files;
+      // }
       res.json({ success: true, posts: slicePosts, total: posts.length });
     } catch (error) {
       console.log(error);
@@ -213,21 +213,30 @@ router.get("/:userId/posts", verifyToken, async (req, res) => {
 // @access Private
 router.get("/:userId/savedPosts", verifyToken, async (req, res) => {
   try {
-    const savedPostsId = await User.findById(req.params.userId).select("savedPost");
+    const savedPostsId = await User.findById(req.params.userId).select(
+      "savedPost"
+    );
 
-    let savedPosts = [];
+    let savedPosts =[];
+    
     if (savedPostsId.savedPost.length === 0) {
-      res.json({ success: true, savedPosts });
+      return res.json({ success: true, savedPosts });
     }
-    
+
     for (let i = 0; i < savedPostsId.savedPost.length; i++) {
-      const savedPost = await Post.findById(savedPostsId.savedPost[i]).populate("user", ["username", "phone"]).lean();
-      const postFiles = await PostFile.find({ postId: savedPostsId.savedPost[i] });
-      const files = postFiles.map((postFile) => postFile.file);
-      savedPost.files = files;
-      savedPosts.push(savedPost);
+      const savedPost = await Post.findById(savedPostsId.savedPost[i])
+        .populate("user", ["username", "phone"])
+        .lean();
+      // const postFiles = await PostFile.find({
+      //   postId: savedPostsId.savedPost[i],
+      // });
+      // const files = postFiles.map((postFile) => postFile.file);
+      // savedPost.files = files;
+      if (savedPost) {
+        savedPosts.push(savedPost);
+      }
     }
-    
+
     res.json({ success: true, savedPosts });
   } catch (error) {
     console.log(error);
@@ -249,11 +258,11 @@ router.get("/:type", async (req, res) => {
 
     const slicePosts = posts.slice(skip, limit * page);
 
-    for (const post of slicePosts) {
-      const postFiles = await PostFile.find({ postId: post._id });
-      const files = postFiles.map((postFile) => postFile.file);
-      post.files = files;
-    }
+    // for (const post of slicePosts) {
+    //   const postFiles = await PostFile.find({ postId: post._id });
+    //   const files = postFiles.map((postFile) => postFile.file);
+    //   post.files = files;
+    // }
     res.json({ success: true, posts: slicePosts, total: posts.length });
   } catch (error) {
     console.log(error);
@@ -271,10 +280,8 @@ router.get("/:type/:id", async (req, res) => {
       .populate("rentType", ["name"])
       .lean();
 
-    const postFiles = await PostFile.find({ postId: req.params.id });
-    // const files = postFiles.map((postFile) => postFile.file);
-    post.files = postFiles;
-    // console.log(post);
+    // const postFiles = await PostFile.find({ postId: req.params.id });
+    // post.files = postFiles;
 
     res.json({ success: true, post });
   } catch (error) {
@@ -297,11 +304,11 @@ router.get("/", async (req, res) => {
 
     const slicePosts = posts.slice(skip, limit * page);
 
-    for (const post of slicePosts) {
-      const postFiles = await PostFile.find({ postId: post._id });
-      const files = postFiles.map((postFile) => postFile.file);
-      post.files = files;
-    }
+    // for (const post of slicePosts) {
+    //   const postFiles = await PostFile.find({ postId: post._id });
+    //   const files = postFiles.map((postFile) => postFile.file);
+    //   post.files = files;
+    // }
 
     res.json({ success: true, posts: slicePosts, total: posts.length });
   } catch (error) {
@@ -411,7 +418,10 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
 
     await newPost.save();
 
-    files.forEach(async (file) => {
+    const images = [];
+    const videos = [];
+
+    for(const file of files) {
       const storageRef = ref(
         storage,
         `files/${newPost._id}/${file.originalname}`
@@ -419,13 +429,23 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
       const metadata = { contentType: file.mimetype };
       const snapshot = await uploadBytes(storageRef, file.buffer, metadata);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      const newPostFile = new PostFile({
-        postId: newPost._id,
-        type: file.mimetype.includes("image/") ? "image" : "video",
-        file: downloadURL,
-      });
+      // const newPostFile = new PostFile({
+      //   postId: newPost._id,
+      //   type: file.mimetype.includes("image/") ? "image" : "video",
+      //   file: downloadURL,
+      // });
 
-      await newPostFile.save();
+      // await newPostFile.save();
+      if (file.mimetype.includes("image/")) {
+        images.push(downloadURL);
+      } else {
+        videos.push(downloadURL);
+      }
+    }
+
+    await Post.findByIdAndUpdate(newPost._id, {
+      images: images,
+      videos: videos,
     });
 
     res.json({

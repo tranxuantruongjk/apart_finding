@@ -1,9 +1,11 @@
-import React, { useState, useContext, useRef } from "react";
+import React, { useState, useContext, useRef, useEffect } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import InputGroup from "react-bootstrap/InputGroup";
+import Modal from "react-bootstrap/Modal";
+import Spinner from "react-bootstrap/Spinner";
 import { AuthContext } from "../../../contexts/AuthContext";
 import Button from "react-bootstrap/Button";
 import AlertMessage from "../../../components/alertMessage/AlertMessage";
@@ -26,6 +28,8 @@ const NewPost = () => {
   const [files, setFiles] = useState([]);
   const [utils, setUtils] = useState([]);
   const [location, setLocation] = useState([]);
+
+  const [showLoading, setShowLoading] = useState(false);
 
   const [libraries] = useState(["places"]);
 
@@ -114,8 +118,20 @@ const NewPost = () => {
     }
   };
 
+  const hideShowLoading = () => {
+    setShowLoading(false);
+    // useEffect(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth"
+      });
+    // }, []);
+  }
+
   const create = async (e) => {
     e.preventDefault();
+    setShowLoading(true);
 
     try {
       const formData = new FormData();
@@ -132,7 +148,9 @@ const NewPost = () => {
 
       const postRes = await createPost(formData);
       if (postRes.success) {
-        window.scrollTo(0, 0);
+        // setShowLoading(false);
+        // window.scrollTo(0, 0);
+        hideShowLoading();
         setPostForm({
           title: "",
           content: "",
@@ -154,7 +172,9 @@ const NewPost = () => {
         setAlert({ type: "success", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
       } else {
-        window.scrollTo(0, 0);
+        hideShowLoading();
+        // setShowLoading(false);
+        // window.scrollTo(0, 0);
         setAlert({ type: "danger", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
       }
@@ -468,6 +488,25 @@ const NewPost = () => {
           </Col>
         </Row>
       </Form>
+      <Modal
+        show={showLoading}
+        onHide={() => setShowLoading(false)}
+        backdrop="static"
+        keyboard={false}
+        centered
+      >
+        <Modal.Body className="d-flex justify-content-center">
+          <Button variant="primary" disabled className="d-flex align-items-center">
+            <Spinner
+              as="span"
+              animation="border"
+              role="status"
+              aria-hidden="true"
+            />
+            <span className="ms-2">Đang xử lý...</span>
+          </Button>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

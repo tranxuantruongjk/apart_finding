@@ -71,7 +71,7 @@ const DetailPost = () => {
   };
 
   useEffect(() => {
-    if (post && user.savedPost.includes(post._id)) {
+    if (post && user && user.savedPost.includes(post._id)) {
       saveRef.current.classList.add("save-click");
       setPostSaved(<FaHeart className="heart-icon saved" />);
     }
@@ -100,23 +100,22 @@ const DetailPost = () => {
                 <div className="detail-post">
                   <div className="detail-post__images">
                     <Carousel>
-                      {post.files.map((file) => (
-                        <Carousel.Item key={file._id}>
-                          {file.type === "image" ? (
+                      {post.images &&
+                        post.images.map((image, i) => (
+                          <Carousel.Item key={i}>
                             <img
                               className="post-img"
-                              src={file.file}
+                              src={image}
                               alt="First slide"
                             />
-                          ) : (
-                            <video
-                              src={file.file}
-                              controls
-                              className="post-img"
-                            />
-                          )}
-                        </Carousel.Item>
-                      ))}
+                          </Carousel.Item>
+                        ))}
+                      {post.videos &&
+                        post.videos.map((video, i) => (
+                          <Carousel.Item key={i}>
+                            <video src={video} controls className="post-img" />
+                          </Carousel.Item>
+                        ))}
                     </Carousel>
                   </div>
                   <h2 className="detail-post__title">{post.title}</h2>

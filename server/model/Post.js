@@ -90,6 +90,13 @@ const PostSchema = new Schema (
       type: Number,
       required: true,
     },
+    images: {
+      type: Array,
+      required: true,
+    },
+    videos: {
+      type: Array,
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'users',

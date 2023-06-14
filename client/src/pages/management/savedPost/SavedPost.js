@@ -14,7 +14,7 @@ const SavedPost = () => {
     authState: { user },
   } = useContext(AuthContext);
   const { getSavedPosts } = useContext(PostContext);
-  const [savedPosts, setSavedPost] = useState();
+  const [savedPosts, setSavedPost] = useState([]);
 
   useEffect(() => {
     if (user) {

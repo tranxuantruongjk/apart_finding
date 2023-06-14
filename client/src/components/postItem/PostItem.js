@@ -44,11 +44,11 @@ const PostItem = ({ post, handleShow }) => {
         <Row>
           <Col md={5} className="post-item__thumb">
             <img
-              src={post.files[0]}
+              src={post.images[0]}
               alt="anh"
               className="post-item__thumb__image"
             />
-            <span className="image-number">{post.files.length} ảnh</span>
+            <span className="image-number">{post.images.length} ảnh</span>
             <span className="post-save">
               <i
                 ref={saveRef}

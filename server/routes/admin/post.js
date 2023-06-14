@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const Post = require("../../model/Post");
-const PostFile = require("../../model/PostFile");
 
 const { ref, deleteObject, listAll } = require("firebase/storage");
 const { storage } = require("../../firebase");
@@ -18,9 +17,6 @@ router.get("/:id", verifyAdminToken, async (req, res) => {
       .populate("user", ["username", "phone"])
       .populate("rentType", ["name"])
       .lean();
-
-    const postFiles = await PostFile.find({ postId: req.params.id });
-    post.files = postFiles;
 
     res.json({ success: true, post });
   } catch (error) {
@@ -119,8 +115,6 @@ router.delete("/:id", verifyAdminToken, async (req, res) => {
         .status(401)
         .json({ success: false, message: "Không tìm thấy bài viết" });
     }
-
-    await PostFile.deleteMany({ postId: req.params.id });
 
     const listRef = ref(storage, `files/${req.params.id}`);
     await listAll(listRef).then((res) => {
