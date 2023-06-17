@@ -2,6 +2,8 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthContext } from "../../contexts/AuthContext";
+import { PostContext } from "../../contexts/PostContext";
+import { SmallPostItem } from "../../components/postItem/PostItem";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,6 +11,8 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Carousel from "react-bootstrap/Carousel";
 import Modal from "react-bootstrap/Modal";
+import ListGroup from "react-bootstrap/ListGroup";
+import Card from "react-bootstrap/Card";
 
 import { FaPhoneAlt, FaRegHeart, FaHeart } from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
@@ -31,6 +35,8 @@ const DetailPost = () => {
     updateUserInfo,
   } = useContext(AuthContext);
 
+  const { getRecommendPosts } = useContext(PostContext);
+
   const [showLoginRequestModal, setShowLoginRequestModal] = useState(false);
 
   const saveRef = useRef(null);
@@ -39,6 +45,7 @@ const DetailPost = () => {
   const [postSaved, setPostSaved] = useState(
     <FaRegHeart className="heart-icon" />
   );
+  const [postsRe, setPostsRe] = useState([]);
 
   const handleClose = () => setShowLoginRequestModal(false);
   const handleShow = () => setShowLoginRequestModal(true);
@@ -74,6 +81,17 @@ const DetailPost = () => {
     if (post && user && user.savedPost.includes(post._id)) {
       saveRef.current.classList.add("save-click");
       setPostSaved(<FaHeart className="heart-icon saved" />);
+    }
+  }, [post, user]);
+
+  useEffect(() => {
+    if (post) {
+      const getPostsRe = async () => {
+        const response = await getRecommendPosts(post._id);
+        
+        setPostsRe(response);
+      };
+      getPostsRe();
     }
   }, [post]);
 
@@ -214,11 +232,17 @@ const DetailPost = () => {
                         <tbody>
                           <tr>
                             <th scope="row">Liên hệ</th>
-                            <td>{post.user.username}</td>
+                            <td>
+                              {post.owner
+                                ? post.owner.name
+                                : post.user.username}
+                            </td>
                           </tr>
                           <tr>
                             <th scope="row">Điện thoại</th>
-                            <td>{post.user.phone}</td>
+                            <td>
+                              {post.owner ? post.owner.phone : post.user.phone}
+                            </td>
                           </tr>
                         </tbody>
                       </Table>
@@ -246,16 +270,22 @@ const DetailPost = () => {
                   <h4 className="title">Liên hệ chủ trọ</h4>
                   <div className="user-info">
                     <RxAvatar className="avatar" />
-                    <h5 className="name">{post.user.username}</h5>
+                    <h5 className="name">
+                      {post.owner ? post.owner.name : post.user.username}
+                    </h5>
                   </div>
                   <Button
                     variant="light"
                     className="phone"
                     as="a"
-                    href={`tel:${post.user.phone}`}
+                    href={`tel:${
+                      post.owner ? post.owner.phone : post.user.phone
+                    }`}
                   >
                     <FaPhoneAlt className="phone-icon" />
-                    <span className="phone-number">{post.user.phone}</span>
+                    <span className="phone-number">
+                      {post.owner ? post.owner.phone : post.user.phone}
+                    </span>
                   </Button>
                   <Button
                     variant="light"
@@ -266,6 +296,26 @@ const DetailPost = () => {
                     {postSaved}
                     <span className="save-text">Lưu tin</span>
                   </Button>
+                </div>
+                <div className="posts-recommend">
+                  <Card>
+                    <Card.Body>
+                      <Card.Title>Gợi ý cho bạn</Card.Title>
+                      <ListGroup variant="flush">
+                        <ListGroup.Item className="border-danger" />
+                        {postsRe &&
+                          postsRe.map((post) => (
+                            <ListGroup.Item
+                              key={post._id.$oid}
+                              className="border-danger"
+                            >
+                              <SmallPostItem post={post} />
+                            </ListGroup.Item>
+                          ))}
+                        <ListGroup.Item></ListGroup.Item>
+                      </ListGroup>
+                    </Card.Body>
+                  </Card>
                 </div>
               </Col>
             </Row>

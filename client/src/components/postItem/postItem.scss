@@ -74,3 +74,36 @@
     -webkit-line-clamp: 2;
   }
 }
+
+.small-post-item {
+  &__thumb {
+    position: relative;
+
+    &__image {
+      width: 100%;
+      aspect-ratio: 1;
+      border-radius: 5px;
+    }
+  }
+
+  &__price {
+    .price {
+      font-size: 1em;
+    }
+  }
+
+  &__address {
+    margin-top: 2px !important;
+
+    .address {
+      margin-left: 5px;
+    }
+  }
+
+  &__title {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+}

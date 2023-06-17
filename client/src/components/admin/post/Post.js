@@ -220,11 +220,11 @@ const Post = () => {
                       <tbody>
                         <tr>
                           <th scope="row">Liên hệ</th>
-                          <td>{post.user.username}</td>
+                          <td>{post.owner ? post.owner.name : post.user.username}</td>
                         </tr>
                         <tr>
                           <th scope="row">Điện thoại</th>
-                          <td>{post.user.phone}</td>
+                          <td>{post.owner ? post.owner.phone : post.user.phone}</td>
                         </tr>
                       </tbody>
                     </Table>

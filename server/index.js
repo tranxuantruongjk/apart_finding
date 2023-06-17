@@ -9,6 +9,7 @@ const authRouter = require('./routes/auth');
 const postRouter = require("./routes/post");
 const adminUserRouter = require("./routes/admin/user");
 const adminPostRouter = require("./routes/admin/post");
+const adminTypeRouter = require("./routes/admin/type");
 
 const connectDB = async () => {
   try {
@@ -39,6 +40,7 @@ app.use('/api/auth', authRouter);
 app.use('/api/posts', postRouter);
 app.use('/api/admin/users', adminUserRouter);
 app.use('/api/admin/posts', adminPostRouter);
+app.use('/api/admin/types', adminTypeRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

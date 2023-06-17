@@ -2,6 +2,7 @@ import { createContext, useEffect, useReducer, useState } from "react";
 import axios from "axios";
 import {
   apiUrl,
+  apiPyUrl,
   POSTS_LOADED_FAIL,
   POSTS_LOADED_SUCCESS,
   POSTS_SEARCHED_SUCCESS,
@@ -69,7 +70,7 @@ const PostContextProvider = ({ children }) => {
             payload: {
               posts: response.data.posts,
               total: response.data.total,
-            }
+            },
           });
         }
       } catch (error) {
@@ -88,7 +89,7 @@ const PostContextProvider = ({ children }) => {
             payload: {
               posts: response.data.posts,
               total: response.data.total,
-            }
+            },
           });
         }
       } catch (error) {
@@ -127,7 +128,7 @@ const PostContextProvider = ({ children }) => {
           payload: {
             posts: response.data.posts,
             total: response.data.total,
-          }
+          },
         });
       }
     } catch (error) {
@@ -148,7 +149,7 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
-  // Get post(s) which a user saved 
+  // Get post(s) which a user saved
   const getSavedPosts = async (userId) => {
     try {
       const response = await axios.get(`${apiUrl}/posts/${userId}/savedPosts`);
@@ -157,7 +158,18 @@ const PostContextProvider = ({ children }) => {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }
-  }
+  };
+
+  // Get post(s) recommend
+  const getRecommendPosts = async (postId) => {
+    try {
+      const response = await axios.get(`${apiPyUrl}/posts/${postId}`);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
 
   // Context data
   const postContextData = {
@@ -170,6 +182,7 @@ const PostContextProvider = ({ children }) => {
     changePage,
     getTotalPosts,
     getSavedPosts,
+    getRecommendPosts,
   };
 
   // Return provider

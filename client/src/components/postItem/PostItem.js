@@ -97,18 +97,62 @@ const PostItem = ({ post, handleShow }) => {
             </div>
             <div className="post-item__contact d-flex justify-content-between align-items-center my-2">
               <div className="post-item__contact-name">
-                {post.user.username}
+                {post.owner ? post.owner.name : post.user.username}
               </div>
               <div className="post-item__contact-phone">
                 <Badge bg="success" className="p-2">
                   <FaPhoneAlt className="me-1" />
-                  {post.user.phone}
+                  {post.owner ? post.owner.phone : post.user.phone}
                 </Badge>
               </div>
             </div>
           </Col>
         </Row>
-        
+      )}
+    </div>
+  );
+};
+
+export const SmallPostItem = ({ post }) => {
+  return (
+    <div className="small-post-item">
+      {post && (
+        <Row>
+          <Col md={4} sm={4} xs={4} className="small-post-item__thumb">
+            <img
+              src={post.images[0]}
+              alt="anh"
+              className="small-post-item__thumb__image"
+            />
+          </Col>
+          <Col md={8} sm={8} xs={8}>
+            <Link
+              to={`/${post.rentType.$oid}/${post._id.$oid}`}
+              className="text-decoration-none"
+            >
+              <p className="small-post-item__title">{post.title}</p>
+            </Link>
+            <div className="d-flex justify-content-between align-items-center">
+              <div className="small-post-item__price">
+                <Badge bg="info" className="price">
+                  {`${post.price}/tháng`}
+                </Badge>
+              </div>
+              <div className="small-post-item__area d-inline-flex align-items-center">
+                <FaChartArea />
+                <span className="ms-1">{`${post.area}m`}&sup2;</span>
+              </div>
+            </div>
+          </Col>
+          <div className="small-post-item__address">
+            <FaSearchLocation
+              style={{ width: "18", height: "18" }}
+              className="text-danger"
+            />
+            <span className="address">{`${post.fullAddressObject.ward.text}, 
+                            ${post.fullAddressObject.district.text}, ${post.fullAddressObject.city.text}`}</span>
+          </div>
+        </Row>
       )}
     </div>
   );

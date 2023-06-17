@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import "./sideBar.scss";
 
 import { BsX } from "react-icons/bs";
-import { MdDashboard, MdPeople, MdArticle } from "react-icons/md";
+import { MdDashboard, MdPeople, MdArticle, MdTypeSpecimen } from "react-icons/md";
 
 const navigation = [
   {
@@ -22,6 +22,11 @@ const navigation = [
     href: "/admin/postsList",
     icon: <MdArticle />,
   },
+  {
+    title: "Loại phòng",
+    href: "/admin/rentTypesList",
+    icon: <MdTypeSpecimen />,
+  }
 ];
 
 const Sidebar = () => {

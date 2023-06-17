@@ -112,7 +112,7 @@ router.post("/search", async (req, res) => {
     try {
       const posts = await Post.find({
         rentType: mongoose.Types.ObjectId(typeId),
-        "fullAddressObject.district.code": district,
+        "fullAddressObject.district.code": parseInt(district),
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
           $gte: parseInt(minAcreage),
@@ -154,7 +154,7 @@ router.post("/search", async (req, res) => {
     try {
       const posts = await Post.find({
         rentType: mongoose.Types.ObjectId(typeId),
-        "fullAddressObject.ward.code": ward,
+        "fullAddressObject.ward.code": parseInt(ward),
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
           $gte: parseInt(minAcreage),
@@ -299,6 +299,7 @@ router.get("/", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
+      .sort('-createdAt')
       .populate("user", ["username", "phone"])
       .lean();
 

@@ -19,6 +19,7 @@ import UsersList from "./components/admin/userList/UsersList";
 import Starter from "./components/admin/starter/Starter";
 import PostsList from "./components/admin/postList/PostsList";
 import Post from "./components/admin/post/Post";
+import RentTypesList from "./components/admin/rentTypeList/RentTypesList";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
                     <Route path="/admin/usersList" element={<UsersList />}/>
                     <Route path="/admin/postsList/:id" element={<Post />} />
                     <Route path="/admin/postsList" element={<PostsList />}/>
+                    <Route path="/admin/rentTypesList" element={<RentTypesList />} />
                   </Route>
                 </Routes>
               </Router>

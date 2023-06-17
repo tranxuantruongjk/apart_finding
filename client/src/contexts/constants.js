@@ -3,6 +3,7 @@ export const apiUrl =
     ? "http://localhost:5000/api"
     : "";
 
+export const apiPyUrl = "http://127.0.0.1:8001"
 export const LOCAL_STORAGE_TOKEN_NAME = 'apart-finding';
 
 export const POSTS_TOTAL_SUCCESS = "POSTS_TOTAL_SUCCESS";

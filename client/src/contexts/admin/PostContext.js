@@ -35,18 +35,49 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
-  // Get a post 
-  const getPost = async (postId) => {
+  // Get rent types
+  const getRentTypes = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/posts/${postId}`);
+      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
 
-      if (response.data.success)
-        return response.data;
+  // Add retn type
+  const addRentType = async (newType) => {
+    try {
+      const response = await axios.post(`${apiUrl}/admin/types`, newType);
+      return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }
   }
+
+  // Update rent type
+  const updateRentType = async(updatedType) => {
+    try {
+      const response = await axios.put(`${apiUrl}/admin/types/${updatedType._id}`, updatedType);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  }
+  // Get a post
+  const getPost = async (postId) => {
+    try {
+      const response = await axios.get(`${apiUrl}/admin/posts/${postId}`);
+
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
 
   // Accept a post
   const acceptPost = async (postId) => {
@@ -114,6 +145,9 @@ const AdminPostContextProvider = ({ children }) => {
     acceptPost,
     rejectPost,
     deletePost,
+    getRentTypes,
+    addRentType,
+    updateRentType,
   };
 
   // Return provider
