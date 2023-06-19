@@ -4,13 +4,14 @@ nav {
   .menuItem {
     color: $main-color;
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: $main-color;
       color: white;
       border-radius: 20px;
     }
   }
-  
+
   .actived {
     background-color: $main-color;
     color: white;

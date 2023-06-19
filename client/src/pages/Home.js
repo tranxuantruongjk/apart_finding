@@ -36,33 +36,31 @@ const Home = () => {
   }, [type, pathname, page]);
 
   return (
-    <div className="home">
+    <div className="home bg-color">
       <HomeTop />
       <div className="container main-home my-3">
         <Row>
-          {
-            pathname === "/" ? (
-              <>
-                <Col md={8}>
-                  <PostsList posts={posts} total={total} />
-                </Col>
-                <Col md={4}>
-                  <TypesList />
-                  <PricesList />
-                  <AcreagesList />
-                </Col>
-              </>
-            ) : (
-              <>
-                <Col md={3}>
-                  <Utils />
-                </Col>
-                <Col md={9}>
-                  <PostsList posts={posts} total={total} />
-                </Col>
-              </>
-            )
-          }
+          {pathname === "/" ? (
+            <>
+              <Col md={8}>
+                <PostsList posts={posts} total={total} />
+              </Col>
+              <Col md={4}>
+                <TypesList />
+                <PricesList />
+                <AcreagesList />
+              </Col>
+            </>
+          ) : (
+            <>
+              <Col md={3}>
+                <Utils />
+              </Col>
+              <Col md={9}>
+                <PostsList posts={posts} total={total} />
+              </Col>
+            </>
+          )}
         </Row>
       </div>
     </div>

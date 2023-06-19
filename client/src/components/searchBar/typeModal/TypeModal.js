@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, memo } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { PostContext } from "../../../contexts/PostContext";
@@ -9,11 +9,14 @@ import "./typeModal.scss";
 
 const TypeModal = ({ show, setShowTypeModal }) => {
   const { rentTypes } = useContext(PostContext);
-  const { searchState: {rentType}, changeSearchState } = useSearchContext();
+  const {
+    searchState: { rentType },
+    changeSearchState,
+  } = useSearchContext();
 
   const [typeChecked, setTypeChecked] = useState();
 
-  const { type }  = useParams();
+  const { type } = useParams();
 
   const handleChecked = (e) => {
     setTypeChecked(e.target.id);
@@ -27,18 +30,11 @@ const TypeModal = ({ show, setShowTypeModal }) => {
         const typeFind = rentTypes.find((rentType1) => rentType1._id === type);
         setTypeChecked(typeFind._id);
         changeSearchState("rentType", typeFind);
+      } else {
+        setTypeChecked();
       }
     }
-  }, [rentTypes, type, rentType])
-
-  useEffect(() => {
-    if (rentTypes.length !== 0) {
-      if (Object.keys(rentType).length !== 0) {
-        const typeFind = rentTypes.find((rentType1) => rentType1._id === rentType._id);
-        setTypeChecked(typeFind._id);
-      }
-    }
-  }, [show, rentTypes]);
+  }, [rentTypes, type, rentType]);
 
   const closeTypeModal = () => {
     setShowTypeModal(false);

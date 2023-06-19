@@ -38,6 +38,11 @@
     color: black;
     border: none;
     outline: none;
+
+    &:hover,
+    &:active {
+      background-color: #fec834 !important;
+    }
   }
 }
 
@@ -59,8 +64,7 @@
 .address-default,
 .price-default,
 .area-default,
-.type-default
- {
+.type-default {
   margin-left: 3px;
   font-weight: 600;
 }

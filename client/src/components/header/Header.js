@@ -8,6 +8,11 @@ import { AiOutlinePlusCircle } from "react-icons/ai";
 import Logo from "../logo/Logo";
 import NavbarMenu from "../navbarMenu/NavbarMenu";
 
+import { LuClipboardList } from "react-icons/lu";
+import { BsBookmarkHeartFill } from "react-icons/bs";
+import { BiUserCircle } from "react-icons/bi";
+import { TbLogout } from "react-icons/tb";
+
 import "./header.scss";
 
 const Header = () => {
@@ -25,69 +30,76 @@ const Header = () => {
       {user && user.role === 1 ? (
         <></>
       ) : (
-        <Container className="d-flex justify-content-between header">
-          <div className="header__logo">
-            <Link to={"/"} className="text-decoration-none">
-              <Logo />
-            </Link>
-          </div>
-          <NavbarMenu />
-          <div className="header__btn d-flex justify-content-between align-items-center">
-            {isAuthenticated ? (
-              <>
-                <p className="mb-0 me-2">
-                  Xin chào,
-                  <Link
-                    to={"/me/profile"}
-                    className="ms-1 text-decoration-none"
-                  >
-                    {user.username}
-                  </Link>
-                </p>
-                <NavDropdown className="me-4">
-                  <NavDropdown.Item className="my-item">
-                    <Link to="/me/posts" className="my-posts">
-                      Quản lý tin đăng
-                    </Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Item className="my-item">
-                    <Link to="/me/savedPosts" className="my-savedPosts">
-                      Tin đã lưu
-                    </Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Item className="my-item">
-                    <Link to="/me/profile" className="my-profile">
-                      Thông tin cá nhân
-                    </Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item className="my-item">
-                    <Link to="/" className="btn__logout" onClick={logout}>
-                      Đăng xuất
-                    </Link>
-                  </NavDropdown.Item>
-                </NavDropdown>
-              </>
-            ) : (
-              <>
-                <Link to="/login" className="me-4 btn__login">
-                  Đăng nhập
-                </Link>
-                <Link to="/register" className="me-4 btn__signup">
-                  Đăng ký
-                </Link>
-              </>
-            )}
-            <div className="btn__post">
-              <Link to="/me/create" className="text-decoration-none">
-                <Button className="d-flex align-items-center">
-                  <span>Đăng tin mới</span>
-                  <AiOutlinePlusCircle className="ms-1"/>
-                </Button>
+        <div className="shadow">
+          <Container className="d-flex justify-content-between header">
+            <div className="header__logo">
+              <Link to={"/"} className="text-decoration-none">
+                <Logo />
               </Link>
             </div>
-          </div>
-        </Container>
+            <NavbarMenu />
+            <div className="header__btn d-flex justify-content-between align-items-center">
+              {isAuthenticated ? (
+                <>
+                  <p className="mb-0 me-2">
+                    Xin chào,
+                    <Link
+                      to={"/me/profile"}
+                      className="ms-1 text-decoration-none"
+                    >
+                      {user.username}
+                    </Link>
+                  </p>
+                  <NavDropdown className="me-4">
+                    <NavDropdown.Item className="my-item">
+                      <Link to="/me/posts" className="my-posts">
+                        <LuClipboardList />
+                        <span>Quản lý tin đăng</span>
+                      </Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item className="my-item">
+                      <Link to="/me/savedPosts" className="my-savedPosts">
+                        <BsBookmarkHeartFill />
+                        <span>Tin đã lưu</span>
+                      </Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Item className="my-item">
+                      <Link to="/me/profile" className="my-profile">
+                        <BiUserCircle />
+                        <span>Thông tin cá nhân</span>
+                      </Link>
+                    </NavDropdown.Item>
+                    <NavDropdown.Divider />
+                    <NavDropdown.Item className="my-item">
+                      <Link to="/" className="btn__logout" onClick={logout}>
+                        <TbLogout />
+                        <span>Đăng xuất</span>
+                      </Link>
+                    </NavDropdown.Item>
+                  </NavDropdown>
+                </>
+              ) : (
+                <div className="auth">
+                  <Link to="/login" className="me-2 btn__login">
+                    Đăng nhập
+                  </Link>
+                  <span className="auth-split"></span>
+                  <Link to="/register" className="ms-2 me-3 btn__signup">
+                    Đăng ký
+                  </Link>
+                </div>
+              )}
+              <div className="btn__post">
+                <Link to="/me/create" className="text-decoration-none">
+                  <Button className="d-flex align-items-center">
+                    <span>Đăng tin mới</span>
+                    <AiOutlinePlusCircle className="ms-1" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </Container>
+        </div>
       )}
     </>
   );

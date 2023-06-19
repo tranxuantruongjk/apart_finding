@@ -70,7 +70,7 @@ router.post("/search", async (req, res) => {
   if (district === "000") {
     try {
       const posts = await Post.find({
-        rentType: mongoose.Types.ObjectId(typeId),
+        rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
           $gte: parseInt(minAcreage),
@@ -111,7 +111,7 @@ router.post("/search", async (req, res) => {
   } else if (ward === "00000") {
     try {
       const posts = await Post.find({
-        rentType: mongoose.Types.ObjectId(typeId),
+        rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         "fullAddressObject.district.code": parseInt(district),
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
@@ -153,7 +153,7 @@ router.post("/search", async (req, res) => {
   } else {
     try {
       const posts = await Post.find({
-        rentType: mongoose.Types.ObjectId(typeId),
+        rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         "fullAddressObject.ward.code": parseInt(ward),
         price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
         area: {
@@ -217,8 +217,8 @@ router.get("/:userId/savedPosts", verifyToken, async (req, res) => {
       "savedPost"
     );
 
-    let savedPosts =[];
-    
+    let savedPosts = [];
+
     if (savedPostsId.savedPost.length === 0) {
       return res.json({ success: true, savedPosts });
     }
@@ -299,7 +299,7 @@ router.get("/", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const posts = await Post.find()
-      .sort('-createdAt')
+      .sort("-createdAt")
       .populate("user", ["username", "phone"])
       .lean();
 
@@ -422,7 +422,7 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
     const images = [];
     const videos = [];
 
-    for(const file of files) {
+    for (const file of files) {
       const storageRef = ref(
         storage,
         `files/${newPost._id}/${file.originalname}`

@@ -150,25 +150,16 @@ const SearchBar = () => {
           as="button"
           lg="auto"
           md="auto"
-          className="search-btn btn btn-primary"
+          className="search-btn btn"
           onClick={handleSubmit}
         >
           <BiSearch />
           <span>Tìm kiếm</span>
         </Col>
       </Row>
-      <TypeModal
-        show={showTypeModal}
-        setShowTypeModal={setShowTypeModal}
-      />
-      <AddressModal 
-        show={displayAddressModal} 
-        onHide={hideAddressModal} 
-      />
-      <PriceModal
-        show={showPriceModal}
-        setShowPriceModal={setShowPriceModal}
-      />
+      <TypeModal show={showTypeModal} setShowTypeModal={setShowTypeModal} />
+      <AddressModal show={displayAddressModal} onHide={hideAddressModal} />
+      <PriceModal show={showPriceModal} setShowPriceModal={setShowPriceModal} />
       <AcreageModal
         show={showAcreageModal}
         setShowAcreageModal={setShowAcreageModal}

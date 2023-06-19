@@ -14,7 +14,12 @@ import Modal from "react-bootstrap/Modal";
 import ListGroup from "react-bootstrap/ListGroup";
 import Card from "react-bootstrap/Card";
 
-import { FaPhoneAlt, FaRegHeart, FaHeart } from "react-icons/fa";
+import {
+  FaPhoneAlt,
+  FaRegHeart,
+  FaHeart,
+  FaMapMarkedAlt,
+} from "react-icons/fa";
 import { RxAvatar } from "react-icons/rx";
 import { MdRoomPreferences } from "react-icons/md";
 import { HiHome } from "react-icons/hi";
@@ -88,7 +93,7 @@ const DetailPost = () => {
     if (post) {
       const getPostsRe = async () => {
         const response = await getRecommendPosts(post._id);
-        
+
         setPostsRe(response);
       };
       getPostsRe();
@@ -172,7 +177,7 @@ const DetailPost = () => {
                                 ? "Nam"
                                 : post.gender === "female"
                                 ? "Nữ"
-                                : "Bất kỳ"}
+                                : "Tất cả"}
                             </td>
                           </tr>
                           <tr>
@@ -249,7 +254,12 @@ const DetailPost = () => {
                     </div>
                   </div>
                   <div className="detail-post__map">
-                    <h3>Bản đồ</h3>
+                    <div className="detail-post__map-header">
+                      <div className="header-icon">
+                        <FaMapMarkedAlt className="icon" />
+                      </div>
+                      <span>Bản đồ</span>
+                    </div>
                     <div id="maps" style={{ height: "300px", width: "100%" }}>
                       <iframe
                         title="frame-detail-address"

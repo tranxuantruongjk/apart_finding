@@ -3,6 +3,10 @@
 .header {
   padding: 5px 0px;
 
+  &__logo {
+    outline: unset;
+  }
+
   .btn__login,
   .btn__logout,
   .btn__signup,
@@ -10,9 +14,43 @@
   .my-savedPosts,
   .my-profile {
     text-decoration: none;
+    color: #000;
 
     &:hover {
-      color: #000;
+      color: $main-color;
+    }
+  }
+
+  .btn__logout,
+  .my-posts,
+  .my-savedPosts,
+  .my-profile {
+    display: flex;
+    align-items: center;
+
+    svg {
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    span {
+      margin-left: 5px;
+    }
+  }
+
+  .auth {
+    display: flex;
+    align-items: center;
+
+    .auth-split {
+      border-right: 2px solid #b4b7b8;
+      display: inline-block;
+      height: 20px;
+    }
+
+    .btn__login,
+    .btn__signup {
+      font-weight: 500;
     }
   }
 
@@ -21,7 +59,7 @@
     font-weight: 600;
     border: none;
     outline: none;
-    
+
     &:hover {
       background-color: #f20a32;
     }
