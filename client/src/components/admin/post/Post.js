@@ -92,8 +92,8 @@ const Post = () => {
                 className={`${
                   post.state === "pending"
                     ? "pending"
-                    : post.state === "accepted"
-                    ? "accepted"
+                    : post.state === "active"
+                    ? "active"
                     : "rejected"
                 } ms-2`}
               >
@@ -160,7 +160,7 @@ const Post = () => {
                               ? "Nam"
                               : post.gender === "female"
                               ? "Nữ"
-                              : "Bất kỳ"}
+                              : "Tất cả"}
                           </td>
                         </tr>
                         <tr>

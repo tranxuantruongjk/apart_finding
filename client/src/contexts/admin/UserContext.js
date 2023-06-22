@@ -1,6 +1,12 @@
 import { createContext, useReducer } from "react";
 import axios from "axios";
-import { apiUrl, USERS_LOADED_SUCCESS, USERS_LOADED_FAILED } from "../constants";
+import {
+  apiUrl,
+  USERS_LOADED_SUCCESS,
+  USERS_LOADED_FAILED,
+  CHANGE_PAGE,
+  CHANGE_LIMIT,
+} from "../constants";
 import { userReducer } from "../../reducers/admin/userReducer";
 
 export const UserContext = createContext();
@@ -9,22 +15,45 @@ const UserContextProvider = ({ children }) => {
   const [userState, dispatch] = useReducer(userReducer, {
     userLoading: true,
     users: [],
+    page: 1,
+    limit: 10,
+    total: 0,
   });
+
+  const { page, limit } = userState;
+
+  // Change page
+  const changePage = async (pageCurrent) => {
+    dispatch({
+      type: CHANGE_PAGE,
+      payload: pageCurrent,
+    });
+  };
+
+  // Change limit
+  const changeLimit = async (pageSize) => {
+    dispatch({
+      type: CHANGE_LIMIT,
+      payload: pageSize,
+    });
+  };
 
   // Get all users
   const getAllUsers = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/users`);
+      const response = await axios.get(
+        `${apiUrl}/admin/users?page=${page}&limit=${limit}`
+      );
       if (response.data.success) {
         dispatch({
           type: USERS_LOADED_SUCCESS,
-          payload: response.data.users,
-        })
+          payload: response.data,
+        });
       }
     } catch (error) {
       dispatch({
         type: USERS_LOADED_FAILED,
-      })
+      });
     }
   };
 
@@ -43,24 +72,10 @@ const UserContextProvider = ({ children }) => {
     }
   };
 
-  const blockUser = async (userId) => {
+  const blockOrUnBlockUser = async (action, userId) => {
     try {
       const response = await axios.put(
-        `${apiUrl}/admin/users/block/${userId}`
-      );
-
-      await getAllUsers();
-      return response.data;
-    } catch (error) {
-      if (error.response.data) return error.response.data;
-      else return { success: false, message: error.message };
-    }
-  };
-
-  const unBlockUser = async (userId) => {
-    try {
-      const response = await axios.put(
-        `${apiUrl}/admin/users/unblock/${userId}`
+        `${apiUrl}/admin/users/${action}/${userId}`
       );
 
       await getAllUsers();
@@ -73,9 +88,7 @@ const UserContextProvider = ({ children }) => {
 
   const deleteUser = async (userId) => {
     try {
-      const response = await axios.delete(
-        `${apiUrl}/admin/users/${userId}`
-      );
+      const response = await axios.delete(`${apiUrl}/admin/users/${userId}`);
 
       await getAllUsers();
       return response.data;
@@ -89,10 +102,11 @@ const UserContextProvider = ({ children }) => {
   const userContextData = {
     userState,
     registerUser,
-    blockUser,
-    unBlockUser,
+    blockOrUnBlockUser,
     deleteUser,
     getAllUsers,
+    changePage,
+    changeLimit,
   };
 
   // Return provider

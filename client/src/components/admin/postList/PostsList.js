@@ -12,15 +12,18 @@ import {
 
 import { AdminPostContext } from "../../../contexts/admin/PostContext";
 import ActionModal from "../actionModal/ActionModal";
+import Paging from "../paging/Paging";
 
 import "./postsList.scss";
 import { Link } from "react-router-dom";
 
 const PostsList = () => {
   const {
-    adminPostState: { posts },
+    adminPostState: { posts, page, limit, total },
     getAllPosts,
     deletePost,
+    changePage,
+    changeLimit,
   } = useContext(AdminPostContext);
 
   const [showActionModal, setShowActionModal] = useState(false);
@@ -43,7 +46,7 @@ const PostsList = () => {
     };
 
     getPosts();
-  }, []);
+  }, [page, limit]);
 
   const handleActionDelete = (postId) => {
     setShowActionModal(true);
@@ -56,7 +59,7 @@ const PostsList = () => {
   };
 
   return (
-    <div>
+    <div className="admin-posts-list">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="fw-bold">Danh sách bài đăng</h5>
         <Button
@@ -93,7 +96,7 @@ const PostsList = () => {
         </Card.Header>
         <Card.Body>
           <Table
-            className="no-wrap mt-3 align-middle"
+            className="no-wrap align-middle"
             responsive
             borderless
             hover
@@ -127,8 +130,8 @@ const PostsList = () => {
                       className={
                         tdata.state === "pending"
                           ? "pending"
-                          : tdata.state === "accepted"
-                          ? "accepted"
+                          : tdata.state === "active"
+                          ? "active"
                           : "rejected"
                       }
                     >
@@ -140,7 +143,10 @@ const PostsList = () => {
                       <Link to={`/admin/postsList/${tdata._id}`}>
                         <MdOutlineRemoveRedEye className="btn-action" />
                       </Link>
-                      <MdOutlineDelete className="btn-action" onClick={() => handleActionDelete(tdata._id)}/>
+                      <MdOutlineDelete
+                        className="btn-action"
+                        onClick={() => handleActionDelete(tdata._id)}
+                      />
                     </div>
                   </td>
                 </tr>
@@ -149,6 +155,13 @@ const PostsList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <Paging
+        page={page}
+        limit={limit}
+        totalPosts={total}
+        changePage={changePage}
+        changeLimit={changeLimit}
+      />
       <ActionModal
         showActionModal={showActionModal}
         setShowActionModal={setShowActionModal}

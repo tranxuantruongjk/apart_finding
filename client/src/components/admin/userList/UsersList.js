@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../../contexts/admin/UserContext";
 import NewUser from "../newUser/NewUser";
 import ActionModal from "../actionModal/ActionModal";
+import Paging from "../paging/Paging";
 
 import Card from "react-bootstrap/Card";
 import Table from "react-bootstrap/Table";
@@ -17,11 +18,13 @@ import avatar from "../../../assets/images/default-user.png";
 
 const UsersList = () => {
   const {
-    userState: { users },
+    userState: { users, page, limit, total },
     getAllUsers,
-    blockUser,
-    unBlockUser,
+    blockOrUnBlockUser,
+    // unBlockUser,
     deleteUser,
+    changePage,
+    changeLimit,
   } = useContext(UserContext);
 
   const [showNewUserModal, setShowNewUserModal] = useState(false);
@@ -39,12 +42,16 @@ const UsersList = () => {
     }
   };
 
-  const handleActionBlock = (userId) => {
+  const handleActionBlockOrUnBlock = (action, userId) => {
     setShowActionModal(true);
     setAction({
       object: userId,
-      action: blockUser,
-      message: "Bạn chắc chắn muốn khóa tài khoản này?",
+      actionName: action,
+      action: blockOrUnBlockUser,
+      message:
+        action === "block"
+          ? "Bạn chắc chắn muốn khóa tài khoản này?"
+          : "Bạn chắc chắn muốn mở khóa tài khoản này?",
       button: "Xác nhận",
     });
   };
@@ -55,17 +62,7 @@ const UsersList = () => {
     };
 
     getUsers();
-  }, []);
-
-  const handleActionUnBlock = (userId) => {
-    setShowActionModal(true);
-    setAction({
-      object: userId,
-      action: unBlockUser,
-      message: "Bạn chắc chắn muốn mở khóa tài khoản này?",
-      button: "Xác nhận",
-    });
-  };
+  }, [page, limit]);
 
   const handleActionDelete = (userId) => {
     setShowActionModal(true);
@@ -163,12 +160,16 @@ const UsersList = () => {
                       {tdata.state === "active" ? (
                         <TbLockOpen
                           className="btn-action"
-                          onClick={() => handleActionBlock(tdata._id)}
+                          onClick={() =>
+                            handleActionBlockOrUnBlock("block", tdata._id)
+                          }
                         />
                       ) : (
                         <TbLock
                           className="btn-action"
-                          onClick={() => handleActionUnBlock(tdata._id)}
+                          onClick={() =>
+                            handleActionBlockOrUnBlock("unblock", tdata._id)
+                          }
                         />
                       )}
                       <MdOutlineDelete
@@ -183,6 +184,13 @@ const UsersList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <Paging
+        page={page}
+        limit={limit}
+        totalPosts={total}
+        changePage={changePage}
+        changeLimit={changeLimit}
+      />
       <ActionModal
         showActionModal={showActionModal}
         setShowActionModal={setShowActionModal}

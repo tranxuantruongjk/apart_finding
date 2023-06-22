@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header/Header";
-import NavbarMenu from "./components/navbarMenu/NavbarMenu";
 import Home from "./pages/Home";
 import Auth from "./pages/Auth";
 import AuthContextProvider from "./contexts/AuthContext";
@@ -30,7 +29,6 @@ function App() {
             <AdminPostContextProvider>
               <Router>
                 <Header />
-                {/* <NavbarMenu /> */}
                 <Routes>
                   <Route path="/:type/:id" element={<DetailPost />} />
                   <Route path="/:type" element={<Home />} />

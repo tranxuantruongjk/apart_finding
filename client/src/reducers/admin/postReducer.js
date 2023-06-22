@@ -4,15 +4,30 @@ import {
   ADD_POST,
   DELETE_POST,
   UPDATE_POST,
+  CHANGE_PAGE,
+  CHANGE_LIMIT,
 } from "../../contexts/constants";
 
 export const postReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    case CHANGE_PAGE: {
+      return {
+        ...state,
+        page: payload,
+      };
+    }
+    case CHANGE_LIMIT: {
+      return {
+        ...state,
+        limit: payload,
+      };
+    }
     case POSTS_LOADED_SUCCESS:
       return {
         ...state,
-        posts: payload,
+        posts: payload.posts,
+        total: payload.total,
         postLoading: false,
       };
     case POSTS_LOADED_FAIL:

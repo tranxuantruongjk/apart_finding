@@ -122,23 +122,36 @@ router.get("/:id", verifyAdminToken, async (req, res) => {
 // @route Private
 router.get("/", verifyAdminToken, async (req, res) => {
   try {
-    const posts = await Post.find().populate("rentType", ["name"]);
+    const { page, limit } = req.query;
+    const skip = (page - 1) * limit;
 
-    res.json({ success: true, posts });
+    const total = await Post.find().countDocuments();
+
+    const posts = await Post.find()
+      .sort("-createdAt")
+      .skip(skip)
+      .limit(limit)
+      .populate("rentType", ["name"]);
+
+    res.json({ success: true, total, posts });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
-// @route PUT api/admin/posts/accept/:id
-// @route Admin accepts a post
+// @route PUT api/admin/posts/:action/:id
+// @route Admin accepts/rejects a post
 // @route Private
-router.put("/accept/:id", verifyAdminToken, async (req, res) => {
+router.put("/:action/:id", verifyAdminToken, async (req, res) => {
   try {
-    let updatedPost = {
-      state: "accepted",
-    };
+    let updatedPost;
+    if (req.params.action === "accept") {
+      updatedPost = { state: "active" };
+    }
+    if (req.params.action === "reject") {
+      updatedPost = { state: "rejected" };
+    }
     const updateCondition = { _id: req.params.id };
 
     updatedPost = await Post.findOneAndUpdate(updateCondition, updatedPost, {
@@ -147,44 +160,12 @@ router.put("/accept/:id", verifyAdminToken, async (req, res) => {
 
     if (!updatedPost) {
       return res
-        .status(401)
+        .status(400)
         .json({ success: false, message: "Không tìm thấy bài viết" });
     }
 
     res.json({
       success: true,
-      message: "Bài viết đã được thông qua",
-      post: updatedPost,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
-  }
-});
-
-// @route PUT api/admin/posts/reject/:id
-// @route Admin rejects a post
-// @route Private
-router.put("/reject/:id", verifyAdminToken, async (req, res) => {
-  try {
-    let updatedPost = {
-      state: "rejected",
-    };
-    const updateCondition = { _id: req.params.id };
-
-    updatedPost = await Post.findOneAndUpdate(updateCondition, updatedPost, {
-      new: true,
-    });
-
-    if (!updatedPost) {
-      return res
-        .status(401)
-        .json({ success: false, message: "Không tìm thấy bài viết" });
-    }
-
-    res.json({
-      success: true,
-      message: "Bài viết đã được từ chối đăng",
       post: updatedPost,
     });
   } catch (error) {

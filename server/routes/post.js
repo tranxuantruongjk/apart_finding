@@ -23,10 +23,19 @@ const utilsChecker = (arr, target) => target.every((t) => arr.includes(t));
 // @route GET api/posts/postsCount
 // @route GET number of posts
 // @access Public
-router.get("/postsCount", async (req, res) => {
+router.get("/postsCountByType", async (req, res) => {
   try {
+    const rentTypes = await RentType.find().lean();
     const posts = await Post.find().select("rentType");
-    res.json({ success: true, posts });
+
+    for (const rentType of rentTypes) {
+      const postsCount = posts.filter(
+        (post) => post.rentType.toString() === rentType._id.toString()
+      ).length;
+      rentType.postsCount = postsCount;
+    }
+
+    res.json({ success: true, rentTypes });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
@@ -83,6 +92,7 @@ router.post("/search", async (req, res) => {
               : { $in: ["any", "female"] }
             : { $in: ["any", "male", "female"] },
       })
+        .sort("-createdAt")
         .populate("user", ["username", "phone"])
         .lean();
 
@@ -125,6 +135,7 @@ router.post("/search", async (req, res) => {
               : { $in: ["any", "female"] }
             : { $in: ["any", "male", "female"] },
       })
+        .sort("-createdAt")
         .populate("user", ["username", "phone"])
         .lean();
 
@@ -167,6 +178,7 @@ router.post("/search", async (req, res) => {
               : { $in: ["any", "female"] }
             : { $in: ["any", "male", "female"] },
       })
+        .sort("-createdAt")
         .populate("user", ["username", "phone"])
         .lean();
 
@@ -200,7 +212,9 @@ router.post("/search", async (req, res) => {
 // @access Private
 router.get("/:userId/posts", verifyToken, async (req, res) => {
   try {
-    const posts = await Post.find({ user: req.params.userId });
+    const posts = await Post.find({ user: req.params.userId }).sort(
+      "-createdAt"
+    );
     res.json({ success: true, posts });
   } catch (error) {
     console.log(error);
@@ -225,6 +239,7 @@ router.get("/:userId/savedPosts", verifyToken, async (req, res) => {
 
     for (let i = 0; i < savedPostsId.savedPost.length; i++) {
       const savedPost = await Post.findById(savedPostsId.savedPost[i])
+        .sort("-createdAt")
         .populate("user", ["username", "phone"])
         .lean();
       // const postFiles = await PostFile.find({
@@ -253,6 +268,7 @@ router.get("/:type", async (req, res) => {
     const skip = (page - 1) * limit;
 
     const posts = await Post.find({ rentType: req.params.type })
+      .sort("-createdAt")
       .populate("user", ["username", "phone"])
       .lean();
 

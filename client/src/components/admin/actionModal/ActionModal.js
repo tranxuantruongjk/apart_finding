@@ -16,7 +16,11 @@ const ActionModal = ({ showActionModal, setShowActionModal, action, setAction })
         setAction((action) => ({...action, success: true}));
       }
     } else {
-      await action.action(action.object);
+      if (action.actionName) {
+        await action.action(action.actionName, action.object);
+      } else {
+        await action.action(action.object);
+      }
     }
     handleClose();
   };

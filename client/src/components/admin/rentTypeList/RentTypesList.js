@@ -12,27 +12,24 @@ import { BsFillSendPlusFill } from "react-icons/bs";
 import { MdOutlineEdit } from "react-icons/md";
 
 const RentTypesList = () => {
-  const { getRentTypes } = useContext(AdminPostContext);
-  const [types, setTypes] = useState([]);
+  const { rentTypes, getPostsCountByType } = useContext(AdminPostContext);
   const [type, setType] = useState({});
 
   const [showNewTypeModal, setShowNewTypeModal] = useState(false);
   const [showUpdateTypeModal, setShowUpdateTypeModal] = useState(false);
 
-  useEffect(() => {
-    const getRentTypesList = async () => {
-      const rentTypes = await getRentTypes();
-
-      setTypes(rentTypes.rentTypes);
-    };
-
-    getRentTypesList();
-  }, []);
-
   const displayUpdateTypeModal = (data) => {
     setShowUpdateTypeModal(true);
     setType(data);
-  }
+  };
+
+  useEffect(() => {
+    const getTypes = async () => {
+      await getPostsCountByType();
+    }
+
+    getTypes();
+  }, []);
 
   return (
     <div>
@@ -63,11 +60,11 @@ const RentTypesList = () => {
               </tr>
             </thead>
             <tbody>
-              {types.map((tdata, index) => (
+              {rentTypes.map((tdata, index) => (
                 <tr key={index} className="border-top font-size-sm">
                   <td>{tdata.type}</td>
                   <td>{tdata.name}</td>
-                  <td>100</td>
+                  <td>{tdata.postsCount}</td>
                   <td>
                     <div className="d-flex align-items-center justify-content-around fs-5">
                       <MdOutlineEdit

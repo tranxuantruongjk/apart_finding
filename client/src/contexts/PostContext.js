@@ -36,10 +36,10 @@ const PostContextProvider = ({ children }) => {
     getRentTypes();
   }, []);
 
-  // Get total of posts
-  const getTotalPosts = async () => {
+  // Get posts's count by type
+  const getPostsCountByType = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/posts/postsCount`);
+      const response = await axios.get(`${apiUrl}/posts/postsCountByType`);
       if (response.data.success) {
         return response.data;
       }
@@ -180,7 +180,7 @@ const PostContextProvider = ({ children }) => {
     searchPost,
     getUserIdPosts,
     changePage,
-    getTotalPosts,
+    getPostsCountByType,
     getSavedPosts,
     getRecommendPosts,
   };

@@ -16,6 +16,7 @@ export const ADD_POST = "ADD_POST";
 export const DELETE_POST = "DELETE_POST";
 export const UPDATE_POST = "UPDATE_POST";
 export const CHANGE_PAGE = "CHANGE_PAGE";
+export const CHANGE_LIMIT = "CHANGE_LIMIT";
 
 export const USERS_LOADED_SUCCESS = "USERS_LOADED_SUCCESS";
 export const USERS_LOADED_FAILED = "USERS_LOADED_FAILED";

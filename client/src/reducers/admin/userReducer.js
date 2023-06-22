@@ -1,16 +1,29 @@
 import {
   USERS_LOADED_SUCCESS,
   USERS_LOADED_FAILED,
+  CHANGE_PAGE,
+  CHANGE_LIMIT,
 } from "../../contexts/constants";
 
 export const userReducer = (state, action) => {
   const { type, payload } = action;
   switch (type) {
+    case CHANGE_PAGE:
+      return {
+        ...state,
+        page: payload,
+      };
+    case CHANGE_LIMIT:
+      return {
+        ...state,
+        limit: payload,
+      };
     case USERS_LOADED_SUCCESS:
       return {
         ...state,
         userLoading: false,
-        users: payload,
+        users: payload.users,
+        total: payload.total,
       };
     case USERS_LOADED_FAILED:
       return {

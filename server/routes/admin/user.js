@@ -9,9 +9,18 @@ const verifyAdminToken = require("../../middleware/authAdmin");
 // @access Private
 router.get("/", verifyAdminToken, async (req, res) => {
   try {
-    const users = await User.find().select("-password");
+    const { page, limit } = req.query;
+    const skip = (page - 1) * limit;
 
-    res.json({ success: true, users });
+    const total = await User.find().countDocuments();
+
+    const users = await User.find()
+      .sort("-createdAt")
+      .skip(skip)
+      .limit(limit)
+      .select("-password");
+
+    res.json({ success: true, total, users });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
@@ -21,48 +30,39 @@ router.get("/", verifyAdminToken, async (req, res) => {
 // @route PUT api/admin/users/block/:id
 // @route Admin blocks a user account
 // @route Private
-router.put("/block/:id", verifyAdminToken, async (req, res) => {
+router.put("/:action/:id", verifyAdminToken, async (req, res) => {
   try {
-    let updatedUser = {
-      state: "blocked",
+    let updatedUser;
+    if (req.params.action === "block") {
+      updatedUser = {
+        state: "blocked",
+      };
+    }
+    if (req.params.action === "unblock") {
+      updatedUser = {
+        state: "active",
+      };
     }
 
     const updateCondition = { _id: req.params.id };
 
-    updatedUser = await User.findOneAndUpdate(updateCondition, updatedUser, {new: true});
+    updatedUser = await User.findOneAndUpdate(updateCondition, updatedUser, {
+      new: true,
+    }).select("-password");
 
-    if(!updatedUser) {
-      return res.status(401).json({success: false, message: "Không tìm thấy người dùng"});
+    if (!updatedUser) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Không tìm thấy người dùng" });
     }
 
-    res.json({success: true, message: "Đã khóa tài khoản của người dùng này", user: updatedUser});
+    res.json({
+      success: true,
+      user: updatedUser,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({success: false, message: "Đã xảy ra lỗi"});
-  }
-});
-
-// @route PUT api/admin/users/unblock/:id
-// @route Admin blocks a user account
-// @route Private
-router.put("/unblock/:id", verifyAdminToken, async (req, res) => {
-  try {
-    let updatedUser = {
-      state: "active",
-    }
-
-    const updateCondition = { _id: req.params.id };
-
-    updatedUser = await User.findOneAndUpdate(updateCondition, updatedUser, {new: true});
-
-    if(!updatedUser) {
-      return res.status(401).json({success: false, message: "Không tìm thấy người dùng"});
-    }
-
-    res.json({success: true, message: "Đã mở khóa tài khoản của người dùng này", user: updatedUser});
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({success: false, message: "Đã xảy ra lỗi"});
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
@@ -72,16 +72,18 @@ router.put("/unblock/:id", verifyAdminToken, async (req, res) => {
 router.delete("/:id", verifyAdminToken, async (req, res) => {
   try {
     const deleteConditon = { _id: req.params.id };
-    const deletedUser = await User.findOneAndDelete(deleteConditon);
+    const deletedUser = await User.findOneAndDelete(deleteConditon).select("-password");
 
     if (!deletedUser) {
-      res.status(401).json({success: false, message: "Không tìm thấy người dùng"});
+      res
+        .status(401)
+        .json({ success: false, message: "Không tìm thấy người dùng" });
     }
 
-    res.json({success: true, user: deletedUser});
+    res.json({ success: true, user: deletedUser });
   } catch (error) {
     console.log(error);
-    res.status(500).json({success: false, message: "Đã xảy ra lỗi"});
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 

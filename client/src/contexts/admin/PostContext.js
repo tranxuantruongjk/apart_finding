@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import { createContext, useReducer, useState } from "react";
 import axios from "axios";
 import {
   apiUrl,
@@ -6,6 +6,8 @@ import {
   POSTS_LOADED_FAIL,
   UPDATE_POST,
   DELETE_POST,
+  CHANGE_PAGE,
+  CHANGE_LIMIT,
 } from "../constants";
 import { postReducer } from "../../reducers/admin/postReducer";
 
@@ -15,17 +17,56 @@ const AdminPostContextProvider = ({ children }) => {
   const [adminPostState, dispatch] = useReducer(postReducer, {
     postLoading: true,
     posts: [],
+    page: 1,
+    limit: 10,
+    total: 0,
   });
+
+  const [rentTypes, setRentTypes] = useState([]);
+
+  const { page, limit } = adminPostState;
+
+  // Change page
+  const changePage = async (pageCurrent) => {
+    dispatch({
+      type: CHANGE_PAGE,
+      payload: pageCurrent,
+    });
+  };
+
+  // Change limit
+  const changeLimit = async (pageSize) => {
+    dispatch({
+      type: CHANGE_LIMIT,
+      payload: pageSize,
+    });
+  };
+
+  // Get posts's count by type
+  const getPostsCountByType = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/postsCountByType`);
+      if (response.data.success) {
+        setRentTypes(response.data.rentTypes);
+        // return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
 
   // Get posts
   const getAllPosts = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/posts`);
+      const response = await axios.get(
+        `${apiUrl}/admin/posts?page=${page}&limit=${limit}`
+      );
       // console.log(response);
       if (response.data.success) {
         dispatch({
           type: POSTS_LOADED_SUCCESS,
-          payload: response.data.posts,
+          payload: response.data,
         });
       }
     } catch (error) {
@@ -35,10 +76,12 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
-  // Get rent types
-  const getRentTypes = async () => {
+  // Add rent type
+  const addRentType = async (newType) => {
     try {
-      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
+      const response = await axios.post(`${apiUrl}/admin/types`, newType);
+
+      await getPostsCountByType();
       return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;
@@ -46,27 +89,21 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
-  // Add retn type
-  const addRentType = async (newType) => {
-    try {
-      const response = await axios.post(`${apiUrl}/admin/types`, newType);
-      return response.data;
-    } catch (error) {
-      if (error.response.data) return error.response.data;
-      else return { success: false, message: error.message };
-    }
-  }
-
   // Update rent type
-  const updateRentType = async(updatedType) => {
+  const updateRentType = async (updatedType) => {
     try {
-      const response = await axios.put(`${apiUrl}/admin/types/${updatedType._id}`, updatedType);
+      const response = await axios.put(
+        `${apiUrl}/admin/types/${updatedType._id}`,
+        updatedType
+      );
+
+      await getPostsCountByType();
       return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;
       else return { success: false, message: error.message };
     }
-  }
+  };
   // Get a post
   const getPost = async (postId) => {
     try {
@@ -140,14 +177,17 @@ const AdminPostContextProvider = ({ children }) => {
   // Context data
   const adminPostContextData = {
     adminPostState,
+    rentTypes,
     getAllPosts,
     getPost,
     acceptPost,
     rejectPost,
     deletePost,
-    getRentTypes,
     addRentType,
     updateRentType,
+    changePage,
+    changeLimit,
+    getPostsCountByType,
   };
 
   // Return provider
