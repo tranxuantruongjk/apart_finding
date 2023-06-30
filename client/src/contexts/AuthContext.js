@@ -1,8 +1,9 @@
-import { createContext, useReducer, useEffect } from "react";
+import { createContext, useReducer, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { apiUrl, LOCAL_STORAGE_TOKEN_NAME } from "./constants";
 import { authReducer } from "../reducers/authReducer";
 import setAuthToken from "../utils/setAuthToken";
+import { io } from "socket.io-client";
 
 export const AuthContext = createContext();
 
@@ -12,6 +13,10 @@ const AuthContextProvider = ({ children }) => {
     isAuthenticated: false,
     user: null,
   });
+  const [socket, setSocket] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+
+  const { user } = authState;
 
   // Authenticate
   const loadUser = async () => {
@@ -49,6 +54,18 @@ const AuthContextProvider = ({ children }) => {
   useEffect(() => {
     loadUser();
   }, []);
+
+  //
+  useEffect(() => {
+    setSocket(io("http://localhost:5001"));
+  }, []);
+
+  //
+  useEffect(() => {
+    user && socket?.emit("addUser", user._id);
+  }, [socket, user]);
+
+  // console.log(user);
 
   // Get information of a user
   const getUser = async (id) => {
@@ -134,6 +151,34 @@ const AuthContextProvider = ({ children }) => {
     });
   };
 
+  // Get notification
+  const getNotifications = async (userId) => {
+    try {
+      const response = await axios.get(`${apiUrl}/notifications/${userId}`);
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
+  // Change notification's status to seen
+  const updateNotification = async (notificationId) => {
+    try {
+      const response = await axios.put(
+        `${apiUrl}/notifications/${notificationId}`
+      );
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Context data
   const authContextData = {
     authState,
@@ -142,6 +187,11 @@ const AuthContextProvider = ({ children }) => {
     logoutUser,
     getUser,
     updateUserInfo,
+    getNotifications,
+    socket,
+    notifications,
+    setNotifications,
+    updateNotification,
   };
 
   // Return provider

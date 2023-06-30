@@ -5,6 +5,7 @@ import Table from "react-bootstrap/Table";
 import Carousel from "react-bootstrap/Carousel";
 import Button from "react-bootstrap/Button";
 import { AdminPostContext } from "../../../contexts/admin/PostContext";
+import { AuthContext } from "../../../contexts/AuthContext";
 import { useParams, useNavigate } from "react-router-dom";
 import ActionModal from "../actionModal/ActionModal";
 
@@ -23,7 +24,12 @@ const Post = () => {
   const [showActionModal, setShowActionModal] = useState(false);
   const [action, setAction] = useState(null);
 
-  const { getPost, acceptPost, rejectPost, deletePost } =
+  const {
+    authState: { user },
+    socket,
+  } = useContext(AuthContext);
+
+  const { getPost, acceptPost, rejectPost, deletePost, sendNotification } =
     useContext(AdminPostContext);
 
   useEffect(() => {
@@ -72,11 +78,42 @@ const Post = () => {
     });
   };
 
+  const handleSendNotification = async (message) => {
+    try {
+      const response = await sendNotification(message);
+
+      if (response.success) {
+        socket.emit("sendNotification", response.notification);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     if (action && action.action.name === "deletePost" && action.success) {
       navigate("/admin/postsList");
     }
-  }, [action, setAction]);
+
+    if (action && action.action.name === "acceptPost" && action.success) {
+      const message = {
+        receiverId: post.user._id,
+        title: post.title,
+        action: "accept_post",
+      };
+
+      handleSendNotification(message);
+    }
+
+    if (action && action.action.name === "rejectPost" && action.success) {
+      const message = {
+        receiverId: post.user._id,
+        title: post.title,
+        action: "reject_post",
+      };
+
+      handleSendNotification(message);
+    }
+  }, [action]);
 
   return (
     <div>
@@ -220,11 +257,15 @@ const Post = () => {
                       <tbody>
                         <tr>
                           <th scope="row">Liên hệ</th>
-                          <td>{post.owner ? post.owner.name : post.user.username}</td>
+                          <td>
+                            {post.owner ? post.owner.name : post.user.username}
+                          </td>
                         </tr>
                         <tr>
                           <th scope="row">Điện thoại</th>
-                          <td>{post.owner ? post.owner.phone : post.user.phone}</td>
+                          <td>
+                            {post.owner ? post.owner.phone : post.user.phone}
+                          </td>
                         </tr>
                       </tbody>
                     </Table>

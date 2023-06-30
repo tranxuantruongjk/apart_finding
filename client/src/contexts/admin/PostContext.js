@@ -137,10 +137,11 @@ const AdminPostContextProvider = ({ children }) => {
   };
 
   // Accept a post
-  const rejectPost = async (postId) => {
+  const rejectPost = async (postId, reason) => {
     try {
       const response = await axios.put(
-        `${apiUrl}/admin/posts/reject/${postId}`
+        `${apiUrl}/admin/posts/reject/${postId}`,
+        { reason }
       );
       if (response.data.success) {
         dispatch({
@@ -174,6 +175,23 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
+  // Send notification
+  const sendNotification = async (notificationForm) => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/admin/notifications`,
+        notificationForm
+      );
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      return error.response.data
+        ? error.response.data
+        : { success: false, message: error.message };
+    }
+  };
+
   // Context data
   const adminPostContextData = {
     adminPostState,
@@ -188,6 +206,7 @@ const AdminPostContextProvider = ({ children }) => {
     changePage,
     changeLimit,
     getPostsCountByType,
+    sendNotification,
   };
 
   // Return provider

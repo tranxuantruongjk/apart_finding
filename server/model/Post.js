@@ -109,6 +109,9 @@ const PostSchema = new Schema (
       type: String,
       default: "pending",
       required: true,
+    },
+    reason: {
+      type: String,
     }
   },
   {

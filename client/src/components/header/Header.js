@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
@@ -12,6 +12,7 @@ import { LuClipboardList } from "react-icons/lu";
 import { BsBookmarkHeartFill } from "react-icons/bs";
 import { BiUserCircle } from "react-icons/bi";
 import { TbLogout } from "react-icons/tb";
+import { GrNotification } from "react-icons/gr";
 
 import "./header.scss";
 
@@ -19,10 +20,38 @@ const Header = () => {
   const {
     authState: { isAuthenticated, user },
     logoutUser,
+    getNotifications,
+    socket,
+    notifications,
+    setNotifications,
+    updateNotification,
   } = useContext(AuthContext);
+
+  useEffect(() => {
+    const getAllNotifications = async () => {
+      const response = await getNotifications(user._id);
+
+      setNotifications(response.notifications);
+    };
+
+    user && getAllNotifications();
+  }, [user]);
+
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotifications((prev) => [data, ...prev]);
+    });
+  }, [socket]);
 
   const logout = async () => {
     await logoutUser();
+  };
+
+  const handleClickNotification = async (notificationId) => {
+    await updateNotification(notificationId);
+
+    const response = await getNotifications(user._id);
+    setNotifications(response.notifications);
   };
 
   return (
@@ -39,8 +68,62 @@ const Header = () => {
             </div>
             <NavbarMenu />
             <div className="header__btn d-flex justify-content-between align-items-center">
-              {isAuthenticated ? (
+              {isAuthenticated && user ? (
                 <>
+                  <NavDropdown
+                    title={
+                      <div className="icon-notification">
+                        <GrNotification className="notification" />
+                        {notifications.filter(
+                          (notification) => notification.seen === false
+                        ).length > 0 && (
+                          <div className="counter">
+                            {
+                              notifications.filter(
+                                (notification) => notification.seen === false
+                              ).length
+                            }
+                          </div>
+                        )}
+                      </div>
+                    }
+                    className="nav-notification"
+                  >
+                    {notifications.length !== 0 ? (
+                      <>
+                        {notifications.map((note, index) => (
+                          <div key={index}>
+                            <NavDropdown.Item
+                              as={Link}
+                              to="/me/posts"
+                              // key={index}
+                              className={note.seen && "opacity-50"}
+                              onClick={() => handleClickNotification(note._id)}
+                            >
+                              {note.action === "accept_post" && (
+                                <span>
+                                  Bài viết <b>{note.title}</b> đã được duyệt và
+                                  đăng lên trang chủ
+                                </span>
+                              )}
+                              {note.action === "reject_post" && (
+                                <span>
+                                  Bài viết <b>{note.title}</b> chưa được đăng do
+                                  vi phạm quy định đăng tin. Hãy xem lý do và
+                                  sửa tin
+                                </span>
+                              )}
+                            </NavDropdown.Item>
+                            <NavDropdown.Divider />
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <NavDropdown.Item disabled>
+                        Bạn không có thông báo nào
+                      </NavDropdown.Item>
+                    )}
+                  </NavDropdown>
                   <p className="mb-0 me-2">
                     Xin chào,
                     <Link

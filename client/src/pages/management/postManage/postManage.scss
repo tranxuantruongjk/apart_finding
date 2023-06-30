@@ -1,5 +1,4 @@
 .post-manage {
-
   &__header {
     padding-bottom: 0.5rem;
     margin-top: 1rem;
@@ -10,6 +9,28 @@
 
   &__table {
     margin-top: 1rem;
+
+    .stt-pending {
+      font-weight: 600;
+      color: #f29339;
+    }
+
+    .stt-active {
+      font-weight: 600;
+      color: #0b815a;
+    }
+
+    .stt-rejected {
+      font-weight: 600;
+      color: red;
+    }
+
+    .rejected-reason {
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #d9512c;
+    }
   }
 
   .delete-icon {
@@ -17,5 +38,23 @@
     height: 18px;
     color: red;
     cursor: pointer;
+  }
+}
+
+.reason-modal {
+  .detailed-reason {
+    color: red;
+  }
+
+  .edit-button {
+    outline: none;
+    border: none;
+    width: 100%;
+    background-color: #d9512c;
+
+    &:hover,
+    &:active {
+      background-color: #dc6241 !important;
+    }
   }
 }

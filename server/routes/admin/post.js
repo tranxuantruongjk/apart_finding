@@ -150,7 +150,7 @@ router.put("/:action/:id", verifyAdminToken, async (req, res) => {
       updatedPost = { state: "active" };
     }
     if (req.params.action === "reject") {
-      updatedPost = { state: "rejected" };
+      updatedPost = { state: "rejected", reason: req.body.reason };
     }
     const updateCondition = { _id: req.params.id };
 

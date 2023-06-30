@@ -6,6 +6,8 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { getDetailDateTime } from "../../../utils/post";
 
 import Table from "react-bootstrap/Table";
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 import { MdDelete } from "react-icons/md";
 
 import "./postManage.scss";
@@ -16,7 +18,11 @@ const PostManage = () => {
   const { getUserIdPosts } = useContext(PostContext);
   const {
     authState: { user },
+    notifications,
   } = useContext(AuthContext);
+
+  const [showReasonModal, setShowReasonModal] = useState(false);
+  const [rejectedReason, setRejectedReason] = useState("");
 
   useEffect(() => {
     const getPosts = async () => {
@@ -28,7 +34,12 @@ const PostManage = () => {
     };
 
     getPosts();
-  }, []);
+  }, [notifications]);
+
+  const handleShowRejectedReason = (reason) => {
+    setShowReasonModal(true);
+    setRejectedReason(reason);
+  };
 
   return (
     <div className="post-manage">
@@ -60,7 +71,23 @@ const PostManage = () => {
                   <td className="text-center">
                     {getDetailDateTime(post.createdAt)}
                   </td>
-                  <td className="text-center"></td>
+                  <td className="text-center">
+                    {post.state === "pending" ? (
+                      <span className="stt-pending">Đang chờ duyệt</span>
+                    ) : post.state === "active" ? (
+                      <span className="stt-active">Đã đăng</span>
+                    ) : (
+                      <>
+                        <span className="stt-rejected">Bị từ chối</span>
+                        <div
+                          className="rejected-reason"
+                          onClick={() => handleShowRejectedReason(post.reason)}
+                        >
+                          Xem lý do bị từ chối và sửa tin
+                        </div>
+                      </>
+                    )}
+                  </td>
                   <td className="text-center">
                     <MdDelete className="delete-icon" />
                   </td>
@@ -80,6 +107,19 @@ const PostManage = () => {
           </tbody>
         </Table>
       </div>
+      <Modal
+        show={showReasonModal}
+        onHide={() => setShowReasonModal(false)}
+        className="reason-modal"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Lý do bị từ chối</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className="detailed-reason">{rejectedReason}</Modal.Body>
+        <Modal.Footer>
+          <Button className="edit-button">Sửa tin</Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

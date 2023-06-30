@@ -72,4 +72,53 @@
   .my-item {
     background-color: #fff !important;
   }
+
+  .nav-notification {
+    .dropdown-toggle::after {
+      display: none;
+    }
+
+    .icon-notification {
+      position: relative;
+
+      .notification {
+        width: 1.3rem;
+        height: 1.3rem;
+        margin-right: 10px;
+      }
+
+      .counter {
+        width: 18px;
+        height: 18px;
+        background-color: red;
+        border-radius: 50%;
+        padding: 5px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: -5px;
+        right: 3px;
+        color: white;
+      }
+    }
+
+    .dropdown-menu {
+      max-width: 400px;
+      min-width: 400px;
+      max-height: 400px;
+      overflow: auto;
+
+      .dropdown-item {
+        white-space: pre-wrap;
+      }
+
+      div:last-child {
+        hr {
+          display: none;
+        }
+      }
+    }
+  }
 }

@@ -20,8 +20,8 @@ const UsersList = () => {
   const {
     userState: { users, page, limit, total },
     getAllUsers,
-    blockOrUnBlockUser,
-    // unBlockUser,
+    blockUser,
+    unblockUser,
     deleteUser,
     changePage,
     changeLimit,
@@ -42,16 +42,22 @@ const UsersList = () => {
     }
   };
 
-  const handleActionBlockOrUnBlock = (action, userId) => {
+  const handleActionBlock = (userId) => {
     setShowActionModal(true);
     setAction({
       object: userId,
-      actionName: action,
-      action: blockOrUnBlockUser,
-      message:
-        action === "block"
-          ? "Bạn chắc chắn muốn khóa tài khoản này?"
-          : "Bạn chắc chắn muốn mở khóa tài khoản này?",
+      action: blockUser,
+      message: "Bạn chắc chắn muốn khóa tài khoản này?",
+      button: "Xác nhận",
+    });
+  };
+
+  const handleActionUnblock = (userId) => {
+    setShowActionModal(true);
+    setAction({
+      object: userId,
+      action: unblockUser,
+      message: "Bạn chắc chắn muốn mở khóa tài khoản này?",
       button: "Xác nhận",
     });
   };
@@ -160,16 +166,12 @@ const UsersList = () => {
                       {tdata.state === "active" ? (
                         <TbLockOpen
                           className="btn-action"
-                          onClick={() =>
-                            handleActionBlockOrUnBlock("block", tdata._id)
-                          }
+                          onClick={() => handleActionBlock(tdata._id)}
                         />
                       ) : (
                         <TbLock
                           className="btn-action"
-                          onClick={() =>
-                            handleActionBlockOrUnBlock("unblock", tdata._id)
-                          }
+                          onClick={() => handleActionUnblock(tdata._id)}
                         />
                       )}
                       <MdOutlineDelete

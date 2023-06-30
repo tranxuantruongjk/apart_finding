@@ -72,10 +72,22 @@ const UserContextProvider = ({ children }) => {
     }
   };
 
-  const blockOrUnBlockUser = async (action, userId) => {
+  const blockUser = async (userId) => {
+    try {
+      const response = await axios.put(`${apiUrl}/admin/users/block/${userId}`);
+
+      await getAllUsers();
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
+  const unblockUser = async (userId) => {
     try {
       const response = await axios.put(
-        `${apiUrl}/admin/users/${action}/${userId}`
+        `${apiUrl}/admin/users/unblock/${userId}`
       );
 
       await getAllUsers();
@@ -102,7 +114,8 @@ const UserContextProvider = ({ children }) => {
   const userContextData = {
     userState,
     registerUser,
-    blockOrUnBlockUser,
+    blockUser,
+    unblockUser,
     deleteUser,
     getAllUsers,
     changePage,
