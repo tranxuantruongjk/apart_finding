@@ -33,6 +33,19 @@
     }
   }
 
+  .disabled-link {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .edit-icon {
+    width: 18px;
+    height: 18px;
+    color: #f29339;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+
   .delete-icon {
     width: 18px;
     height: 18px;

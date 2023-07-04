@@ -17,6 +17,8 @@ import { RiContactsFill } from "react-icons/ri";
 import { getDetailDateTime } from "../../../utils/post";
 import { utilities } from "../../../utils/post";
 
+import "../postList/postsList.scss";
+
 const Post = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -92,6 +94,7 @@ const Post = () => {
   useEffect(() => {
     if (action && action.action.name === "deletePost" && action.success) {
       navigate("/admin/postsList");
+      setAction(null);
     }
 
     if (action && action.action.name === "acceptPost" && action.success) {
@@ -102,6 +105,7 @@ const Post = () => {
       };
 
       handleSendNotification(message);
+      setAction(null);
     }
 
     if (action && action.action.name === "rejectPost" && action.success) {
@@ -112,6 +116,7 @@ const Post = () => {
       };
 
       handleSendNotification(message);
+      setAction(null);
     }
   }, [action]);
 
@@ -123,7 +128,7 @@ const Post = () => {
       {post && (
         <>
           <Row>
-            <span className="fw-semibold mb-3">
+            <span className="fw-semibold mb-3 admin-posts-list">
               Trạng thái:
               <span
                 className={`${
@@ -134,7 +139,11 @@ const Post = () => {
                     : "rejected"
                 } ms-2`}
               >
-                {post.state}
+                {post.state === "pending"
+                  ? "Đang chờ duyệt"
+                  : post.state === "active"
+                  ? "Đang hiển thị"
+                  : "Bị từ chối"}
               </span>
             </span>
           </Row>
@@ -200,6 +209,14 @@ const Post = () => {
                               : "Tất cả"}
                           </td>
                         </tr>
+                        {post.capacity && (
+                          <tr>
+                            <td>Sức chứa</td>
+                            <td className="info">
+                              {post.capacity} người/phòng
+                            </td>
+                          </tr>
+                        )}
                         <tr>
                           <td>Ngày cập nhật</td>
                           <td className="info">

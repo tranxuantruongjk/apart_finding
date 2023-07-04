@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,31 +14,26 @@ import { PostContext } from "../../../contexts/PostContext";
 import FileUpload from "../../../components/fileUpload/FileUpload";
 import FileList from "../../../components/fileUpload/fileList/FileList";
 import { utilities } from "../../../utils/post";
-import { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 
-import { useJsApiLoader, Autocomplete } from "@react-google-maps/api";
+import districtsList from "hanhchinhvn/dist/quan-huyen/01.json";
+import { compare } from "../../../utils/compare";
 
 const province = "Hà Nội";
 
 const NewPost = () => {
+  const districts = Object.values(districtsList).sort(compare("code"));
+  const [wards, setWards] = useState([]);
+  const [districtName, setDistrictName] = useState("");
+  const [wardName, setWardName] = useState("");
+  const [streetName, setStreetName] = useState("");
+  const [houseNumber, setHouseNumber] = useState("");
+  const fullAddressRef = useRef(null);
+
   const [alert, setAlert] = useState(null);
-
   const [addressMap, setAddressMap] = useState(province);
-
   const [files, setFiles] = useState([]);
   const [utils, setUtils] = useState([]);
-  const [location, setLocation] = useState([]);
-
   const [showLoading, setShowLoading] = useState(false);
-
-  const [libraries] = useState(["places"]);
-
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: process.env.REACT_APP_API_KEY,
-    libraries: libraries,
-  });
-
-  const originRef = useRef();
 
   const {
     authState: { user },
@@ -50,19 +45,98 @@ const NewPost = () => {
     title: "",
     content: "",
     rentType: "",
-    address: "",
+    districtId: "",
+    wardId: "",
+    streetName: "",
+    houseNumber: "",
     gender: "any",
     area: "",
     price: "",
+    capacity: "",
   });
 
-  const { title, content, rentType, address, gender, area, price } = postForm;
+  const {
+    title,
+    content,
+    rentType,
+    districtId,
+    wardId,
+    gender,
+    area,
+    price,
+    capacity,
+  } = postForm;
 
   const onChangePostForm = (e) => {
     setPostForm({
       ...postForm,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const onChangeDistrict = (e) => {
+    const districtName = districtsList[e.target.value]["name"];
+    const districtPath = districtsList[e.target.value]["path"];
+    setDistrictName(districtName);
+    setAddressMap(districtPath);
+    fullAddressRef.current.value = districtPath;
+    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${e.target.value}.json`);
+    setWards(Object.values(wardsList));
+    setPostForm({
+      ...postForm,
+      districtId: e.target.value,
+    });
+  };
+
+  const onChangeWard = (e) => {
+    const wardFind = wards.find((ward) => ward.code === e.target.value);
+    const wardName = wardFind.name;
+    const wardPath = wardFind.path;
+    setWardName(wardName);
+    setAddressMap(wardPath);
+    fullAddressRef.current.value = wardPath;
+    setPostForm({
+      ...postForm,
+      wardId: e.target.value,
+    });
+  };
+
+  const onChangeStreetName = (e) => {
+    setPostForm({
+      ...postForm,
+      streetName: e.target.value,
+    });
+    setStreetName(e.target.value);
+    fullAddressRef.current.value = `${e.target.value}, ${wardName}, ${districtName}, ${province}`;
+  };
+
+  const onChangeHouseNumber = (e) => {
+    setPostForm({
+      ...postForm,
+      houseNumber: e.target.value,
+    });
+    setHouseNumber(e.target.value);
+    fullAddressRef.current.value = `${e.target.value} ${streetName}, ${wardName}, ${districtName}, ${province}`;
+  };
+
+  const handleKeyUpStreetName = () => {
+    setTimeout(
+      () =>
+        setAddressMap(
+          `${streetName}, ${wardName}, ${districtName}, ${province}`
+        ),
+      5000
+    );
+  };
+
+  const handleKeyUpHouseNumber = () => {
+    setTimeout(
+      () =>
+        setAddressMap(
+          `${houseNumber} ${streetName}, ${wardName}, ${districtName}, ${province}`
+        ),
+      5000
+    );
   };
 
   const onClickUtil = (e, utilId) => {
@@ -99,35 +173,14 @@ const NewPost = () => {
     e.target.value = null;
   };
 
-  const fn = () => {
-    const place = originRef.current.value;
-    if (place) {
-      const getLatLngFromAddress = async () => {
-        const result = await geocodeByAddress(place);
-        const coords = await getLatLng(result[0]);
-
-        setLocation([coords.lat, coords.lng]);
-      };
-
-      getLatLngFromAddress();
-      setAddressMap(place);
-      setPostForm({
-        ...postForm,
-        address: place,
-      });
-    }
-  };
-
   const hideShowLoading = () => {
     setShowLoading(false);
-    // useEffect(() => {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: "smooth"
-      });
-    // }, []);
-  }
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  };
 
   const create = async (e) => {
     e.preventDefault();
@@ -138,32 +191,41 @@ const NewPost = () => {
       formData.append("title", title);
       formData.append("content", content);
       formData.append("rentType", rentType);
-      formData.append("address", address);
-      formData.append("location", location);
+      formData.append("districtId", districtId);
+      formData.append("wardId", wardId);
+      formData.append("streetName", streetName);
+      formData.append("houseNumber", houseNumber);
+      formData.append("exactAddress", fullAddressRef.current.value);
       formData.append("gender", gender);
       formData.append("area", area);
       formData.append("price", price);
+      formData.append("capacity", capacity);
       formData.append("utils", utils);
       files.forEach((file) => formData.append("files", file));
 
       const postRes = await createPost(formData);
       if (postRes.success) {
-        // setShowLoading(false);
-        // window.scrollTo(0, 0);
         hideShowLoading();
         setPostForm({
           title: "",
           content: "",
           rentType: "",
-          address: "",
+          districtId: "",
+          wardId: "",
+          streetName: "",
+          houseNumber: "",
           gender: "any",
           area: "",
           price: "",
+          capacity: "",
         });
+        fullAddressRef.current.value = "";
+        setDistrictName("");
+        setWardName("");
+        setStreetName("");
+        setHouseNumber("");
         setFiles([]);
         setUtils([]);
-        setLocation([]);
-        originRef.current.value = "";
         setAddressMap(province);
         const utilEls = document.querySelectorAll(".btn-util");
         for (const utilEl of utilEls) {
@@ -173,8 +235,6 @@ const NewPost = () => {
         setTimeout(() => setAlert(null), 5000);
       } else {
         hideShowLoading();
-        // setShowLoading(false);
-        // window.scrollTo(0, 0);
         setAlert({ type: "danger", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
       }
@@ -204,7 +264,7 @@ const NewPost = () => {
               </Card.Header>
               <Card.Body>
                 <Row className="mb-2">
-                  <Col md={6} lg={6}>
+                  <Col>
                     <Form.Group>
                       <Form.Label>
                         Tỉnh/Thành phố <span className="text-danger">*</span>
@@ -216,32 +276,94 @@ const NewPost = () => {
                       />
                     </Form.Group>
                   </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>
+                        Quận/Huyện <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Select
+                        name="districtId"
+                        onChange={onChangeDistrict}
+                        className="mt--5"
+                        value={districtId}
+                      >
+                        <option value="">--Quận/Huyện--</option>
+                        {districts.map((district) => (
+                          <option key={district.code} value={district.code}>
+                            {district["name_with_type"]}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>
+                        Phường/Xã <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Select
+                        name="wardId"
+                        onChange={onChangeWard}
+                        className="mt--5"
+                        value={wardId}
+                      >
+                        <option value="">--Phường/Xã--</option>
+                        {wards.map((ward) => (
+                          <option key={ward.code} value={ward.code}>
+                            {ward["name_with_type"]}
+                          </option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
                 </Row>
-                <Form.Group>
-                  <Form.Label>
-                    Địa chỉ <span className="text-danger">*</span>
-                  </Form.Label>
-                  <Row className="mb-2 mt--5">
-                    <Col md={9}>
-                      {isLoaded && (
-                        <Autocomplete>
-                          <Form.Control
-                            type="text"
-                            name="address"
-                            // value={address}
-                            // onChange={onChangeAddress}
-                            ref={originRef}
-                          />
-                        </Autocomplete>
-                      )}
-                    </Col>
-                    <Col md={3}>
-                      <Button onClick={fn} className="btn-submit-address">
-                        Xác nhận
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form.Group>
+                <Row className="mb-2">
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>
+                        Đường/Phố <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="address"
+                        value={streetName}
+                        onChange={onChangeStreetName}
+                        placeholder="Phố Lê Thanh Nghị hoặc Đường Giải Phóng"
+                        className="mt--5"
+                        onKeyUp={handleKeyUpStreetName}
+                      />
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group>
+                      <Form.Label>
+                        Số nhà <span className="text-danger">*</span>
+                      </Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="address"
+                        value={houseNumber}
+                        onChange={onChangeHouseNumber}
+                        placeholder="42 hoặc Ngõ 12"
+                        className="mt--5"
+                        onKeyUp={handleKeyUpHouseNumber}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row className="mb-2">
+                  <Form.Group>
+                    <Form.Label>
+                      Địa chỉ chính xác <span className="text-danger">*</span>
+                    </Form.Label>
+                    <Form.Control
+                      ref={fullAddressRef}
+                      disabled
+                      type="text"
+                      className="mt--5"
+                    />
+                  </Form.Group>
+                </Row>
               </Card.Body>
             </Card>
             <Card className="shadow mb-3">
@@ -283,6 +405,7 @@ const NewPost = () => {
                       value={title}
                       onChange={onChangePostForm}
                       className="mt--5"
+                      placeholder="Tiêu đề đăng tin. Gợi ý: Loại phòng + Diện tích + Tên Đường/Phố"
                     />
                   </Form.Group>
                 </Row>
@@ -313,10 +436,11 @@ const NewPost = () => {
                     <Form.Control
                       as="textarea"
                       name="content"
-                      rows={3}
+                      rows={5}
                       value={content}
                       onChange={onChangePostForm}
                       className="mt--5"
+                      placeholder="Điền thêm các thông tin các cho bài đăng: nhà vệ sinh trong ngoài; giá điện, nước, wifi; trọ gần khu vực nào: trường học, chợ, bệnh viện,.. và một số thông tin khác..."
                     />
                   </Form.Group>
                 </Row>
@@ -347,7 +471,7 @@ const NewPost = () => {
                   </Col>
                 </Row>
                 <Row className="mb-2">
-                  <Col md={6}>
+                  <Col>
                     <Form.Group>
                       <Form.Label>
                         Đối tượng cho thuê{" "}
@@ -365,6 +489,20 @@ const NewPost = () => {
                       </Form.Select>
                     </Form.Group>
                   </Col>
+                  <Col>
+                    <Form.Label>
+                      Sức chứa <span className="text-danger">*</span>
+                    </Form.Label>
+                    <InputGroup className="mt--5">
+                      <Form.Control
+                        name="capacity"
+                        value={capacity}
+                        onChange={onChangePostForm}
+                        placeholder="Điền số. VD: 2"
+                      />
+                      <InputGroup.Text>người/phòng</InputGroup.Text>
+                    </InputGroup>
+                  </Col>
                 </Row>
                 <Row className="mb-2">
                   <Col>
@@ -376,6 +514,7 @@ const NewPost = () => {
                         name="price"
                         value={price}
                         onChange={onChangePostForm}
+                        placeholder="Điền số. VD: 2000000"
                       />
                       <InputGroup.Text>VND</InputGroup.Text>
                     </InputGroup>
@@ -390,6 +529,7 @@ const NewPost = () => {
                           name="area"
                           value={area}
                           onChange={onChangePostForm}
+                          placeholder="Điền số. VD: 20"
                         />
                         <InputGroup.Text>m2</InputGroup.Text>
                       </InputGroup>
@@ -496,7 +636,11 @@ const NewPost = () => {
         centered
       >
         <Modal.Body className="d-flex justify-content-center">
-          <Button variant="primary" disabled className="d-flex align-items-center">
+          <Button
+            variant="primary"
+            disabled
+            className="d-flex align-items-center"
+          >
             <Spinner
               as="span"
               animation="border"

@@ -65,13 +65,9 @@ const PostSchema = new Schema (
       //   type: String,
       //   required: true,
       // },
-      // houseName: {
+      // houseNumber: {
       //   type: String
       // }
-    },
-    location: {
-      type: Schema.Types.Mixed,
-      required: true,
     },
     utils: {
       type: Array,
@@ -87,6 +83,10 @@ const PostSchema = new Schema (
       required: true,
     },
     price: {
+      type: Number,
+      required: true,
+    },
+    capacity: {
       type: Number,
       required: true,
     },

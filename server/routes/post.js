@@ -4,9 +4,14 @@ const router = express.Router();
 const User = require("../model/User");
 const RentType = require("../model/RentType");
 const Post = require("../model/Post");
-// const PostFile = require("../model/PostFile");
 
-const { ref, uploadBytes, getDownloadURL } = require("firebase/storage");
+const {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  listAll,
+  deleteObject,
+} = require("firebase/storage");
 const { storage } = require("../firebase");
 
 var multer = require("multer");
@@ -51,7 +56,7 @@ router.get("/rentTypes", async (req, res) => {
     res.json({ success: true, rentTypes });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
@@ -106,11 +111,6 @@ router.post("/search", async (req, res) => {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      // for (const post of slicePosts) {
-      //   const postFiles = await PostFile.find({ postId: post._id });
-      //   const files = postFiles.map((postFile) => postFile.file);
-      //   post.files = files;
-      // }
       res.json({ success: true, posts: slicePosts, total: posts.length });
     } catch (error) {
       console.log(error);
@@ -149,11 +149,6 @@ router.post("/search", async (req, res) => {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      // for (const post of slicePosts) {
-      //   const postFiles = await PostFile.find({ postId: post._id });
-      //   const files = postFiles.map((postFile) => postFile.file);
-      //   post.files = files;
-      // }
       res.json({ success: true, posts: slicePosts, total: posts.length });
     } catch (error) {
       console.log(error);
@@ -192,17 +187,10 @@ router.post("/search", async (req, res) => {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      // for (const post of posts) {
-      //   const postFiles = await PostFile.find({ postId: post._id });
-      //   const files = postFiles.map((postFile) => postFile.file);
-      //   post.files = files;
-      // }
       res.json({ success: true, posts: slicePosts, total: posts.length });
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({ success: false, message: "Internal server error" });
+      res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
     }
   }
 });
@@ -218,7 +206,7 @@ router.get("/:userId/posts", verifyToken, async (req, res) => {
     res.json({ success: true, posts });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
@@ -242,11 +230,7 @@ router.get("/:userId/savedPosts", verifyToken, async (req, res) => {
         .sort("-createdAt")
         .populate("user", ["username", "phone"])
         .lean();
-      // const postFiles = await PostFile.find({
-      //   postId: savedPostsId.savedPost[i],
-      // });
-      // const files = postFiles.map((postFile) => postFile.file);
-      // savedPost.files = files;
+
       if (savedPost) {
         savedPosts.push(savedPost);
       }
@@ -274,15 +258,10 @@ router.get("/:type", async (req, res) => {
 
     const slicePosts = posts.slice(skip, limit * page);
 
-    // for (const post of slicePosts) {
-    //   const postFiles = await PostFile.find({ postId: post._id });
-    //   const files = postFiles.map((postFile) => postFile.file);
-    //   post.files = files;
-    // }
     res.json({ success: true, posts: slicePosts, total: posts.length });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
@@ -296,13 +275,10 @@ router.get("/:type/:id", async (req, res) => {
       .populate("rentType", ["name"])
       .lean();
 
-    // const postFiles = await PostFile.find({ postId: req.params.id });
-    // post.files = postFiles;
-
     res.json({ success: true, post });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
@@ -321,32 +297,32 @@ router.get("/", async (req, res) => {
 
     const slicePosts = posts.slice(skip, limit * page);
 
-    // for (const post of slicePosts) {
-    //   const postFiles = await PostFile.find({ postId: post._id });
-    //   const files = postFiles.map((postFile) => postFile.file);
-    //   post.files = files;
-    // }
-
     res.json({ success: true, posts: slicePosts, total: posts.length });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 
-// @route POST api/posts/
-// @route Create new post
+// @route PUT api/posts/
+// @route Update/Edit a post
 // @access Private
-router.post("/", verifyToken, upload.array("files"), async (req, res) => {
+router.put("/:id", verifyToken, upload.array("files"), async (req, res) => {
   const {
     title,
     content,
     rentType,
-    address,
-    location,
+    districtId,
+    wardId,
+    streetName,
+    houseNumber,
+    exactAddress,
     gender,
     area,
     price,
+    capacity,
+    images,
+    videos,
     utils,
   } = req.body;
   const files = req.files;
@@ -355,41 +331,31 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
     !title ||
     !content ||
     !rentType ||
-    !address ||
+    !districtId ||
+    !wardId ||
+    !streetName ||
+    !houseNumber ||
+    !exactAddress ||
     !gender ||
     !area ||
     !price ||
-    !location ||
+    !capacity ||
     utils.length === 0 ||
-    files.length === 0
+    images.length === 0 ||
+    videos.length === 0
   )
     return res
       .status(400)
       .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
 
   try {
-    const addressArray = address.split(", ");
-    const length = addressArray.length;
     const districts = Object.values(districtsList);
     const districtFind = districts.find(
-      (district) => district.name === addressArray[length - 3]
+      (district) => district.code === districtId
     );
     const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
     const wards = Object.values(wardsList);
-    const wardFind = wards.find(
-      (ward) => ward.name === addressArray[length - 4]
-    );
-    let detailStreet;
-    let index = -1;
-    if (addressArray[length - 5]) {
-      detailStreet =
-        addressArray[length - 5] && addressArray[length - 5].split(" ");
-      for (let i = 0; i < detailStreet.length; i++) {
-        if (detailStreet[i].match(/\d/)) {
-          index = i;
-        }
-      }
-    }
+    const wardFind = wards.find((ward) => ward.code === wardId);
 
     const fullAddressObject = {
       city: {
@@ -406,28 +372,203 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
         text: wardFind.name_with_type,
         districtCode: wardFind.parent_code,
       },
-      streetName:
-        detailStreet &&
-        detailStreet.slice(index + 1, detailStreet.length).join(" "),
-      houseName: detailStreet && detailStreet.slice(0, index + 1).join(" "),
+      streetName: streetName,
+      houseNumber: houseNumber,
     };
 
     const utilsArray = utils.split(",");
-    const geocode = location.split(",");
-    const locationCode = {
-      lat: geocode[0],
-      lng: geocode[1],
+    const imagesArray = images.split(",");
+    const videosArray = videos.split(",");
+
+    if (files.length !== 0) {
+      for (const file of files) {
+        const storageRef = ref(
+          storage,
+          `files/${req.params.id}/${file.originalname}`
+        );
+        const metadata = { contentType: file.mimetype };
+        const snapshot = await uploadBytes(storageRef, file.buffer, metadata);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+
+        if (file.mimetype.includes("image/")) {
+          imagesArray.push(downloadURL);
+        } else {
+          videosArray.push(downloadURL);
+        }
+      }
+    }
+
+    let updatedPost = {
+      title: req.body.title,
+      content,
+      rentType,
+      address: exactAddress,
+      fullAddressObject,
+      area,
+      price,
+      capacity,
+      gender,
+      utils: utilsArray,
+      images: imagesArray,
+      videos: videosArray,
+      state: "pending",
     };
+
+    const postUpdateCondition = { _id: req.params.id, user: req.userId };
+
+    updatedPost = await Post.findOneAndUpdate(
+      postUpdateCondition,
+      updatedPost,
+      { new: true }
+    );
+
+    if (!updatedPost)
+      return res.status(401).json({
+        success: false,
+        message: "Không tìm thấy bài viết hoặc Người dùng chưa được xác thực",
+      });
+
+    const listRef = ref(storage, `files/${req.params.id}`);
+    await listAll(listRef)
+      .then((res) => {
+        res.items.forEach(async (itemRef) => {
+          const downloadURL = await getDownloadURL(itemRef);
+          if (
+            !imagesArray.includes(downloadURL) &&
+            !videos.includes(downloadURL)
+          ) {
+            deleteObject(itemRef);
+          }
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    res.json({
+      success: true,
+      message:
+        "Thông tin phòng trọ đã được cập nhật thành công và gửi đi đăng ký!!!",
+      post: updatedPost,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
+// @route DELETE api/posts/
+// @route Delete a post
+// @access Private
+router.delete("/:id", verifyToken, async (req, res) => {
+  try {
+    const postDeleteCondition = { _id: req.params.id, user: req.userId };
+    const deletedPost = await Post.findOneAndDelete(postDeleteCondition);
+
+    if (!deletedPost)
+      return res.status(401).json({
+        success: false,
+        message: "Không tìm thấy bài viết hoặc Người dùng chưa được xác thực",
+      });
+
+    const listRef = ref(storage, `files/${req.params.id}`);
+    await listAll(listRef)
+      .then((res) => {
+        res.items.forEach(async (itemRef) => {
+          deleteObject(itemRef);
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    res.json({ success: true, post: deletedPost });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
+// @route POST api/posts/
+// @route Create new post
+// @access Private
+router.post("/", verifyToken, upload.array("files"), async (req, res) => {
+  const {
+    title,
+    content,
+    rentType,
+    districtId,
+    wardId,
+    streetName,
+    houseNumber,
+    exactAddress,
+    gender,
+    area,
+    price,
+    capacity,
+    utils,
+  } = req.body;
+  const files = req.files;
+
+  if (
+    !title ||
+    !content ||
+    !rentType ||
+    !districtId ||
+    !wardId ||
+    !streetName ||
+    !houseNumber ||
+    !exactAddress ||
+    !gender ||
+    !area ||
+    !price ||
+    !capacity ||
+    utils.length === 0 ||
+    files.length === 0
+  )
+    return res
+      .status(400)
+      .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
+
+  try {
+    const districts = Object.values(districtsList);
+    const districtFind = districts.find(
+      (district) => district.code === districtId
+    );
+    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
+    const wards = Object.values(wardsList);
+    const wardFind = wards.find((ward) => ward.code === wardId);
+
+    const fullAddressObject = {
+      city: {
+        code: "01",
+        text: "Hà Nội",
+      },
+      district: {
+        code: parseInt(districtFind.code),
+        text: districtFind.name_with_type,
+        cityCode: districtFind.parent_code,
+      },
+      ward: {
+        code: parseInt(wardFind.code),
+        text: wardFind.name_with_type,
+        districtCode: parseInt(wardFind.parent_code),
+      },
+      streetName: streetName,
+      houseNumber: houseNumber,
+    };
+
+    const utilsArray = utils.split(",");
 
     const newPost = new Post({
       title: req.body.title,
       content,
       rentType,
-      address,
+      address: exactAddress,
       fullAddressObject,
-      location: locationCode,
       area,
       price,
+      capacity,
       gender,
       utils: utilsArray,
       user: req.userId,
@@ -446,13 +587,6 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
       const metadata = { contentType: file.mimetype };
       const snapshot = await uploadBytes(storageRef, file.buffer, metadata);
       const downloadURL = await getDownloadURL(snapshot.ref);
-      // const newPostFile = new PostFile({
-      //   postId: newPost._id,
-      //   type: file.mimetype.includes("image/") ? "image" : "video",
-      //   file: downloadURL,
-      // });
-
-      // await newPostFile.save();
       if (file.mimetype.includes("image/")) {
         images.push(downloadURL);
       } else {
@@ -471,7 +605,7 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
   }
 });
 

@@ -7,6 +7,7 @@ import AuthContextProvider from "./contexts/AuthContext";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import DetailPost from "./pages/detail/DetailPost";
 import Management from "./pages/management/Management";
+import EditPost from "./pages/management/editPost/EditPost";
 
 import PostContextProvider from "./contexts/PostContext";
 import SearchProvider from "./contexts/SearchContext";
@@ -38,6 +39,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/me" element={<ProtectedRoute />}>
                     <Route path="/me/posts" element={<Management manageRoute="posts"/>} />
+                    <Route path="/me/posts/:type/:id/edit" element={<EditPost />} />
                     <Route path="/me/create" element={<Management manageRoute="create"/>} />
                     <Route path="/me/profile" element={<Management manageRoute="profile"/>} />
                     <Route path="/me/savedPosts" element={<Management manageRoute="savedPosts"/>} />

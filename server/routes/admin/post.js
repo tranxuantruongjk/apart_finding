@@ -4,7 +4,12 @@ const router = express.Router();
 const Post = require("../../model/Post");
 const RentType = require("../../model/RentType");
 
-const { ref, deleteObject, listAll } = require("firebase/storage");
+const {
+  ref,
+  deleteObject,
+  listAll,
+  getDownloadURL,
+} = require("firebase/storage");
 const { storage } = require("../../firebase");
 
 const verifyAdminToken = require("../../middleware/authAdmin");
@@ -147,7 +152,7 @@ router.put("/:action/:id", verifyAdminToken, async (req, res) => {
   try {
     let updatedPost;
     if (req.params.action === "accept") {
-      updatedPost = { state: "active" };
+      updatedPost = { state: "active", reason: "" };
     }
     if (req.params.action === "reject") {
       updatedPost = { state: "rejected", reason: req.body.reason };
@@ -181,7 +186,7 @@ router.delete("/:id", verifyAdminToken, async (req, res) => {
   try {
     const deleteCondition = { _id: req.params.id };
 
-    const deletedPost = await Post.findOneAndDelete(deleteCondition);
+    let deletedPost = await Post.findOneAndDelete(deleteCondition);
 
     if (!deletedPost) {
       return res
@@ -192,7 +197,7 @@ router.delete("/:id", verifyAdminToken, async (req, res) => {
     const listRef = ref(storage, `files/${req.params.id}`);
     await listAll(listRef)
       .then((res) => {
-        res.items.forEach((itemRef) => {
+        res.items.forEach(async (itemRef) => {
           deleteObject(itemRef);
         });
       })

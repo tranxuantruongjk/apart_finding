@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { AuthContext } from "../../contexts/AuthContext";
 import { PostContext } from "../../contexts/PostContext";
 import { SmallPostItem } from "../../components/postItem/PostItem";
@@ -27,7 +26,6 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import { RiContactsFill } from "react-icons/ri";
 import "./detailPost.scss";
 
-import { apiUrl } from "../../contexts/constants";
 import { getDetailDateTime } from "../../utils/post";
 import { utilities } from "../../utils/post";
 
@@ -40,7 +38,7 @@ const DetailPost = () => {
     updateUserInfo,
   } = useContext(AuthContext);
 
-  const { getRecommendPosts } = useContext(PostContext);
+  const { getRecommendPosts, getDetailPost } = useContext(PostContext);
 
   const [showLoginRequestModal, setShowLoginRequestModal] = useState(false);
 
@@ -57,9 +55,9 @@ const DetailPost = () => {
 
   useEffect(() => {
     const getDetail = async () => {
-      const response = await axios.get(`${apiUrl}/posts/${type}/${id}`);
+      const response = await getDetailPost(type, id);
 
-      setPost(response.data.post);
+      setPost(response.post);
     };
     getDetail();
   }, [type, id]);
@@ -180,6 +178,14 @@ const DetailPost = () => {
                                 : "Tất cả"}
                             </td>
                           </tr>
+                          {post.capacity && (
+                            <tr>
+                              <td>Sức chứa</td>
+                              <td className="info">
+                                {post.capacity} người/phòng
+                              </td>
+                            </tr>
+                          )}
                           <tr>
                             <td>Ngày cập nhật</td>
                             <td className="info">

@@ -171,6 +171,42 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
+  // Get detail post
+  const getDetailPost = async (typeId, postId) => {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/${typeId}/${postId}`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
+  // Update/Edit a post
+  const updatePost = async (postId, updatedPost) => {
+    try {
+      const response = await axios.put(
+        `${apiUrl}/posts/${postId}`,
+        updatedPost
+      );
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
+  // Delete a post
+  const deletePost = async (postId) => {
+    try {
+      const response = await axios.delete(`${apiUrl}/posts/${postId}`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Context data
   const postContextData = {
     postState,
@@ -183,6 +219,9 @@ const PostContextProvider = ({ children }) => {
     getPostsCountByType,
     getSavedPosts,
     getRecommendPosts,
+    getDetailPost,
+    updatePost,
+    deletePost,
   };
 
   // Return provider
