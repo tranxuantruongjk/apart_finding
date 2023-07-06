@@ -195,6 +195,26 @@ router.post("/search", async (req, res) => {
   }
 });
 
+// @route GET api/posts/
+// @route Get all posts
+// @access Public
+router.get("/postsWithVideos", async (req, res) => {
+  try {
+    const posts = await Post.find().sort("-createdAt").lean();
+
+    const postsFilter = posts.filter(
+      (post) => post.videos && post.videos.length > 0
+    );
+
+    const slicePosts = postsFilter.slice(0, 10);
+
+    res.json({ success: true, posts: slicePosts });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // @route GET api/posts/:userId/posts
 // @route Get all posts which userId's user posted
 // @access Private

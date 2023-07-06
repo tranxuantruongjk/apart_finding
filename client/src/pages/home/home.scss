@@ -1,0 +1,17 @@
+@use "../../assets/scss/style.scss" as *;
+
+.main-home-btn__post {
+  background-color: $actived-color !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  border: none !important;
+  outline: none !important;
+
+  &:hover {
+    background-color: #f20a32 !important;
+  }
+
+  &:active {
+    background-color: $actived-color !important;
+  }
+}

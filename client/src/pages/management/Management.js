@@ -34,7 +34,7 @@ const Management = ({ manageRoute }) => {
   }, [pathname]);
 
   return (
-    <div className="container mt-3">
+    <div className="container mt-3 pb-4">
       <ul className="nav nav-tabs">
         <li className="nav-item">
           <Link className="nav-link manage-link" to="/me/posts">

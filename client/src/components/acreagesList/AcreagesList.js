@@ -1,17 +1,34 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-// import Row from "react-bootstrap/Row";
-// import Col from "react-bootstrap/Col"
 
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
 import { ACREAGE_RANGE } from "../../contexts/constants";
 
+import useSearchContext from "../../hooks/useSearchContext";
+
 import "./acreagesList.scss";
 
 const AcreagesList = () => {
+  const { changeSearchState } = useSearchContext();
+
+  const handleClickAcreageRange = (e, acreage1, acreage2 = 0) => {
+    if (acreage2 === 0) {
+      if (acreage1 === ACREAGE_RANGE[0]) {
+        changeSearchState("minAcreageVal", 0);
+        changeSearchState("maxAcreageVal", acreage1);
+      } else {
+        changeSearchState("minAcreageVal", acreage1);
+        changeSearchState("maxAcreageVal", acreage1);
+      }
+    } else {
+      changeSearchState("minAcreageVal", acreage1);
+      changeSearchState("maxAcreageVal", acreage2);
+    }
+  };
+
   return (
     <div className="acreages-list">
       <Card>
@@ -25,16 +42,30 @@ const AcreagesList = () => {
                     <ListGroup.Item>
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
-                        <Link className="list-item__text">
-                          Dưới {acreage} m&sup2;
+                        <Link
+                          to="/search"
+                          className="list-item__text"
+                          onClick={(e) => handleClickAcreageRange(e, acreage)}
+                        >
+                          Dưới {acreage}m&sup2;
                         </Link>
                       </div>
                     </ListGroup.Item>
                     <ListGroup.Item>
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
-                        <Link className="list-item__text">
-                          Từ {acreage} - {ACREAGE_RANGE[i + 1]} &sup2;
+                        <Link
+                          to="/search"
+                          className="list-item__text"
+                          onClick={(e) =>
+                            handleClickAcreageRange(
+                              e,
+                              acreage,
+                              ACREAGE_RANGE[i + 1]
+                            )
+                          }
+                        >
+                          Từ {acreage}m&sup2; - {ACREAGE_RANGE[i + 1]}m&sup2;
                         </Link>
                       </div>
                     </ListGroup.Item>
@@ -45,8 +76,12 @@ const AcreagesList = () => {
                   <ListGroup.Item>
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
-                      <Link className="list-item__text">
-                        Trên {acreage} &sup2;
+                      <Link
+                        to="/search"
+                        className="list-item__text"
+                        onClick={(e) => handleClickAcreageRange(e, acreage)}
+                      >
+                        Trên {acreage}m&sup2;
                       </Link>
                     </div>
                   </ListGroup.Item>
@@ -56,8 +91,18 @@ const AcreagesList = () => {
                   <ListGroup.Item>
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
-                      <Link className="list-item__text">
-                        Từ {acreage} - {ACREAGE_RANGE[i + 1]} &sup2;
+                      <Link
+                        to="/search"
+                        className="list-item__text"
+                        onClick={(e) =>
+                          handleClickAcreageRange(
+                            e,
+                            acreage,
+                            ACREAGE_RANGE[i + 1]
+                          )
+                        }
+                      >
+                        Từ {acreage}m&sup2; - {ACREAGE_RANGE[i + 1]}m&sup2;
                       </Link>
                     </div>
                   </ListGroup.Item>

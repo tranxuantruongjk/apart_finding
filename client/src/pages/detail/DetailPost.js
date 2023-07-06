@@ -112,11 +112,11 @@ const DetailPost = () => {
   // }, []);
 
   return (
-    <div className="bg-color">
+    <div className="bg-color pb-5">
       <div className="container mt-3">
         {post && (
           <>
-            <Row className="mb-5">
+            <Row>
               <Col md={8}>
                 <div className="detail-post">
                   <div className="detail-post__images">

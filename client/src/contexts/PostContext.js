@@ -18,7 +18,7 @@ const PostContextProvider = ({ children }) => {
     postLoading: true,
     posts: [],
     page: 1,
-    limit: 5,
+    limit: 10,
     total: 0,
   });
 
@@ -171,6 +171,17 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
+  // Get posts with videos
+  const getPostsWithVideos = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/postsWithVideos`);
+      return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Get detail post
   const getDetailPost = async (typeId, postId) => {
     try {
@@ -219,6 +230,7 @@ const PostContextProvider = ({ children }) => {
     getPostsCountByType,
     getSavedPosts,
     getRecommendPosts,
+    getPostsWithVideos,
     getDetailPost,
     updatePost,
     deletePost,

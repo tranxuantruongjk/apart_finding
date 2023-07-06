@@ -125,9 +125,13 @@ export const SmallPostItem = ({ post }) => {
               className="small-post-item__thumb__image"
             />
           </Col>
-          <Col md={8} sm={8} xs={8}>
+          <Col md={8} sm={8} xs={8} className="d-flex flex-column justify-content-between">
             <Link
-              to={`/${post.rentType.$oid}/${post._id.$oid}`}
+              to={
+                post.rentType.$oid
+                  ? `/${post.rentType.$oid}/${post._id.$oid}`
+                  : `/${post.rentType}/${post._id}`
+              }
               className="text-decoration-none"
             >
               <p className="small-post-item__title">{post.title}</p>

@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import "./App.scss";
 import Header from "./components/header/Header";
-import Home from "./pages/Home";
+import Footer from "./components/footer/Footer";
+import Home from "./pages/home/Home";
 import Auth from "./pages/Auth";
 import AuthContextProvider from "./contexts/AuthContext";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
@@ -53,6 +54,7 @@ function App() {
                     <Route path="/admin/rentTypesList" element={<RentTypesList />} />
                   </Route>
                 </Routes>
+                <Footer />
               </Router>
             </AdminPostContextProvider>
           </UserContextProvider>

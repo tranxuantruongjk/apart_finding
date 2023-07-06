@@ -1,17 +1,34 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-// import Row from "react-bootstrap/Row";
-// import Col from "react-bootstrap/Col"
 
 import { Link } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
 import { PRICE_RANGE } from "../../contexts/constants";
 
+import useSearchContext from "../../hooks/useSearchContext";
+
 import "./pricesList.scss";
 
 const PricesList = () => {
+  const { changeSearchState } = useSearchContext();
+
+  const handleClickPriceRange = (e, price1, price2 = 0) => {
+    if (price2 === 0) {
+      if (price1 === PRICE_RANGE[0]) {
+        changeSearchState("minPriceVal", 0);
+        changeSearchState("maxPriceVal", price1);
+      } else {
+        changeSearchState("minPriceVal", price1);
+        changeSearchState("maxPriceVal", price1);
+      }
+    } else {
+      changeSearchState("minPriceVal", price1);
+      changeSearchState("maxPriceVal", price2);
+    }
+  };
+
   return (
     <div className="prices-list">
       <Card>
@@ -25,7 +42,11 @@ const PricesList = () => {
                     <ListGroup.Item>
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
-                        <Link className="list-item__text">
+                        <Link
+                          to="/search"
+                          className="list-item__text"
+                          onClick={(e) => handleClickPriceRange(e, price)}
+                        >
                           Dưới {price} triệu đồng
                         </Link>
                       </div>
@@ -33,7 +54,13 @@ const PricesList = () => {
                     <ListGroup.Item>
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
-                        <Link className="list-item__text">
+                        <Link
+                          to="/search"
+                          className="list-item__text"
+                          onClick={(e) =>
+                            handleClickPriceRange(e, price, PRICE_RANGE[i + 1])
+                          }
+                        >
                           Từ {price} - {PRICE_RANGE[i + 1]} triệu đồng
                         </Link>
                       </div>
@@ -45,7 +72,11 @@ const PricesList = () => {
                   <ListGroup.Item>
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
-                      <Link className="list-item__text">
+                      <Link
+                        to="/search"
+                        className="list-item__text"
+                        onClick={(e) => handleClickPriceRange(e, price)}
+                      >
                         Trên {price} triệu đồng
                       </Link>
                     </div>
@@ -56,7 +87,13 @@ const PricesList = () => {
                   <ListGroup.Item>
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
-                      <Link className="list-item__text">
+                      <Link
+                        to="/search"
+                        className="list-item__text"
+                        onClick={(e) =>
+                          handleClickPriceRange(e, price, PRICE_RANGE[i + 1])
+                        }
+                      >
                         Từ {price} - {PRICE_RANGE[i + 1]} triệu đồng
                       </Link>
                     </div>

@@ -1,0 +1,69 @@
+@use "../../assets//scss/style.scss" as *;
+
+.footer {
+  background-color: $main-color;
+  padding-top: 50px;
+  border-top: 1px solid #dcdcdc;
+  color: #fff !important;
+
+  .logo {
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &-icon {
+      height: 4.5rem;
+      width: 4.5rem;
+    }
+
+    &-text {
+      text-decoration: none;
+      font-weight: 700;
+      margin-top: -5px;
+      font-size: 1.6rem;
+    }
+  }
+
+  &-info {
+    padding-bottom: 26px;
+
+    .col-header {
+      font-weight: 600;
+      margin-bottom: 5px;
+      font-size: 1.1rem;
+    }
+
+    a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+
+      &:hover {
+        color: #2cd7ff !important;
+      }
+    }
+
+    .hotline,
+    .email {
+      font-weight: 500;
+    }
+
+    .social-media {
+      margin-top: 5px;
+
+      img {
+        width: 40px;
+        height: 40px;
+        margin-right: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .copyright {
+    padding: 10px 0;
+    font-weight: 500;
+  }
+}
