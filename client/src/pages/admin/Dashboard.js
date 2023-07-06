@@ -7,8 +7,6 @@ import "./dashboard.scss";
 const Dashboard = () => {
   return (
     <main className="admin-dashboard">
-      {/********header**********/}
-      <Header />
       <div className="pageWrapper d-lg-flex">
         {/********Sidebar**********/}
         <aside className="sidebarArea shadow" id="sidebarArea">
@@ -16,6 +14,8 @@ const Dashboard = () => {
         </aside>
         {/********Content Area**********/}
         <div className="contentArea">
+          {/********header**********/}
+          <Header />
           {/********Middle Content**********/}
           <Container className="p-4" fluid>
             <Outlet />

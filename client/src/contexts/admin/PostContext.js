@@ -8,6 +8,7 @@ import {
   DELETE_POST,
   CHANGE_PAGE,
   CHANGE_LIMIT,
+  CHANGE_FILTER,
 } from "../constants";
 import { postReducer } from "../../reducers/admin/postReducer";
 
@@ -19,12 +20,13 @@ const AdminPostContextProvider = ({ children }) => {
     posts: [],
     page: 1,
     limit: 10,
+    filter: "all",
     total: 0,
   });
 
   const [rentTypes, setRentTypes] = useState([]);
 
-  const { page, limit } = adminPostState;
+  const { page, limit, filter } = adminPostState;
 
   // Change page
   const changePage = async (pageCurrent) => {
@@ -39,6 +41,14 @@ const AdminPostContextProvider = ({ children }) => {
     dispatch({
       type: CHANGE_LIMIT,
       payload: pageSize,
+    });
+  };
+
+  // Change filter
+  const changeFilter = async (filter) => {
+    dispatch({
+      type: CHANGE_FILTER,
+      payload: filter,
     });
   };
 
@@ -60,7 +70,7 @@ const AdminPostContextProvider = ({ children }) => {
   const getAllPosts = async () => {
     try {
       const response = await axios.get(
-        `${apiUrl}/admin/posts?page=${page}&limit=${limit}`
+        `${apiUrl}/admin/posts?filter=${filter}&page=${page}&limit=${limit}`
       );
       // console.log(response);
       if (response.data.success) {
@@ -205,6 +215,7 @@ const AdminPostContextProvider = ({ children }) => {
     updateRentType,
     changePage,
     changeLimit,
+    changeFilter,
     getPostsCountByType,
     sendNotification,
   };

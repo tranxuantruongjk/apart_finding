@@ -6,6 +6,7 @@ import {
   USERS_LOADED_FAILED,
   CHANGE_PAGE,
   CHANGE_LIMIT,
+  CHANGE_FILTER,
 } from "../constants";
 import { userReducer } from "../../reducers/admin/userReducer";
 
@@ -17,10 +18,11 @@ const UserContextProvider = ({ children }) => {
     users: [],
     page: 1,
     limit: 10,
+    filter: "all",
     total: 0,
   });
 
-  const { page, limit } = userState;
+  const { page, limit, filter } = userState;
 
   // Change page
   const changePage = async (pageCurrent) => {
@@ -38,11 +40,19 @@ const UserContextProvider = ({ children }) => {
     });
   };
 
+  // Change filter
+  const changeFilter = async (filter) => {
+    dispatch({
+      type: CHANGE_FILTER,
+      payload: filter,
+    });
+  };
+
   // Get all users
   const getAllUsers = async () => {
     try {
       const response = await axios.get(
-        `${apiUrl}/admin/users?page=${page}&limit=${limit}`
+        `${apiUrl}/admin/users?filter=${filter}&page=${page}&limit=${limit}`
       );
       if (response.data.success) {
         dispatch({
@@ -120,6 +130,7 @@ const UserContextProvider = ({ children }) => {
     getAllUsers,
     changePage,
     changeLimit,
+    changeFilter,
   };
 
   // Return provider

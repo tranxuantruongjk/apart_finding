@@ -19,11 +19,12 @@ import { Link } from "react-router-dom";
 
 const PostsList = () => {
   const {
-    adminPostState: { posts, page, limit, total },
+    adminPostState: { posts, page, limit, total, filter },
     getAllPosts,
     deletePost,
     changePage,
     changeLimit,
+    changeFilter,
   } = useContext(AdminPostContext);
 
   const [showActionModal, setShowActionModal] = useState(false);
@@ -33,6 +34,7 @@ const PostsList = () => {
     const btnsList = Object.values(
       document.getElementById("post-selector").childNodes
     );
+    changeFilter(e.target.id);
     const remainList = btnsList.filter((btn) => btn !== e.target);
     e.target.classList.add("active");
     for (let btn of remainList) {
@@ -46,7 +48,7 @@ const PostsList = () => {
     };
 
     getPosts();
-  }, [page, limit]);
+  }, [page, limit, filter]);
 
   const handleActionDelete = (postId) => {
     setShowActionModal(true);
@@ -62,36 +64,63 @@ const PostsList = () => {
     <div className="admin-posts-list">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="fw-bold">Danh sách bài đăng</h5>
-        <Button
+        {/* <Button
           className="d-flex justify-content-between align-items-center fw-bold"
           // onClick={() => setShowNewUserModal(true)}
         >
           <MdOutlinePostAdd width="20" height="20" className="me-2" />
           <span>Thêm</span>
-        </Button>
+        </Button> */}
       </div>
       <Card>
         <Card.Header id="post-selector">
           <Button
+            id="all"
             variant="link"
-            className="text-decoration-none text-dark fw-bold active"
+            className={
+              filter === "all"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
             onClick={handleClickList}
           >
             Tất cả
           </Button>
           <Button
+            id="active"
             variant="link"
-            className="text-decoration-none text-dark fw-bold"
+            className={
+              filter === "active"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
             onClick={handleClickList}
           >
             Đang hiển thị
           </Button>
           <Button
+            id="pending"
             variant="link"
-            className="text-decoration-none text-dark fw-bold"
+            className={
+              filter === "pending"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
             onClick={handleClickList}
           >
-            Chờ duyệt
+            Đang chờ duyệt
+          </Button>
+          <Button
+            id="rejected"
+            variant="link"
+            className={
+              filter === "rejected"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
+            onClick={handleClickList}
+          >
+            Bị từ chối
           </Button>
         </Card.Header>
         <Card.Body>

@@ -6,6 +6,7 @@ import {
   UPDATE_POST,
   CHANGE_PAGE,
   CHANGE_LIMIT,
+  CHANGE_FILTER,
 } from "../../contexts/constants";
 
 export const postReducer = (state, action) => {
@@ -21,6 +22,12 @@ export const postReducer = (state, action) => {
       return {
         ...state,
         limit: payload,
+      };
+    }
+    case CHANGE_FILTER: {
+      return {
+        ...state,
+        filter: payload,
       };
     }
     case POSTS_LOADED_SUCCESS:

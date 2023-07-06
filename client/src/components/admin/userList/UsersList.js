@@ -18,13 +18,14 @@ import avatar from "../../../assets/images/default-user.png";
 
 const UsersList = () => {
   const {
-    userState: { users, page, limit, total },
+    userState: { users, filter, page, limit, total },
     getAllUsers,
     blockUser,
     unblockUser,
     deleteUser,
     changePage,
     changeLimit,
+    changeFilter,
   } = useContext(UserContext);
 
   const [showNewUserModal, setShowNewUserModal] = useState(false);
@@ -35,6 +36,7 @@ const UsersList = () => {
     const btnsList = Object.values(
       document.getElementById("selector").childNodes
     );
+    changeFilter(e.target.id);
     const remainList = btnsList.filter((btn) => btn !== e.target);
     e.target.classList.add("active");
     for (let btn of remainList) {
@@ -68,7 +70,7 @@ const UsersList = () => {
     };
 
     getUsers();
-  }, [page, limit]);
+  }, [page, limit, filter]);
 
   const handleActionDelete = (userId) => {
     setShowActionModal(true);
@@ -95,22 +97,37 @@ const UsersList = () => {
       <Card>
         <Card.Header id="selector">
           <Button
+            id="all"
             variant="link"
-            className="text-decoration-none text-dark fw-bold active"
+            className={
+              filter === "all"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
             onClick={handleClickList}
           >
             All
           </Button>
           <Button
+            id="admin"
             variant="link"
-            className="text-decoration-none text-dark fw-bold"
+            className={
+              filter === "admin"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
             onClick={handleClickList}
           >
             Admin
           </Button>
           <Button
+            id="user"
             variant="link"
-            className="text-decoration-none text-dark fw-bold"
+            className={
+              filter === "user"
+                ? "text-decoration-none text-dark fw-bold active"
+                : "text-decoration-none text-dark fw-bold"
+            }
             onClick={handleClickList}
           >
             User

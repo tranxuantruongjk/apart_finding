@@ -13,7 +13,6 @@ import {
   Dropdown,
   Button,
 } from "reactstrap";
-import Logo from "../logo/Logo";
 import user1 from "../../../assets/users/user4.jpg";
 
 import { BsThreeDotsVertical, BsList, BsX } from "react-icons/bs";
@@ -23,7 +22,10 @@ import "./header.scss";
 import { AuthContext } from "../../../contexts/AuthContext";
 
 const Header = () => {
-  const { logoutUser } = useContext(AuthContext);
+  const {
+    authState: { user },
+    logoutUser,
+  } = useContext(AuthContext);
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -46,11 +48,8 @@ const Header = () => {
   return (
     <Navbar color="white" light expand="md" className="fix-header">
       <div className="d-flex align-items-center">
-        <div className="d-lg-block d-none header-logo">
-          <Logo />
-        </div>
-        {/* <NavbarBrand href="/admin">
-          <LogoWhite className="d-lg-none" />
+        {/* <NavbarBrand as={Link} to="/admin">
+          <HomeLogo className="d-lg-none" />
         </NavbarBrand> */}
         <Button
           color="primary"
@@ -67,22 +66,18 @@ const Header = () => {
           className="d-sm-block d-md-none"
           onClick={Handletoggle}
         >
-          {isOpen ? (
-            <BsX />
-          ) : (
-            <BsThreeDotsVertical />
-          )}
+          {isOpen ? <BsX /> : <BsThreeDotsVertical />}
         </Button>
       </div>
 
       <Collapse navbar isOpen={isOpen}>
         <Nav className="me-auto" navbar>
-          <NavItem>
+          {/* <NavItem>
             <Link to="/admin/starter" className="nav-link">
               Starter
             </Link>
-          </NavItem>
-          <UncontrolledDropdown inNavbar nav>
+          </NavItem> */}
+          {/* <UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
               DD Menu
             </DropdownToggle>
@@ -92,7 +87,7 @@ const Header = () => {
               <DropdownItem divider />
               <DropdownItem>Reset</DropdownItem>
             </DropdownMenu>
-          </UncontrolledDropdown>
+          </UncontrolledDropdown> */}
         </Nav>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">
@@ -100,14 +95,17 @@ const Header = () => {
               src={user1}
               alt="profile"
               className="rounded-circle"
-              width="30"
+              width="35"
             ></img>
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Info</DropdownItem>
-            <DropdownItem>My profile</DropdownItem>
+            <DropdownItem header>
+              {user && user.username}
+              <br />
+              {user && user.phone}
+            </DropdownItem>
             <DropdownItem divider />
-            <DropdownItem onClick={logout}>Logout</DropdownItem>
+            <DropdownItem onClick={logout}>Đăng xuất</DropdownItem>
           </DropdownMenu>
         </Dropdown>
       </Collapse>

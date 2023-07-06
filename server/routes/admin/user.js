@@ -9,16 +9,33 @@ const verifyAdminToken = require("../../middleware/authAdmin");
 // @access Private
 router.get("/", verifyAdminToken, async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { filter, page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const total = await User.find().countDocuments();
-
-    const users = await User.find()
-      .sort("-createdAt")
-      .skip(skip)
-      .limit(limit)
-      .select("-password");
+    let total;
+    let users;
+    if (filter === "all") {
+      total = await User.find().countDocuments();
+      users = await User.find()
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit)
+        .select("-password");
+    } else if (filter === "admin") {
+      total = await User.find({ role: 1 }).countDocuments();
+      users = await User.find({ role: 1 })
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit)
+        .select("-password");
+    } else {
+      total = await User.find({ role: 0 }).countDocuments();
+      users = await User.find({ role: 0 })
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit)
+        .select("-password");
+    }
 
     res.json({ success: true, total, users });
   } catch (error) {
@@ -72,7 +89,9 @@ router.put("/:action/:id", verifyAdminToken, async (req, res) => {
 router.delete("/:id", verifyAdminToken, async (req, res) => {
   try {
     const deleteConditon = { _id: req.params.id };
-    const deletedUser = await User.findOneAndDelete(deleteConditon).select("-password");
+    const deletedUser = await User.findOneAndDelete(deleteConditon).select(
+      "-password"
+    );
 
     if (!deletedUser) {
       res

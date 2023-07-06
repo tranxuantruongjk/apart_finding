@@ -1,10 +1,17 @@
 import { Button, Nav, NavItem } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 
+import HomeLogo from "../../logo/Logo";
+
 import "./sideBar.scss";
 
 import { BsX } from "react-icons/bs";
-import { MdDashboard, MdPeople, MdArticle, MdTypeSpecimen } from "react-icons/md";
+import {
+  MdDashboard,
+  MdPeople,
+  MdArticle,
+  MdTypeSpecimen,
+} from "react-icons/md";
 
 const navigation = [
   {
@@ -26,7 +33,7 @@ const navigation = [
     title: "Loại phòng",
     href: "/admin/rentTypesList",
     icon: <MdTypeSpecimen />,
-  }
+  },
 ];
 
 const Sidebar = () => {
@@ -45,6 +52,11 @@ const Sidebar = () => {
         >
           <BsX />
         </Button>
+      </div>
+      <div className="d-lg-block logo">
+        <Link to="/admin" className="text-decoration-none">
+          <HomeLogo />
+        </Link>
       </div>
       <div className="p-3 mt-2">
         <Nav vertical className="sidebarNav">

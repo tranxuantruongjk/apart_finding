@@ -3,6 +3,7 @@ import {
   USERS_LOADED_FAILED,
   CHANGE_PAGE,
   CHANGE_LIMIT,
+  CHANGE_FILTER,
 } from "../../contexts/constants";
 
 export const userReducer = (state, action) => {
@@ -17,6 +18,11 @@ export const userReducer = (state, action) => {
       return {
         ...state,
         limit: payload,
+      };
+    case CHANGE_FILTER:
+      return {
+        ...state,
+        filter: payload,
       };
     case USERS_LOADED_SUCCESS:
       return {

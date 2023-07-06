@@ -9,6 +9,12 @@ $sidebarColor: $dark;
   flex-shrink: 0;
   width: $sidebarWidth;
   background-color: $sidebarColor;
+
+  .logo {
+    color: #fff !important;
+    margin-top: 2rem;
+  }
+
   .nav-link {
     color: rgba(255, 255, 255, 0.5);
   }
@@ -37,6 +43,10 @@ $sidebarColor: $dark;
     transition: 0.2s ease-in;
     &.showSidebar {
       margin-left: 0px;
+    }
+
+    .logo {
+      margin-top: 0;
     }
   }
 }

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 
+import { AuthContext } from "../../contexts/AuthContext";
 import { PostContext } from "../../contexts/PostContext";
 import FacebookIcon from "../../assets/images/facebook.svg";
 import ZaloIcon from "../../assets/images/zalo.svg";
@@ -12,6 +13,9 @@ import { SiHomeassistant } from "react-icons/si";
 import "./footer.scss";
 
 const Footer = () => {
+  const {
+    authState: { user },
+  } = useContext(AuthContext);
   const { rentTypes } = useContext(PostContext);
 
   return (
@@ -19,7 +23,10 @@ const Footer = () => {
       <div className="container footer-info">
         <Row>
           <Col className="d-flex align-items-center justify-content-center">
-            <Link to={"/"} className="text-decoration-none">
+            <Link
+              to={user ? (user.role === 0 ? "/" : "/admin") : "/"}
+              className="text-decoration-none"
+            >
               <div className="logo">
                 <SiHomeassistant className="logo-icon" />
                 <span className="logo-text">TRỌ SV</span>
@@ -37,7 +44,16 @@ const Footer = () => {
             <div className="col-header">HỆ THỐNG</div>
             {rentTypes &&
               rentTypes.map((rentType) => (
-                <Link key={rentType._id} to={`${rentType._id}`}>
+                <Link
+                  key={rentType._id}
+                  to={
+                    user
+                      ? user.role === 0
+                        ? `${rentType._id}`
+                        : "/admin/postsList"
+                      : `${rentType._id}`
+                  }
+                >
                   {rentType.name}
                 </Link>
               ))}

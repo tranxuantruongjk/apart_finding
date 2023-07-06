@@ -127,16 +127,26 @@ router.get("/:id", verifyAdminToken, async (req, res) => {
 // @route Private
 router.get("/", verifyAdminToken, async (req, res) => {
   try {
-    const { page, limit } = req.query;
+    const { page, limit, filter } = req.query;
     const skip = (page - 1) * limit;
 
-    const total = await Post.find().countDocuments();
-
-    const posts = await Post.find()
-      .sort("-createdAt")
-      .skip(skip)
-      .limit(limit)
-      .populate("rentType", ["name"]);
+    let total;
+    let posts;
+    if (filter === "all") {
+      total = await Post.find().countDocuments();
+      posts = await Post.find()
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit)
+        .populate("rentType", ["name"]);
+    } else {
+      total = await Post.find({ state: filter }).countDocuments();
+      posts = await Post.find({ state: filter })
+        .sort("-createdAt")
+        .skip(skip)
+        .limit(limit)
+        .populate("rentType", ["name"]);
+    }
 
     res.json({ success: true, total, posts });
   } catch (error) {
