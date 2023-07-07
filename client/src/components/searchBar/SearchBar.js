@@ -68,7 +68,7 @@ const SearchBar = () => {
     };
 
     window.scrollTo({
-      top: 0,
+      top: 80,
       left: 0,
       behavior: "smooth",
     });
@@ -81,9 +81,9 @@ const SearchBar = () => {
     }
   };
 
-  useEffect(() => {
-    changePage(1);
-  }, [pathname]);
+  // useEffect(() => {
+  //   changePage(1);
+  // }, [pathname]);
 
   useEffect(() => {
     if (pathname !== "/search") {

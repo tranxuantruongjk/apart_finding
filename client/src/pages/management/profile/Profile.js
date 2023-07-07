@@ -12,6 +12,7 @@ import { IoMdMail } from "react-icons/io";
 
 import { AuthContext } from "../../../contexts/AuthContext";
 import AlertMessage from "../../../components/alertMessage/AlertMessage";
+import ChangePasswordModal from "../../../components/changePassword/ChangePasswordModal";
 
 import "./profile.scss";
 // import defaultAvatar from "../../../assets/images/default-user.png";
@@ -19,12 +20,13 @@ import "./profile.scss";
 const Profile = () => {
   const {
     authState: { user },
-    updateUserInfo
+    updateUserInfo,
   } = useContext(AuthContext);
 
   const [userName, setUserName] = useState(user.username);
   const [userEmail, setUserEmail] = useState(user.email);
   const [alert, setAlert] = useState(null);
+  const [showChangePasswordModal, setShowChangePasswordModal] = useState(false);
 
   const handleChangeUserName = (e) => {
     setUserName(e.target.value);
@@ -38,23 +40,29 @@ const Profile = () => {
     e.preventDefault();
 
     if (userName === user.username && userEmail === user.email) {
-      setAlert({ type: "secondary", message: "Bạn chưa thay đổi thông tin."});
+      setAlert({ type: "secondary", message: "Bạn chưa thay đổi thông tin." });
       setTimeout(() => setAlert(null), 5000);
     } else if (userName === "") {
-      setAlert({ type: "danger", message: "Tên hiển thị là thông tin bắt buộc."});
+      setAlert({
+        type: "danger",
+        message: "Tên hiển thị là thông tin bắt buộc.",
+      });
       setTimeout(() => setAlert(null), 5000);
     } else {
       try {
-        const res = await updateUserInfo(user._id, {username: userName, email: userEmail});
+        const res = await updateUserInfo(user._id, {
+          username: userName,
+          email: userEmail,
+        });
         if (res.success) {
-          setAlert({ type: "success", message: res.message});
+          setAlert({ type: "success", message: res.message });
           setTimeout(() => setAlert(null), 5000);
         } else {
-          setAlert({ type: "danger", message: res.message});
+          setAlert({ type: "danger", message: res.message });
           setTimeout(() => setAlert(null), 5000);
         }
       } catch (error) {
-        setAlert({ type: "danger", message: "Đã xảy ra lỗi."});
+        setAlert({ type: "danger", message: "Đã xảy ra lỗi." });
         setTimeout(() => setAlert(null), 5000);
       }
     }
@@ -149,7 +157,7 @@ const Profile = () => {
               <Form.Label>Mật khẩu</Form.Label>
             </Col>
             <Col md={4}>
-              <p className="change-password">Đổi mật khẩu</p>
+              <p className="change-password" onClick={() => setShowChangePasswordModal(true)}>Đổi mật khẩu</p>
             </Col>
             <Col md={3}></Col>
           </Row>
@@ -164,6 +172,11 @@ const Profile = () => {
           </Row>
         </Form>
       </div>
+      <ChangePasswordModal
+        show={showChangePasswordModal}
+        setShow={setShowChangePasswordModal}
+        userId={user && user._id}
+      />
     </div>
   );
 };

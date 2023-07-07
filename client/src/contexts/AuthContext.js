@@ -1,4 +1,4 @@
-import { createContext, useReducer, useEffect, useRef, useState } from "react";
+import { createContext, useReducer, useEffect, useState } from "react";
 import axios from "axios";
 import { apiUrl, LOCAL_STORAGE_TOKEN_NAME } from "./constants";
 import { authReducer } from "../reducers/authReducer";
@@ -138,6 +138,21 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Change password
+  const changePassword = async (userId, changePasswordForm) => {
+    console.log(changePasswordForm);
+    try {
+      const response = await axios.put(
+        `${apiUrl}/auth/${userId}/changePassword`,
+        changePasswordForm
+      );
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // User exits
   const logoutUser = async () => {
     localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
@@ -187,6 +202,7 @@ const AuthContextProvider = ({ children }) => {
     logoutUser,
     getUser,
     updateUserInfo,
+    changePassword,
     getNotifications,
     socket,
     notifications,

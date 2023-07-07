@@ -33,6 +33,11 @@ const Home = () => {
 
   useEffect(() => {
     changePage(1);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
   }, [pathname]);
 
   // Start: get all posts

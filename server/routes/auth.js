@@ -25,6 +25,66 @@ router.get("/", verifyToken, async (req, res) => {
   }
 });
 
+// @route PUT api/auth/:id/changePassword
+// @route User changes password
+// @access Private
+router.put("/:id/changePassword", verifyToken, async (req, res) => {
+  const { oldPassword, newPassword } = req.body;
+  console.log(oldPassword, newPassword);
+
+  if (!oldPassword || !newPassword) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Thông tin vẫn còn thiếu" });
+  }
+
+  if (req.params.id !== req.userId) {
+    return res
+      .status(401)
+      .json({ success: false, message: "Người dùng chưa được xác thực" });
+  }
+
+  try {
+    // Check for existing user
+    const user = await User.findById(req.params.id);
+    if (!user)
+      return res.status(401).json({
+        success: false,
+        message: "Không tìm thấy người dùng hoặc Người dùng không tồn tại",
+      });
+
+    // Username found
+    const passwordValid = await argon2.verify(user.password, oldPassword);
+    if (!passwordValid)
+      return res.status(400).json({
+        success: false,
+        message: "Mật khẩu cũ đã nhập không đúng",
+      });
+
+    const hashedPassword = await argon2.hash(newPassword);
+    let updatedUser = {
+      password: hashedPassword,
+    };
+
+    updatedUser = await User.findByIdAndUpdate(req.params.id, updatedUser, {
+      new: true,
+    });
+
+    if (!updatedUser)
+      return res
+        .status(401)
+        .json({ success: false, message: "Không tìm thấy người dùng" });
+
+    res.json({
+      success: true,
+      message: "Mật khẩu được cập nhật thành công",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // @route PUT api/auth
 // @desc Update user's info
 // @access Private
@@ -32,7 +92,9 @@ router.put("/:id", verifyToken, async (req, res) => {
   const { username, email, savedPost } = req.body;
 
   if (!username && !savedPost) {
-    return res.status(400).json({success: false, message: "Tên là thông tin bắt buộc."});
+    return res
+      .status(400)
+      .json({ success: false, message: "Tên là thông tin bắt buộc." });
   }
 
   try {
@@ -40,21 +102,31 @@ router.put("/:id", verifyToken, async (req, res) => {
       username,
       email,
       savedPost,
-    }
+    };
 
-    const userUpdateCondition = {_id: req.params.id, _id: req.userId};
+    const userUpdateCondition = { _id: req.params.id, _id: req.userId };
 
-    updatedUser = await User.findOneAndUpdate(userUpdateCondition, updatedUser, {new: true});
+    updatedUser = await User.findOneAndUpdate(
+      userUpdateCondition,
+      updatedUser,
+      { new: true }
+    );
 
     if (!updatedUser)
-    return res.status(401).json({success: false, message: "Không tìm thấy người dùng."});
+      return res
+        .status(401)
+        .json({ success: false, message: "Không tìm thấy người dùng." });
 
-    res.json({success: true, message: "Thông tin được cập nhật thành công.", user: updatedUser});
+    res.json({
+      success: true,
+      message: "Thông tin được cập nhật thành công.",
+      user: updatedUser,
+    });
   } catch (error) {
     console.log(error);
-    res.status(500).json({success: false, message: "Đã xảy ra lỗi."});
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi." });
   }
-})
+});
 
 // @route POST api/auth/register
 // @route Register user
@@ -65,12 +137,10 @@ router.post("/register", async (req, res) => {
 
   // Simple validation
   if (!username || !phone || !password)
-    return res
-      .status(400)
-      .json({
-        success: false,
-        message: "Missing username and/or password and/or phone",
-      });
+    return res.status(400).json({
+      success: false,
+      message: "Missing username and/or password and/or phone",
+    });
 
   if (role === 1) verifyAdminToken(req, res);
 
@@ -85,7 +155,13 @@ router.post("/register", async (req, res) => {
 
     // All pass
     const hashedPassword = await argon2.hash(password);
-    const newUser = new User({ username, phone, email, password: hashedPassword, role });
+    const newUser = new User({
+      username,
+      phone,
+      email,
+      password: hashedPassword,
+      role,
+    });
 
     await newUser.save();
     // console.log(newUser);
@@ -98,13 +174,11 @@ router.post("/register", async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET
     );
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "User created successfully.",
-        accessToken,
-      });
+    res.status(200).json({
+      success: true,
+      message: "User created successfully.",
+      accessToken,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Internal server error" });
@@ -127,16 +201,18 @@ router.post("/login", async (req, res) => {
     // Check for existing user
     const user = await User.findOne({ phone });
     if (!user)
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect username and/or password" });
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect username and/or password",
+      });
 
     // Username found
     const passwordValid = await argon2.verify(user.password, password);
     if (!passwordValid)
-      return res
-        .status(400)
-        .json({ success: false, message: "Incorrect username and/or password" });
+      return res.status(400).json({
+        success: false,
+        message: "Incorrect username and/or password",
+      });
 
     // All good
     const accessToken = jwt.sign(
