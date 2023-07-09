@@ -37,9 +37,11 @@ const NewPost = () => {
 
   const {
     authState: { user },
+    socket,
   } = useContext(AuthContext);
 
-  const { rentTypes, createPost } = useContext(PostContext);
+  const { rentTypes, createPost, getAdminRole, sendNotification } =
+    useContext(PostContext);
 
   const [postForm, setPostForm] = useState({
     title: "",
@@ -206,6 +208,26 @@ const NewPost = () => {
       const postRes = await createPost(formData);
       if (postRes.success) {
         hideShowLoading();
+        const admins = await getAdminRole();
+        for (let admin of admins.admins) {
+          try {
+            const response = await sendNotification({
+              receiverId: admin._id,
+              postId: postRes.postId,
+              action: "register_post",
+            });
+
+            if (response.success) {
+              socket.emit("sendNotification", {
+                ...response.notification,
+                user: user.username,
+                title: title,
+              });
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
         setPostForm({
           title: "",
           content: "",

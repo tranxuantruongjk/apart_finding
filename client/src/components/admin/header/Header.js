@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Navbar,
@@ -13,9 +13,11 @@ import {
   Dropdown,
   Button,
 } from "reactstrap";
+import NavDropdown from "react-bootstrap/NavDropdown";
 import user1 from "../../../assets/users/user4.jpg";
 
 import { BsThreeDotsVertical, BsList, BsX } from "react-icons/bs";
+import { GrNotification } from "react-icons/gr";
 
 import "./header.scss";
 
@@ -25,7 +27,45 @@ const Header = () => {
   const {
     authState: { user },
     logoutUser,
+    getAdminNotifications,
+    socket,
+    notifications,
+    setNotifications,
+    updateNotification,
   } = useContext(AuthContext);
+
+  useEffect(() => {
+    const getAllNotifications = async () => {
+      const response = await getAdminNotifications(user._id);
+      
+      setNotifications(response.notifications);
+    };
+
+    user && getAllNotifications();
+  }, [user]);
+
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotifications((prev) => {
+        const arr = [data, ...prev];
+        const result = [];
+        result.push(arr[0]);
+        for (let i = 0; i < arr.length - 1; i++) {
+          if (arr[i]._id !== arr[i + 1]._id) {
+            result.push(arr[i+1]);
+          }
+        }
+        return result;
+      });
+    });
+  }, [socket]);
+
+  const handleClickNotification = async (notificationId) => {
+    await updateNotification(notificationId);
+
+    const response = await getAdminNotifications(user._id);
+    setNotifications(response.notifications);
+  };
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -70,14 +110,14 @@ const Header = () => {
         </Button>
       </div>
 
-      <Collapse navbar isOpen={isOpen}>
-        <Nav className="me-auto" navbar>
-          {/* <NavItem>
+      <Collapse navbar isOpen={isOpen} className="d-flex justify-content-end">
+        {/* <Nav className="me-auto" navbar>
+          <NavItem>
             <Link to="/admin/starter" className="nav-link">
-              Starter
+              Starters
             </Link>
-          </NavItem> */}
-          {/* <UncontrolledDropdown inNavbar nav>
+          </NavItem>
+          <UncontrolledDropdown inNavbar nav>
             <DropdownToggle caret nav>
               DD Menu
             </DropdownToggle>
@@ -87,15 +127,75 @@ const Header = () => {
               <DropdownItem divider />
               <DropdownItem>Reset</DropdownItem>
             </DropdownMenu>
-          </UncontrolledDropdown> */}
-        </Nav>
+          </UncontrolledDropdown>
+        </Nav> */}
+        <NavDropdown
+          title={
+            <div className="icon-notification">
+              <GrNotification className="notification" />
+              {notifications && notifications.filter(
+                (notification) => notification.seen === false
+              ).length > 0 && (
+                <div className="counter">
+                  {
+                    notifications.filter(
+                      (notification) => notification.seen === false
+                    ).length
+                  }
+                </div>
+              )}
+            </div>
+          }
+          className="nav-notification"
+        >
+          {notifications && notifications.length !== 0 ? (
+            <>
+              {notifications.map((note, index) => (
+                <div key={index}>
+                  <NavDropdown.Item
+                    as={Link}
+                    to={`/admin/postsList/${
+                      note.postId._id ? note.postId._id : note.postId
+                    }`}
+                    className={note.seen && "opacity-50"}
+                    onClick={() => handleClickNotification(note._id)}
+                  >
+                    {note.action === "register_post" && (
+                      <span>
+                        Người dùng{" "}
+                        <b>{note.user ? note.user : note.senderId.username}</b>{" "}
+                        vừa gửi đăng ký bài viết{" "}
+                        <b>{note.title ? note.title : note.postId.title}</b>.
+                        Hãy vào xét duyệt đi.
+                      </span>
+                    )}
+                    {note.action === "update_post" && (
+                      <span>
+                        Người dùng{" "}
+                        <b>{note.user ? note.user : note.senderId.username}</b>{" "}
+                        vừa cập nhật lại bài viết{" "}
+                        <b>{note.title ? note.title : note.postId.title}</b>.
+                        Hãy vào xét duyệt đi.
+                      </span>
+                    )}
+                  </NavDropdown.Item>
+                  <NavDropdown.Divider />
+                </div>
+              ))}
+            </>
+          ) : (
+            <NavDropdown.Item disabled>
+              Bạn không có thông báo nào
+            </NavDropdown.Item>
+          )}
+        </NavDropdown>
         <Dropdown isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle color="transparent">
             <img
               src={user1}
               alt="profile"
               className="rounded-circle"
-              width="35"
+              width="30"
             ></img>
           </DropdownToggle>
           <DropdownMenu>

@@ -13,8 +13,9 @@ const NotificationSchema = new Schema(
       ref: "users",
       required: true,
     },
-    title: {
-      type: String,
+    postId: {
+      type: Schema.Types.ObjectId,
+      ref: "posts",
       required: true,
     },
     action: {

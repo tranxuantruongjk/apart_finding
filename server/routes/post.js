@@ -361,8 +361,7 @@ router.put("/:id", verifyToken, upload.array("files"), async (req, res) => {
     !price ||
     !capacity ||
     utils.length === 0 ||
-    images.length === 0 ||
-    videos.length === 0
+    images.length === 0
   )
     return res
       .status(400)
@@ -622,6 +621,7 @@ router.post("/", verifyToken, upload.array("files"), async (req, res) => {
     res.json({
       success: true,
       message: "Thông tin phòng trọ đã đăng ký thành công!!!",
+      postId: newPost._id,
     });
   } catch (error) {
     console.log(error);

@@ -179,6 +179,19 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
+  // Get admin notification
+  const getAdminNotifications = async (userId) => {
+    try {
+      const response = await axios.get(`${apiUrl}/admin/notifications/${userId}`);
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Change notification's status to seen
   const updateNotification = async (notificationId) => {
     try {
@@ -204,6 +217,7 @@ const AuthContextProvider = ({ children }) => {
     updateUserInfo,
     changePassword,
     getNotifications,
+    getAdminNotifications,
     socket,
     notifications,
     setNotifications,

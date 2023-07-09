@@ -229,4 +229,18 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// @route GET api/auth/roleAdmin
+// @route Get admin-role user(s)
+// @access Public
+router.get("/roleAdmin", async (req, res) => {
+  try {
+    const admins = await User.find({ role: 1 }).select("_id");
+
+    res.json({ success: true, admins });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
 module.exports = router;

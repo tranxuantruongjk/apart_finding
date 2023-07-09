@@ -218,6 +218,33 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
+  // Get admin role
+  const getAdminRole = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/auth/roleAdmin`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
+  // Send notifications
+  const sendNotification = async (notificationForm) => {
+    try {
+      const response = await axios.post(
+        `${apiUrl}/notifications`,
+        notificationForm
+      );
+      if (response.data.success) {
+        return response.data;
+      }
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Context data
   const postContextData = {
     postState,
@@ -234,6 +261,8 @@ const PostContextProvider = ({ children }) => {
     getDetailPost,
     updatePost,
     deletePost,
+    getAdminRole,
+    sendNotification,
   };
 
   // Return provider

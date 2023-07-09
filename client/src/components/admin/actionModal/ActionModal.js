@@ -11,7 +11,6 @@ const ActionModal = ({
 }) => {
   const [reason, setReason] = useState("");
   const handleChangeReason = (e) => {
-    console.log(e.target.value);
     setReason(e.target.value);
   };
 

@@ -28,9 +28,11 @@ const EditPost = () => {
 
   const {
     authState: { user },
+    socket,
   } = useContext(AuthContext);
 
-  const { rentTypes, updatePost } = useContext(PostContext);
+  const { rentTypes, updatePost, getAdminRole, sendNotification } =
+    useContext(PostContext);
 
   const [postForm, setPostForm] = useState({
     title: state.title,
@@ -262,6 +264,26 @@ const EditPost = () => {
         hideShowLoading();
         setAlert({ type: "success", message: postRes.message });
         setTimeout(() => setAlert(null), 5000);
+        const admins = await getAdminRole();
+        for (let admin of admins.admins) {
+          try {
+            const response = await sendNotification({
+              receiverId: admin._id,
+              postId: state._id,
+              action: "update_post",
+            });
+
+            if (response.success) {
+              socket.emit("sendNotification", {
+                ...response.notification,
+                user: user.username,
+                title: title,
+              });
+            }
+          } catch (error) {
+            console.log(error);
+          }
+        }
       } else {
         hideShowLoading();
         setAlert({ type: "danger", message: postRes.message });

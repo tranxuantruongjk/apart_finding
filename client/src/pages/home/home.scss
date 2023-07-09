@@ -15,3 +15,11 @@
     background-color: $actived-color !important;
   }
 }
+
+.posts-with-videos {
+  margin-top: 1rem;
+  .list-group-item {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

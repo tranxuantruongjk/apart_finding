@@ -85,12 +85,16 @@ const Post = () => {
       const response = await sendNotification(message);
 
       if (response.success) {
-        socket.emit("sendNotification", response.notification);
+        socket.emit("sendNotification", {
+          ...response.notification,
+          title: post.title,
+        });
       }
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     if (action && action.action.name === "deletePost" && action.success) {
       navigate("/admin/postsList");
@@ -100,7 +104,7 @@ const Post = () => {
     if (action && action.action.name === "acceptPost" && action.success) {
       const message = {
         receiverId: post.user._id,
-        title: post.title,
+        postId: post._id,
         action: "accept_post",
       };
 
@@ -111,7 +115,7 @@ const Post = () => {
     if (action && action.action.name === "rejectPost" && action.success) {
       const message = {
         receiverId: post.user._id,
-        title: post.title,
+        postId: post._id,
         action: "reject_post",
       };
 

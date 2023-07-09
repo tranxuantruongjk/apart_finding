@@ -74,7 +74,7 @@ const Header = () => {
                     title={
                       <div className="icon-notification">
                         <GrNotification className="notification" />
-                        {notifications.filter(
+                        {notifications && notifications.filter(
                           (notification) => notification.seen === false
                         ).length > 0 && (
                           <div className="counter">
@@ -89,7 +89,7 @@ const Header = () => {
                     }
                     className="nav-notification"
                   >
-                    {notifications.length !== 0 ? (
+                    {notifications && notifications.length !== 0 ? (
                       <>
                         {notifications.map((note, index) => (
                           <div key={index}>
@@ -102,13 +102,13 @@ const Header = () => {
                             >
                               {note.action === "accept_post" && (
                                 <span>
-                                  Bài viết <b>{note.title}</b> đã được duyệt và
+                                  Bài viết <b>{note.title ? note.title : note.postId.title}</b> đã được duyệt và
                                   đăng lên trang chủ
                                 </span>
                               )}
                               {note.action === "reject_post" && (
                                 <span>
-                                  Bài viết <b>{note.title}</b> chưa được đăng do
+                                  Bài viết <b>{note.title ? note.title : note.postId.title}</b> chưa được đăng do
                                   vi phạm quy định đăng tin. Hãy xem lý do và
                                   sửa tin
                                 </span>
