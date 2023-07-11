@@ -4,6 +4,43 @@ const router = express.Router();
 const User = require("../../model/User");
 const verifyAdminToken = require("../../middleware/authAdmin");
 
+// @route GET api/admin/users/statistic
+// @route Admin statistic users
+// @route Private
+router.get("/statistic", verifyAdminToken, async (req, res) => {
+  const fullYear = new Date().getFullYear();
+  try {
+    const users = await User.find().select("createdAt");
+    let statisticInYear = [];
+    for (let i = 0; i < 12; i++) {
+      let count = 0;
+      let startDate, endDate;
+      if (i !== 11) {
+        startDate = new Date(fullYear, i, 1);
+        endDate = new Date(fullYear, i + 1, 1);
+      } else {
+        startDate = new Date(fullYear, i, 1);
+        endDate = new Date(fullYear + 1, 0, 1);
+      }
+      users.forEach((user) => {
+        if (user.createdAt >= startDate && user.createdAt < endDate) {
+          count++;
+        }
+      });
+      statisticInYear.push(count);
+    }
+
+    res.json({
+      success: true,
+      total: users.length,
+      statistic: statisticInYear,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
+
 // @route GET api/admin/users
 // @route Admin gets list of users
 // @access Private

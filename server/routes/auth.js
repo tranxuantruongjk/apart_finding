@@ -7,6 +7,33 @@ const User = require("../model/User");
 const verifyToken = require("../middleware/auth");
 const verifyAdminToken = require("../middleware/authAdmin");
 
+// const test = require("./test1.json");
+
+// // @route
+// router.get("/all", verifyAdminToken, async (req, res) => {
+//   try {
+//     const testData = Object.values(test);
+
+//     for (let i = 0; i < 1554; i++) {
+//       // Check for existing user
+//       console.log(i);
+//       const updatedUser = await User.findOneAndUpdate(
+//         { phone: testData[i].data[0].phone_number },
+//         { email: testData[i].data[0].userInfo[0].email },
+//         { new: true }
+//       );
+//     }
+
+//     res.json({
+//       success: true,
+//       message: "Thông tin phòng trọ đã đăng ký thành công!!!",
+//     });
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+//   }
+// });
+
 // @route GET api/auth
 // @desc Check it user is logged in
 // @access Public
@@ -133,7 +160,7 @@ router.put("/:id", verifyToken, async (req, res) => {
 // @access Public
 router.post("/register", async (req, res) => {
   const { username, phone, email, password, role } = req.body;
-  // console.log(req.body);
+  console.log(req.body);
 
   // Simple validation
   if (!username || !phone || !password)
@@ -161,6 +188,8 @@ router.post("/register", async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      createdAt: new Date(2023, 5, 1),
+      updatedAt: new Date(2023, 5, 1),
     });
 
     await newUser.save();

@@ -66,6 +66,17 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
+  // Get all rent types
+  const getRentTypes = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/posts/rentTypes`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Get posts
   const getAllPosts = async () => {
     try {
@@ -202,6 +213,17 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
+  const statisticPost = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/admin/posts/statistic`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      return error.response.data
+        ? error.response.data
+        : { success: false, message: error.message };
+    }
+  };
+
   // Context data
   const adminPostContextData = {
     adminPostState,
@@ -218,6 +240,8 @@ const AdminPostContextProvider = ({ children }) => {
     changeFilter,
     getPostsCountByType,
     sendNotification,
+    statisticPost,
+    getRentTypes,
   };
 
   // Return provider

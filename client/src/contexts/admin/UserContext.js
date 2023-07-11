@@ -120,6 +120,17 @@ const UserContextProvider = ({ children }) => {
     }
   };
 
+  const statisticUser = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/admin/users/statistic`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      return error.response.data
+        ? error.response.data
+        : { success: false, message: error.message };
+    }
+  };
+
   // Context data
   const userContextData = {
     userState,
@@ -131,6 +142,7 @@ const UserContextProvider = ({ children }) => {
     changePage,
     changeLimit,
     changeFilter,
+    statisticUser,
   };
 
   // Return provider

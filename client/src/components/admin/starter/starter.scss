@@ -1,0 +1,29 @@
+.starter {
+  &__total {
+    .users-icon,
+    .posts-icon,
+    .types-icon {
+      text-align: center;
+      width: 64px;
+      height: 64px;
+    }
+
+    .detail-button {
+      padding: 2px;
+      display: flex;
+      align-items: center;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #000;
+
+      svg {
+        margin-left: 3px;
+      }
+
+      &:hover {
+        background-color: #ededed;
+      }
+    }
+  }
+}

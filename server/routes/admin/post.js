@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
+const User = require("../../model/User");
 const Post = require("../../model/Post");
 const RentType = require("../../model/RentType");
 
@@ -32,7 +33,7 @@ const verifyAdminToken = require("../../middleware/authAdmin");
 //   "room_pets_allowed",
 //   "security_guard",
 //   "share_home_as_landlord",
-// ]
+// ];
 
 // const fillPrice = (price) => {
 //   let priceText = price.toString();
@@ -56,23 +57,28 @@ const verifyAdminToken = require("../../middleware/authAdmin");
 
 // const fillUtils = (post) => {
 //   let utils = [];
-//   for(let util of utilsArray) {
+//   for (let util of utilsArray) {
 //     if (post[util] === true) {
 //       utils.push(util);
 //     }
 //   }
 
 //   return utils;
-// }
+// };
 
-// @route
+// // @route
 // router.get("/all", verifyAdminToken, async (req, res) => {
 //   try {
 //     const rentTypes = await RentType.find().lean();
 
 //     const testData = Object.values(test);
 
-//     for (let i = 1344; i >= 0; i--) {
+//     for (let i = 274; i >= 0; i--) {
+//       console.log(i);
+//       const user = await User.findOne({
+//         phone: testData[i].data[0].phone_number,
+//       });
+
 //       const newPost = new Post({
 //         title: testData[i].data[0].room_name,
 //         content: testData[i].data[0].notes,
@@ -81,14 +87,11 @@ const verifyAdminToken = require("../../middleware/authAdmin");
 //         fullAddressObject: testData[i].data[0].full_address_object,
 //         location: testData[i].data[0].geocodingApi.location,
 //         utils: fillUtils(testData[i].data[0]),
-//         gender: testData[i].data[0].gender,
+//         gender: "any",
 //         area: testData[i].data[0].room_area,
 //         price: fillPrice(testData[i].data[0].room_price),
 //         images: testData[i].data[0].upload_room_images,
-//         owner: {
-//           name: testData[i].data[0].userInfo[0].name,
-//           phone: testData[i].data[0].phone_number,
-//         },
+//         user: user._id,
 //         state: "active",
 //       });
 
@@ -104,6 +107,43 @@ const verifyAdminToken = require("../../middleware/authAdmin");
 //     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
 //   }
 // });
+
+// @route GET api/admin/users/statistic
+// @route Admin statistic users
+// @route Private
+router.get("/statistic", verifyAdminToken, async (req, res) => {
+  const fullYear = new Date().getFullYear();
+  try {
+    const posts = await Post.find().select("createdAt");
+    let statisticInYear = [];
+    for (let i = 0; i < 12; i++) {
+      let count = 0;
+      let startDate, endDate;
+      if (i !== 11) {
+        startDate = new Date(fullYear, i, 1);
+        endDate = new Date(fullYear, i + 1, 1);
+      } else {
+        startDate = new Date(fullYear, i, 1);
+        endDate = new Date(fullYear + 1, 0, 1);
+      }
+      posts.forEach((post) => {
+        if (post.createdAt >= startDate && post.createdAt < endDate) {
+          count++;
+        }
+      });
+      statisticInYear.push(count);
+    }
+
+    res.json({
+      success: true,
+      total: posts.length,
+      statistic: statisticInYear,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+});
 
 // @route GET api/admin/posts/:id
 // @route Admin get a post

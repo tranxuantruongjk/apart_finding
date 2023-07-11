@@ -34,6 +34,7 @@ const PostsList = () => {
     const btnsList = Object.values(
       document.getElementById("post-selector").childNodes
     );
+    changePage(1);
     changeFilter(e.target.id);
     const remainList = btnsList.filter((btn) => btn !== e.target);
     e.target.classList.add("active");

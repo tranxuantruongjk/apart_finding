@@ -88,7 +88,7 @@ const PostSchema = new Schema (
     },
     capacity: {
       type: Number,
-      required: true,
+      // required: true,
     },
     images: {
       type: Array,
@@ -97,13 +97,10 @@ const PostSchema = new Schema (
     videos: {
       type: Array,
     },
-    owner: {
-      type: Schema.Types.Mixed,
-    },
     user: {
       type: Schema.Types.ObjectId,
       ref: 'users',
-      // required: true,
+      required: true,
     },
     state: {
       type: String,
