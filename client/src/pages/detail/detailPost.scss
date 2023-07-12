@@ -64,6 +64,10 @@
     }
   }
 
+  &__map {
+    margin-bottom: 1rem;
+  }
+
   &__overview,
   &__utils,
   &__description,
@@ -121,6 +125,7 @@
   border-radius: 5px;
   text-align: center;
   padding: 30px 50px;
+  margin-bottom: 1rem;
 
   .title {
     color: white;
@@ -224,7 +229,6 @@
 }
 
 .posts-recommend {
-  margin-top: 1rem;
   .list-group-item {
     padding-left: 0;
     padding-right: 0;

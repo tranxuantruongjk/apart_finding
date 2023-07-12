@@ -64,9 +64,12 @@ function App() {
               <Router>
                 <Header />
                 <Routes>
-                  <Route path="/:type/:id" element={<DetailPost />} />
-                  <Route path="/:type" element={<Home />} />
-                  <Route path="/search" element={<Home />} />
+                  <Route
+                    path="/posts/type/:type/:id"
+                    element={<DetailPost />}
+                  />
+                  <Route path="/posts/type/:type" element={<Home />} />
+                  <Route path="/posts/search" element={<Home />} />
                   <Route path="/login" element={<Auth authRoute="login" />} />
                   <Route
                     path="/register"
@@ -78,10 +81,7 @@ function App() {
                       path="/me/posts"
                       element={<Management manageRoute="posts" />}
                     />
-                    <Route
-                      path="/me/posts/:type/:id/edit"
-                      element={<EditPost />}
-                    />
+                    <Route path="/me/posts/:id/edit" element={<EditPost />} />
                     <Route
                       path="/me/create"
                       element={<Management manageRoute="create" />}

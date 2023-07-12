@@ -33,7 +33,10 @@ const TypesList = () => {
                 <ListGroup.Item key={rentType._id}>
                   <div className="list-item">
                     <IoIosArrowForward className="list-item__icon" />
-                    <Link to={`/${rentType._id}`} className="list-item__text">
+                    <Link
+                      to={`/posts/type/${rentType._id}`}
+                      className="list-item__text"
+                    >
                       {rentType.name}
                     </Link>
                   </div>

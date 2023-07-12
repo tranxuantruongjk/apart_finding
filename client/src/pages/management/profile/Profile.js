@@ -15,7 +15,6 @@ import AlertMessage from "../../../components/alertMessage/AlertMessage";
 import ChangePasswordModal from "../../../components/changePassword/ChangePasswordModal";
 
 import "./profile.scss";
-// import defaultAvatar from "../../../assets/images/default-user.png";
 
 const Profile = () => {
   const {
@@ -76,27 +75,12 @@ const Profile = () => {
       <div className="my-profile__body">
         <AlertMessage info={alert} />
         <Form onSubmit={updateUser}>
-          {/* <Row className="mb-3">
-            <Col md={3}></Col>
-            <Col md={2}>
-              <Form.Label>Ảnh đại diện</Form.Label>
-            </Col>
-            <Col md={4}>
-              <div className="avatar-wrapper">
-                <div className="avatar-inner">
-                    <img src={defaultAvatar} alt="default-avatar" className="avatar-preview" />
-                </div>
-                <Button variant="secondary" className="btn-avatar">Chọn ảnh</Button>
-              </div>
-            </Col>
-            <Col md={3}></Col>
-          </Row> */}
           <Row className="mb-3">
-            <Col md={3}></Col>
-            <Col md={2}>
+            <Col sm={0} md={3}></Col>
+            <Col xs={4} sm={4} md={2}>
               <Form.Label htmlFor="phone">Số điện thoại</Form.Label>
             </Col>
-            <Col md={4}>
+            <Col xs={8} sm={8} md={4}>
               <InputGroup>
                 <InputGroup.Text>
                   <BsTelephoneFill />
@@ -109,14 +93,14 @@ const Profile = () => {
                 />
               </InputGroup>
             </Col>
-            <Col md={3}></Col>
+            <Col sm={0} md={3}></Col>
           </Row>
           <Row className="mb-3">
-            <Col md={3}></Col>
-            <Col md={2}>
+            <Col sm={0} md={3}></Col>
+            <Col xs={4} sm={4} md={2}>
               <Form.Label htmlFor="username">Tên hiển thị</Form.Label>
             </Col>
-            <Col md={4}>
+            <Col xs={8} sm={8} md={4}>
               <InputGroup>
                 <InputGroup.Text>
                   <FaUserAlt />
@@ -129,14 +113,14 @@ const Profile = () => {
                 />
               </InputGroup>
             </Col>
-            <Col md={3}></Col>
+            <Col sm={0} md={3}></Col>
           </Row>
           <Row className="mb-3">
-            <Col md={3}></Col>
-            <Col md={2}>
+            <Col sm={0} md={3}></Col>
+            <Col xs={4} sm={4} md={2}>
               <Form.Label htmlFor="email">Email</Form.Label>
             </Col>
-            <Col md={4}>
+            <Col xs={8} sm={8} md={4}>
               <InputGroup>
                 <InputGroup.Text>
                   <IoMdMail />
@@ -149,17 +133,22 @@ const Profile = () => {
                 />
               </InputGroup>
             </Col>
-            <Col md={3}></Col>
+            <Col sm={0} md={3}></Col>
           </Row>
           <Row className="mb-3">
-            <Col md={3}></Col>
-            <Col md={2}>
+            <Col sm={0} md={3}></Col>
+            <Col xs={4} sm={4} md={2}>
               <Form.Label>Mật khẩu</Form.Label>
             </Col>
-            <Col md={4}>
-              <p className="change-password" onClick={() => setShowChangePasswordModal(true)}>Đổi mật khẩu</p>
+            <Col xs={8} sm={8} md={4}>
+              <p
+                className="change-password"
+                onClick={() => setShowChangePasswordModal(true)}
+              >
+                Đổi mật khẩu
+              </p>
             </Col>
-            <Col md={3}></Col>
+            <Col sm={0} md={3}></Col>
           </Row>
           <Row>
             <Col md={3}></Col>

@@ -1,4 +1,4 @@
-@use "../../assets//scss/style.scss" as *;
+@use "../../assets/scss/style.scss" as *;
 
 .search-bar {
   min-height: 60px;
@@ -23,6 +23,10 @@
     position: relative;
     margin-right: 5px;
     cursor: pointer;
+
+    @include large {
+      margin-bottom: 5px;
+    }
   }
 
   .search-btn {

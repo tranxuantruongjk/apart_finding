@@ -14,8 +14,8 @@ const LoginForm = () => {
   const navigate = useNavigate();
 
   const [loginForm, setLoginForm] = useState({
-    phone: '',
-    password: ''
+    phone: "",
+    password: "",
   });
   const [alert, setAlert] = useState(null);
 
@@ -24,9 +24,9 @@ const LoginForm = () => {
   const onChangeLoginForm = (e) => {
     setLoginForm({
       ...loginForm,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const login = async (e) => {
     e.preventDefault();
@@ -34,26 +34,25 @@ const LoginForm = () => {
     try {
       const loginData = await loginUser(loginForm);
       if (loginData.success) {
-        console.log(loginData);
         if (loginData.user.role === 1) {
-          navigate('/admin');
+          navigate("/admin");
+        } else {
+          navigate("/");
         }
-        else {
-          navigate('/');
-        }
-      }
-      else {
-        setAlert({type: 'danger', message: loginData.message});
+      } else {
+        setAlert({ type: "danger", message: loginData.message });
         setTimeout(() => setAlert(null), 5000);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
   return (
     <>
       <Card>
-        <Card.Header as='h3' className="text-center">ĐĂNG NHẬP</Card.Header>
+        <Card.Header as="h3" className="text-center">
+          ĐĂNG NHẬP
+        </Card.Header>
         <Card.Body>
           <AlertMessage info={alert} />
           <Form className="" onSubmit={login}>
@@ -64,7 +63,7 @@ const LoginForm = () => {
                 placeholder="Số điện thoại"
                 name="phone"
                 required
-                className="mb-2"
+                className="mb-2 mt--5"
                 value={phone}
                 onChange={onChangeLoginForm}
               />
@@ -76,7 +75,7 @@ const LoginForm = () => {
                 placeholder="Mật khẩu"
                 name="password"
                 required
-                className="mb-3"
+                className="mb-3 mt--5"
                 value={password}
                 onChange={onChangeLoginForm}
               />

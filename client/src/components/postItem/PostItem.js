@@ -11,6 +11,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthContext";
 
 import { getDate } from "../../utils/post";
+import avatar from "../../assets/images/default-user.png";
 
 import "./postItem.scss";
 
@@ -42,7 +43,7 @@ const PostItem = ({ post, handleShow }) => {
     <div className="post-item">
       {post && (
         <Row>
-          <Col md={5} className="post-item__thumb">
+          <Col md={12} lg={5} className="post-item__thumb">
             <img
               src={post.images[0]}
               alt="anh"
@@ -60,9 +61,9 @@ const PostItem = ({ post, handleShow }) => {
               ></i>
             </span>
           </Col>
-          <Col md={7}>
+          <Col md={12} lg={7}>
             <Link
-              to={`/${post.rentType}/${post._id}`}
+              to={`/posts/type/${post.rentType}/${post._id}`}
               className="text-decoration-none"
             >
               <h5 className="post-item__title">{post.title}</h5>
@@ -97,6 +98,13 @@ const PostItem = ({ post, handleShow }) => {
             </div>
             <div className="post-item__contact d-flex justify-content-between align-items-center my-2">
               <div className="post-item__contact-name">
+                <img
+                  src={avatar}
+                  className="rounded-circle me-2"
+                  alt="avatar"
+                  width="30"
+                  height="30"
+                />
                 {post.owner ? post.owner.name : post.user.username}
               </div>
               <div className="post-item__contact-phone">
@@ -118,23 +126,27 @@ export const SmallPostItem = ({ post }) => {
     <div className="small-post-item">
       {post && (
         <Row>
-          <Col md={4} sm={4} xs={4} className="small-post-item__thumb">
+          <Col md={4} lg={4} className="small-post-item__thumb">
             <img
               src={post.images[0]}
               alt="anh"
               className="small-post-item__thumb__image"
             />
           </Col>
-          <Col md={8} sm={8} xs={8} className="d-flex flex-column justify-content-between">
+          <Col
+            md={8}
+            lg={8}
+            className="d-flex flex-column justify-content-between small-post-item__content"
+          >
             <Link
               to={
                 post.rentType.$oid
-                  ? `/${post.rentType.$oid}/${post._id.$oid}`
-                  : `/${post.rentType}/${post._id}`
+                  ? `/posts/type/${post.rentType.$oid}/${post._id.$oid}`
+                  : `/posts/type/${post.rentType}/${post._id}`
               }
               className="text-decoration-none"
             >
-              <p className="small-post-item__title">{post.title}</p>
+              <p className="small-post-item__content__title">{post.title}</p>
             </Link>
             <div className="d-flex justify-content-between align-items-center">
               <div className="small-post-item__price">

@@ -1,6 +1,9 @@
+@use "../../assets/scss/style.scss" as *;
+
 .post-item {
   &__thumb {
     position: relative;
+    height: 100%;
 
     &__image {
       height: 240px;
@@ -83,12 +86,16 @@
       width: 100%;
       aspect-ratio: 1;
       border-radius: 5px;
+
+      @include small {
+        height: 260px;
+      }
     }
   }
 
   &__price {
     .price {
-      font-size: 1em;
+      font-size: 0.9em;
     }
   }
 
@@ -100,10 +107,30 @@
     }
   }
 
-  &__title {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+  &__content {
+    padding-left: 0 !important;
+
+    &__title {
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+
+      @include extra-large {
+        margin-bottom: 0;
+      }
+    }
+
+    @include large {
+      padding-left: 12px !important;
+    }
+  }
+
+  @include extra-large {
+    font-size: 0.9rem;
+  }
+
+  @include large {
+    font-size: 1rem !important;
   }
 }

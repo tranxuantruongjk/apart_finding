@@ -30,7 +30,7 @@ import { getDetailDateTime } from "../../utils/post";
 import { utilities } from "../../utils/post";
 
 const DetailPost = () => {
-  const { type, id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const {
@@ -55,12 +55,12 @@ const DetailPost = () => {
 
   useEffect(() => {
     const getDetail = async () => {
-      const response = await getDetailPost(type, id);
+      const response = await getDetailPost(id);
 
       setPost(response.post);
     };
     getDetail();
-  }, [type, id]);
+  }, [id]);
 
   const handleSaveClick = async () => {
     if (!saveRef.current.classList.contains("save-click")) {
@@ -117,7 +117,7 @@ const DetailPost = () => {
         {post && (
           <>
             <Row>
-              <Col md={8}>
+              <Col lg={8}>
                 <div className="detail-post">
                   <div className="detail-post__images">
                     <Carousel>
@@ -204,7 +204,7 @@ const DetailPost = () => {
                       <span>Tiện ích</span>
                     </div>
                     <div className="detail-post__utils-items">
-                      <Row sm={2} md={3} lg={3}>
+                      <Row xs={2} sm={2} md={3} lg={3}>
                         {post.utils.map((util) => {
                           const item = utilities.find((u) => u.id === util);
                           return (
@@ -281,58 +281,64 @@ const DetailPost = () => {
                   </div>
                 </div>
               </Col>
-              <Col md={4}>
-                <div className="contact-info">
-                  <h4 className="title">Liên hệ chủ trọ</h4>
-                  <div className="user-info">
-                    <RxAvatar className="avatar" />
-                    <h5 className="name">
-                      {post.owner ? post.owner.name : post.user.username}
-                    </h5>
-                  </div>
-                  <Button
-                    variant="light"
-                    className="phone"
-                    as="a"
-                    href={`tel:${
-                      post.owner ? post.owner.phone : post.user.phone
-                    }`}
-                  >
-                    <FaPhoneAlt className="phone-icon" />
-                    <span className="phone-number">
-                      {post.owner ? post.owner.phone : post.user.phone}
-                    </span>
-                  </Button>
-                  <Button
-                    variant="light"
-                    ref={saveRef}
-                    onClick={handleSaveClick}
-                    className="post--save"
-                  >
-                    {postSaved}
-                    <span className="save-text">Lưu tin</span>
-                  </Button>
-                </div>
-                <div className="posts-recommend">
-                  <Card>
-                    <Card.Body>
-                      <Card.Title>Gợi ý cho bạn</Card.Title>
-                      <ListGroup variant="flush">
-                        <ListGroup.Item className="border-danger" />
-                        {postsRe &&
-                          postsRe.map((post) => (
-                            <ListGroup.Item
-                              key={post._id.$oid}
-                              className="border-danger"
-                            >
-                              <SmallPostItem post={post} />
-                            </ListGroup.Item>
-                          ))}
-                        <ListGroup.Item></ListGroup.Item>
-                      </ListGroup>
-                    </Card.Body>
-                  </Card>
-                </div>
+              <Col lg={4}>
+                <Row xs={1} sm={2} md={2} lg={1}>
+                  <Col>
+                    <div className="contact-info">
+                      <h4 className="title">Liên hệ chủ trọ</h4>
+                      <div className="user-info">
+                        <RxAvatar className="avatar" />
+                        <h5 className="name">
+                          {post.owner ? post.owner.name : post.user.username}
+                        </h5>
+                      </div>
+                      <Button
+                        variant="light"
+                        className="phone"
+                        as="a"
+                        href={`tel:${
+                          post.owner ? post.owner.phone : post.user.phone
+                        }`}
+                      >
+                        <FaPhoneAlt className="phone-icon" />
+                        <span className="phone-number">
+                          {post.owner ? post.owner.phone : post.user.phone}
+                        </span>
+                      </Button>
+                      <Button
+                        variant="light"
+                        ref={saveRef}
+                        onClick={handleSaveClick}
+                        className="post--save"
+                      >
+                        {postSaved}
+                        <span className="save-text">Lưu tin</span>
+                      </Button>
+                    </div>
+                  </Col>
+                  <Col>
+                    <div className="posts-recommend">
+                      <Card>
+                        <Card.Body>
+                          <Card.Title>Gợi ý cho bạn</Card.Title>
+                          <ListGroup variant="flush">
+                            <ListGroup.Item className="border-danger" />
+                            {postsRe &&
+                              postsRe.map((post) => (
+                                <ListGroup.Item
+                                  key={post._id.$oid}
+                                  className="border-danger"
+                                >
+                                  <SmallPostItem post={post} />
+                                </ListGroup.Item>
+                              ))}
+                            <ListGroup.Item></ListGroup.Item>
+                          </ListGroup>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </Col>
+                </Row>
               </Col>
             </Row>
             <Modal

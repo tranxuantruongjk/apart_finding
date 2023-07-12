@@ -75,18 +75,14 @@ const SearchBar = () => {
 
     try {
       await searchPost(searchForm);
-      navigate("/search");
+      navigate("/posts/search");
     } catch (error) {
       console.log(error);
     }
   };
 
-  // useEffect(() => {
-  //   changePage(1);
-  // }, [pathname]);
-
   useEffect(() => {
-    if (pathname !== "/search") {
+    if (pathname !== "/posts/search") {
       setPage(0);
       setSearchState({
         rentType: {},

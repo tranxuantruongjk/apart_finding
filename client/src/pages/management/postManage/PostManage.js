@@ -92,7 +92,7 @@ const PostManage = () => {
                 <tr key={post._id}>
                   <td>
                     <Link
-                      to={`/${post.rentType}/${post._id}`}
+                      to={`/posts/type/${post.rentType}/${post._id}`}
                       className={
                         post.state !== "active"
                           ? "disabled-link text-decoration-none"
@@ -128,7 +128,7 @@ const PostManage = () => {
                   </td>
                   <td className="text-center">
                     <Link
-                      to={`/me/posts/${post.rentType}/${post._id}/edit`}
+                      to={`/me/posts/${post._id}/edit`}
                       state={post}
                       className={
                         post.state === "pending" ? "disabled-link" : ""

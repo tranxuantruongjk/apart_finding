@@ -43,7 +43,7 @@ const AcreagesList = () => {
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
                         <Link
-                          to="/search"
+                          to="/posts/search"
                           className="list-item__text"
                           onClick={(e) => handleClickAcreageRange(e, acreage)}
                         >
@@ -55,7 +55,7 @@ const AcreagesList = () => {
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
                         <Link
-                          to="/search"
+                          to="/posts/search"
                           className="list-item__text"
                           onClick={(e) =>
                             handleClickAcreageRange(
@@ -77,7 +77,7 @@ const AcreagesList = () => {
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
                       <Link
-                        to="/search"
+                        to="/posts/search"
                         className="list-item__text"
                         onClick={(e) => handleClickAcreageRange(e, acreage)}
                       >
@@ -92,7 +92,7 @@ const AcreagesList = () => {
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
                       <Link
-                        to="/search"
+                        to="/posts/search"
                         className="list-item__text"
                         onClick={(e) =>
                           handleClickAcreageRange(

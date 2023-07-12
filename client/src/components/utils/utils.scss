@@ -29,7 +29,8 @@
   }
 
   .items {
-    .util-item, .gender-item {
+    .util-item,
+    .gender-item {
       font-size: 1.2rem;
       font-weight: 500;
 
@@ -37,12 +38,42 @@
         margin-left: 10px;
       }
     }
+
+    @include large {
+      padding-left: 0;
+      padding-right: 0;
+
+      .util-item,
+      .gender-item {
+        font-size: 1rem;
+        font-weight: 500;
+
+        label {
+          margin-left: 5px;
+        }
+      }
+    }
+
+    @include medium {
+      padding-left: 20px;
+      padding-right: 20px;
+
+      .util-item,
+      .gender-item {
+        font-size: 1.2rem;
+        font-weight: 500;
+
+        label {
+          margin-left: 10px;
+        }
+      }
+    }
   }
 
   .utils-footer {
     text-align: center;
     cursor: pointer;
-    
+
     .btn-add {
       color: $main-color;
     }

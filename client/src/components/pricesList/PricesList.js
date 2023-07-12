@@ -43,7 +43,7 @@ const PricesList = () => {
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
                         <Link
-                          to="/search"
+                          to="/posts/search"
                           className="list-item__text"
                           onClick={(e) => handleClickPriceRange(e, price)}
                         >
@@ -55,7 +55,7 @@ const PricesList = () => {
                       <div className="list-item">
                         <IoIosArrowForward className="list-item__icon" />
                         <Link
-                          to="/search"
+                          to="/posts/search"
                           className="list-item__text"
                           onClick={(e) =>
                             handleClickPriceRange(e, price, PRICE_RANGE[i + 1])
@@ -73,7 +73,7 @@ const PricesList = () => {
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
                       <Link
-                        to="/search"
+                        to="/posts/search"
                         className="list-item__text"
                         onClick={(e) => handleClickPriceRange(e, price)}
                       >
@@ -88,7 +88,7 @@ const PricesList = () => {
                     <div className="list-item">
                       <IoIosArrowForward className="list-item__icon" />
                       <Link
-                        to="/search"
+                        to="/posts/search"
                         className="list-item__text"
                         onClick={(e) =>
                           handleClickPriceRange(e, price, PRICE_RANGE[i + 1])

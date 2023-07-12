@@ -32,6 +32,7 @@ const PostContextProvider = ({ children }) => {
     setRentTypes(response.data.rentTypes);
   };
 
+  // Execute to get all rent types
   useEffect(() => {
     getRentTypes();
   }, []);
@@ -62,7 +63,7 @@ const PostContextProvider = ({ children }) => {
     if (type) {
       try {
         const response = await axios.get(
-          `${apiUrl}/posts/${type}?page=${page}&limit=${limit}`
+          `${apiUrl}/posts/type/${type}?page=${page}&limit=${limit}`
         );
         if (response.data.success) {
           dispatch({
@@ -171,21 +172,10 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
-  // Get posts with videos
-  const getPostsWithVideos = async () => {
-    try {
-      const response = await axios.get(`${apiUrl}/posts/postsWithVideos`);
-      return response.data;
-    } catch (error) {
-      if (error.response.data) return error.response.data;
-      else return { success: false, message: error.message };
-    }
-  };
-
   // Get detail post
-  const getDetailPost = async (typeId, postId) => {
+  const getDetailPost = async (postId) => {
     try {
-      const response = await axios.get(`${apiUrl}/posts/${typeId}/${postId}`);
+      const response = await axios.get(`${apiUrl}/posts/${postId}`);
       if (response.data.success) return response.data;
     } catch (error) {
       if (error.response.data) return error.response.data;
@@ -257,7 +247,6 @@ const PostContextProvider = ({ children }) => {
     getPostsCountByType,
     getSavedPosts,
     getRecommendPosts,
-    getPostsWithVideos,
     getDetailPost,
     updatePost,
     deletePost,

@@ -186,12 +186,13 @@ const EditPost = () => {
   };
 
   const onClickUtil = (e, utilId) => {
-    if (e.target.classList.value.includes("actived")) {
-      e.target.classList.remove("actived");
+    const utilEl = document.querySelector(`button#${utilId}`);
+    if (utilEl.classList.value.includes("actived")) {
+      utilEl.classList.remove("actived");
       const newUtils = utils.filter((util) => util !== utilId);
       setUtils(newUtils);
     } else {
-      e.target.classList.add("actived");
+      utilEl.classList.add("actived");
       setUtils((prev) => [...prev, utilId]);
     }
   };
@@ -315,7 +316,7 @@ const EditPost = () => {
                   </Row>
                 </Card.Header>
                 <Card.Body>
-                  <Row className="mb-2">
+                  <Row xs={1} sm={1} md={1} lg={3} className="mb-2">
                     <Col>
                       <Form.Group>
                         <Form.Label>
@@ -325,6 +326,7 @@ const EditPost = () => {
                           disabled
                           placeholder="Hà Nội"
                           className="mt--5"
+                          required
                         />
                       </Form.Group>
                     </Col>
@@ -338,6 +340,7 @@ const EditPost = () => {
                           onChange={onChangeDistrict}
                           className="mt--5"
                           value={districtId}
+                          required
                         >
                           <option value="">--Quận/Huyện--</option>
                           {districts.map((district) => (
@@ -358,6 +361,7 @@ const EditPost = () => {
                           onChange={onChangeWard}
                           className="mt--5"
                           value={wardId}
+                          required
                         >
                           <option value="">--Phường/Xã--</option>
                           {wards.map((ward) => (
@@ -369,7 +373,7 @@ const EditPost = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Row className="mb-2">
+                  <Row xs={1} sm={1} md={1} lg={2} className="mb-2">
                     <Col>
                       <Form.Group>
                         <Form.Label>
@@ -383,6 +387,7 @@ const EditPost = () => {
                           placeholder="Phố Lê Thanh Nghị hoặc Đường Giải Phóng"
                           className="mt--5"
                           onKeyUp={handleKeyUpStreetName}
+                          required
                         />
                       </Form.Group>
                     </Col>
@@ -399,6 +404,7 @@ const EditPost = () => {
                           placeholder="42 hoặc Ngõ 12"
                           className="mt--5"
                           onKeyUp={handleKeyUpHouseNumber}
+                          required
                         />
                       </Form.Group>
                     </Col>
@@ -425,7 +431,7 @@ const EditPost = () => {
                   </Row>
                 </Card.Header>
                 <Card.Body>
-                  <Row className="mb-2">
+                  <Row sm={1} className="mb-2">
                     <Col md={6}>
                       <Form.Group>
                         <Form.Label>
@@ -436,6 +442,7 @@ const EditPost = () => {
                           onChange={onChangePostForm}
                           className="mt--5"
                           value={rentType}
+                          required
                         >
                           <option value="">--Chọn loại chuyên mục--</option>
                           {rentTypes.map((type) => (
@@ -457,8 +464,12 @@ const EditPost = () => {
                         value={title}
                         onChange={onChangePostForm}
                         className="mt--5"
-                        placeholder="Tiêu đề đăng tin. Gợi ý: Loại phòng + Diện tích + Tên Đường/Phố"
+                        required
                       />
+                      <Form.Text className="text-muted">
+                        Tiêu đề đăng tin. Gợi ý: Loại phòng + Diện tích + Tên
+                        Đường/Phố
+                      </Form.Text>
                     </Form.Group>
                   </Row>
                   <Row className="mb-2">
@@ -493,9 +504,14 @@ const EditPost = () => {
                         value={content}
                         onChange={onChangePostForm}
                         className="mt--5"
-                        placeholder="Điền thêm các thông tin các cho bài đăng: nhà vệ sinh trong ngoài; giá điện, nước, wifi; trọ gần khu vực nào: trường học, chợ, bệnh viện,.. và một số thông tin khác..."
+                        required
                       />
                     </Form.Group>
+                    <Form.Text>
+                      Điền thêm các thông tin các cho bài đăng: nhà vệ sinh
+                      trong ngoài; giá điện, nước, wifi; trọ gần khu vực nào:
+                      trường học, chợ, bệnh viện,.. và một số thông tin khác...
+                    </Form.Text>
                   </Row>
                   <Row className="mb-2">
                     <Col>
@@ -524,7 +540,7 @@ const EditPost = () => {
                       </Form.Group>
                     </Col>
                   </Row>
-                  <Row className="mb-2">
+                  <Row xs={1} sm={1} lg={2} className="mb-2">
                     <Col>
                       <Form.Group>
                         <Form.Label>
@@ -536,6 +552,7 @@ const EditPost = () => {
                           onChange={onChangePostForm}
                           className="mt--5"
                           value={gender}
+                          required
                         >
                           <option value="any">-- Tất cả --</option>
                           <option value="male">Nam</option>
@@ -544,21 +561,19 @@ const EditPost = () => {
                       </Form.Group>
                     </Col>
                     <Col>
-                      <Form.Label>
-                        Sức chứa <span className="text-danger">*</span>
-                      </Form.Label>
+                      <Form.Label>Sức chứa</Form.Label>
                       <InputGroup className="mt--5">
                         <Form.Control
                           name="capacity"
                           value={capacity}
                           onChange={onChangePostForm}
-                          placeholder="Điền số. VD: 2"
                         />
                         <InputGroup.Text>người/phòng</InputGroup.Text>
                       </InputGroup>
+                      <Form.Text>Điền số. VD: 2</Form.Text>
                     </Col>
                   </Row>
-                  <Row className="mb-2">
+                  <Row xs={1} sm={1} lg={2} className="mb-2">
                     <Col>
                       <Form.Label>
                         Giá cho thuê <span className="text-danger">*</span>
@@ -568,10 +583,11 @@ const EditPost = () => {
                           name="price"
                           value={price}
                           onChange={onChangePostForm}
-                          placeholder="Điền số. VD: 2000000"
+                          required
                         />
                         <InputGroup.Text>VND</InputGroup.Text>
                       </InputGroup>
+                      <Form.Text>Điền số. VD: 2000000</Form.Text>
                     </Col>
                     <Col>
                       <Form.Group>
@@ -583,10 +599,11 @@ const EditPost = () => {
                             name="area"
                             value={area}
                             onChange={onChangePostForm}
-                            placeholder="Điền số. VD: 20"
+                            required
                           />
                           <InputGroup.Text>m2</InputGroup.Text>
                         </InputGroup>
+                        <Form.Text>Điền số. VD: 20</Form.Text>
                       </Form.Group>
                     </Col>
                   </Row>
@@ -598,7 +615,7 @@ const EditPost = () => {
               <Row className="mb-2">
                 <FileUpload type="image" uploadHandler={uploadHandler} />
               </Row>
-              <Row className="mb-2" md={4}>
+              <Row className="mb-2" xs={3} sm={3} md={3} lg={4}>
                 {images &&
                   images.map((image) => (
                     <FileItem
@@ -615,7 +632,7 @@ const EditPost = () => {
               <Row className="mb-2">
                 <FileUpload type="video" uploadHandler={uploadHandler} />
               </Row>
-              <Row className="mb-2" md={4}>
+              <Row className="mb-2" xs={3} sm={3} md={3} lg={4}>
                 {videos &&
                   videos.map((video) => (
                     <FileItem
@@ -633,7 +650,7 @@ const EditPost = () => {
               </Row>
             </Col>
             <Col md={4}>
-              <Row className="mb-3">
+              <Row className="post-map">
                 <div id="maps" style={{ height: "300px", width: "100%" }}>
                   <iframe
                     title="frame-new-post-address"

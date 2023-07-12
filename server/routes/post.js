@@ -195,26 +195,6 @@ router.post("/search", async (req, res) => {
   }
 });
 
-// @route GET api/posts/
-// @route Get all posts
-// @access Public
-router.get("/postsWithVideos", async (req, res) => {
-  try {
-    const posts = await Post.find().sort("-createdAt").lean();
-
-    const postsFilter = posts.filter(
-      (post) => post.videos && post.videos.length > 0
-    );
-
-    const slicePosts = postsFilter.slice(0, 10);
-
-    res.json({ success: true, posts: slicePosts });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
-  }
-});
-
 // @route GET api/posts/:userId/posts
 // @route Get all posts which userId's user posted
 // @access Private
@@ -266,7 +246,7 @@ router.get("/:userId/savedPosts", verifyToken, async (req, res) => {
 // @route GET api/posts/:type
 // @route Get all posts which have rentType = type
 // @access Public
-router.get("/:type", async (req, res) => {
+router.get("/type/:type", async (req, res) => {
   try {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
@@ -288,7 +268,7 @@ router.get("/:type", async (req, res) => {
 // @route GET api/posts/:type/:id
 // @route Get a post
 // @access Public
-router.get("/:type/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
       .populate("user", ["username", "phone"])

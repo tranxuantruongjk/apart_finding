@@ -50,22 +50,20 @@ const AuthContextProvider = ({ children }) => {
     }
   };
 
-  //
+  // Load user
   useEffect(() => {
     loadUser();
   }, []);
 
-  //
+  // Set socket
   useEffect(() => {
     setSocket(io("http://localhost:5001"));
   }, []);
 
-  //
+  // Socket event add user
   useEffect(() => {
     user && socket?.emit("addUser", user._id);
   }, [socket, user]);
-
-  // console.log(user);
 
   // Get information of a user
   const getUser = async (id) => {
@@ -91,6 +89,9 @@ const AuthContextProvider = ({ children }) => {
         );
 
       const res = await loadUser();
+      if (res.user.role === 1) {
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+      }
       return { ...response.data, user: res.user };
     } catch (error) {
       if (error.response.data) return error.response.data;
@@ -98,7 +99,7 @@ const AuthContextProvider = ({ children }) => {
     }
   };
   // User registers
-  const registerUser = async (registerForm, role = "user") => {
+  const registerUser = async (registerForm) => {
     try {
       const response = await axios.post(
         `${apiUrl}/auth/register`,
@@ -140,7 +141,6 @@ const AuthContextProvider = ({ children }) => {
 
   // Change password
   const changePassword = async (userId, changePasswordForm) => {
-    console.log(changePasswordForm);
     try {
       const response = await axios.put(
         `${apiUrl}/auth/${userId}/changePassword`,

@@ -142,12 +142,13 @@ const NewPost = () => {
   };
 
   const onClickUtil = (e, utilId) => {
-    if (e.target.classList.value.includes("actived")) {
-      e.target.classList.remove("actived");
+    const utilEl = document.querySelector(`button#${utilId}`);
+    if (utilEl.classList.value.includes("actived")) {
+      utilEl.classList.remove("actived");
       const newUtils = utils.filter((util) => util !== utilId);
       setUtils(newUtils);
     } else {
-      e.target.classList.add("actived");
+      utilEl.classList.add("actived");
       setUtils((prev) => [...prev, utilId]);
     }
   };
@@ -285,7 +286,7 @@ const NewPost = () => {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <Row className="mb-2">
+                <Row xs={1} sm={1} md={1} lg={3} className="mb-2">
                   <Col>
                     <Form.Group>
                       <Form.Label>
@@ -295,6 +296,7 @@ const NewPost = () => {
                         disabled
                         placeholder="Hà Nội"
                         className="mt--5"
+                        required
                       />
                     </Form.Group>
                   </Col>
@@ -308,6 +310,7 @@ const NewPost = () => {
                         onChange={onChangeDistrict}
                         className="mt--5"
                         value={districtId}
+                        required
                       >
                         <option value="">--Quận/Huyện--</option>
                         {districts.map((district) => (
@@ -328,6 +331,7 @@ const NewPost = () => {
                         onChange={onChangeWard}
                         className="mt--5"
                         value={wardId}
+                        required
                       >
                         <option value="">--Phường/Xã--</option>
                         {wards.map((ward) => (
@@ -339,7 +343,7 @@ const NewPost = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row className="mb-2">
+                <Row xs={1} sm={1} md={1} lg={2} className="mb-2">
                   <Col>
                     <Form.Group>
                       <Form.Label>
@@ -350,26 +354,32 @@ const NewPost = () => {
                         name="address"
                         value={streetName}
                         onChange={onChangeStreetName}
-                        placeholder="Phố Lê Thanh Nghị hoặc Đường Giải Phóng"
                         className="mt--5"
                         onKeyUp={handleKeyUpStreetName}
+                        required
                       />
+                      <Form.Text className="text-muted">
+                        VD: Phố Lê Thanh Nghị hoặc Đường Giải Phóng
+                      </Form.Text>
                     </Form.Group>
                   </Col>
                   <Col>
                     <Form.Group>
                       <Form.Label>
-                        Số nhà <span className="text-danger">*</span>
+                        Số nhà/Ngõ <span className="text-danger">*</span>
                       </Form.Label>
                       <Form.Control
                         type="text"
                         name="address"
                         value={houseNumber}
                         onChange={onChangeHouseNumber}
-                        placeholder="42 hoặc Ngõ 12"
                         className="mt--5"
                         onKeyUp={handleKeyUpHouseNumber}
+                        required
                       />
+                      <Form.Text className="text-muted">
+                        VD: 42 hoặc Ngõ 12
+                      </Form.Text>
                     </Form.Group>
                   </Col>
                 </Row>
@@ -395,7 +405,7 @@ const NewPost = () => {
                 </Row>
               </Card.Header>
               <Card.Body>
-                <Row className="mb-2">
+                <Row sm={1} className="mb-2">
                   <Col md={6}>
                     <Form.Group>
                       <Form.Label>
@@ -406,6 +416,7 @@ const NewPost = () => {
                         onChange={onChangePostForm}
                         className="mt--5"
                         value={rentType}
+                        required
                       >
                         <option value="">--Chọn loại chuyên mục--</option>
                         {rentTypes.map((type) => (
@@ -427,8 +438,12 @@ const NewPost = () => {
                       value={title}
                       onChange={onChangePostForm}
                       className="mt--5"
-                      placeholder="Tiêu đề đăng tin. Gợi ý: Loại phòng + Diện tích + Tên Đường/Phố"
+                      required
                     />
+                    <Form.Text className="text-muted">
+                      Tiêu đề đăng tin. Gợi ý: Loại phòng + Diện tích + Tên
+                      Đường/Phố
+                    </Form.Text>
                   </Form.Group>
                 </Row>
                 <Row className="mb-2">
@@ -441,6 +456,7 @@ const NewPost = () => {
                         <Button
                           variant="light"
                           className="btn-util"
+                          id={util.id}
                           onClick={(e) => onClickUtil(e, util.id)}
                         >
                           {util.icon}
@@ -462,9 +478,14 @@ const NewPost = () => {
                       value={content}
                       onChange={onChangePostForm}
                       className="mt--5"
-                      placeholder="Điền thêm các thông tin các cho bài đăng: nhà vệ sinh trong ngoài; giá điện, nước, wifi; trọ gần khu vực nào: trường học, chợ, bệnh viện,.. và một số thông tin khác..."
+                      required
                     />
                   </Form.Group>
+                  <Form.Text>
+                    Điền thêm các thông tin các cho bài đăng: nhà vệ sinh trong
+                    ngoài; giá điện, nước, wifi; trọ gần khu vực nào: trường
+                    học, chợ, bệnh viện,.. và một số thông tin khác...
+                  </Form.Text>
                 </Row>
                 <Row className="mb-2">
                   <Col>
@@ -492,7 +513,7 @@ const NewPost = () => {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row className="mb-2">
+                <Row xs={1} sm={1} lg={2} className="mb-2">
                   <Col>
                     <Form.Group>
                       <Form.Label>
@@ -504,6 +525,7 @@ const NewPost = () => {
                         onChange={onChangePostForm}
                         className="mt--5"
                         value={gender}
+                        required
                       >
                         <option value="any">-- Tất cả --</option>
                         <option value="male">Nam</option>
@@ -512,21 +534,19 @@ const NewPost = () => {
                     </Form.Group>
                   </Col>
                   <Col>
-                    <Form.Label>
-                      Sức chứa <span className="text-danger">*</span>
-                    </Form.Label>
+                    <Form.Label>Sức chứa</Form.Label>
                     <InputGroup className="mt--5">
                       <Form.Control
                         name="capacity"
                         value={capacity}
                         onChange={onChangePostForm}
-                        placeholder="Điền số. VD: 2"
                       />
                       <InputGroup.Text>người/phòng</InputGroup.Text>
                     </InputGroup>
+                    <Form.Text>Điền số. VD: 2</Form.Text>
                   </Col>
                 </Row>
-                <Row className="mb-2">
+                <Row xs={1} sm={1} lg={2} className="mb-2">
                   <Col>
                     <Form.Label>
                       Giá cho thuê <span className="text-danger">*</span>
@@ -536,10 +556,11 @@ const NewPost = () => {
                         name="price"
                         value={price}
                         onChange={onChangePostForm}
-                        placeholder="Điền số. VD: 2000000"
+                        required
                       />
                       <InputGroup.Text>VND</InputGroup.Text>
                     </InputGroup>
+                    <Form.Text>Điền số. VD: 2000000</Form.Text>
                   </Col>
                   <Col>
                     <Form.Group>
@@ -551,22 +572,25 @@ const NewPost = () => {
                           name="area"
                           value={area}
                           onChange={onChangePostForm}
-                          placeholder="Điền số. VD: 20"
+                          required
                         />
                         <InputGroup.Text>m2</InputGroup.Text>
                       </InputGroup>
+                      <Form.Text>Điền số. VD: 20</Form.Text>
                     </Form.Group>
                   </Col>
                 </Row>
               </Card.Body>
             </Card>
             <Row className="mb-2">
-              <h3>Hình ảnh</h3>
+              <h3>
+                Hình ảnh <span className="text-danger">*</span>
+              </h3>
             </Row>
             <Row className="mb-2">
               <FileUpload type="image" uploadHandler={uploadHandler} />
             </Row>
-            <Row className="mb-2" md={4}>
+            <Row className="mb-2" xs={3} sm={3} md={3} lg={4}>
               <FileList type="image" files={files} removeFile={removeFile} />
             </Row>
             <Row className="mb-2">
@@ -575,7 +599,7 @@ const NewPost = () => {
             <Row className="mb-2">
               <FileUpload type="video" uploadHandler={uploadHandler} />
             </Row>
-            <Row className="mb-2" md={4}>
+            <Row className="mb-2" xs={3} sm={3} md={3} lg={4}>
               <FileList type="video" files={files} removeFile={removeFile} />
             </Row>
             <Row className="me-1">
@@ -585,7 +609,7 @@ const NewPost = () => {
             </Row>
           </Col>
           <Col md={4}>
-            <Row className="mb-3">
+            <Row className="post-map">
               <div id="maps" style={{ height: "300px", width: "100%" }}>
                 <iframe
                   title="frame-new-post-address"

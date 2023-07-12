@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import { Link } from "react-router-dom";
@@ -13,6 +13,7 @@ import { BsBookmarkHeartFill } from "react-icons/bs";
 import { BiUserCircle } from "react-icons/bi";
 import { TbLogout } from "react-icons/tb";
 import { GrNotification } from "react-icons/gr";
+import { LuLayoutDashboard } from "react-icons/lu";
 
 import "./header.scss";
 
@@ -60,8 +61,8 @@ const Header = () => {
         <></>
       ) : (
         <div className="shadow">
-          <Container className="d-flex justify-content-between header">
-            <div className="header__logo">
+          <Container className="d-flex justify-content-between align-items-center header">
+            <div className="header__logo d-flex justify-content-between">
               <Link to={"/"} className="text-decoration-none">
                 <Logo />
               </Link>
@@ -74,17 +75,18 @@ const Header = () => {
                     title={
                       <div className="icon-notification">
                         <GrNotification className="notification" />
-                        {notifications && notifications.filter(
-                          (notification) => notification.seen === false
-                        ).length > 0 && (
-                          <div className="counter">
-                            {
-                              notifications.filter(
-                                (notification) => notification.seen === false
-                              ).length
-                            }
-                          </div>
-                        )}
+                        {notifications &&
+                          notifications.filter(
+                            (notification) => notification.seen === false
+                          ).length > 0 && (
+                            <div className="counter">
+                              {
+                                notifications.filter(
+                                  (notification) => notification.seen === false
+                                ).length
+                              }
+                            </div>
+                          )}
                       </div>
                     }
                     className="nav-notification"
@@ -102,15 +104,25 @@ const Header = () => {
                             >
                               {note.action === "accept_post" && (
                                 <span>
-                                  Bài viết <b>{note.title ? note.title : note.postId.title}</b> đã được duyệt và
-                                  đăng lên trang chủ
+                                  Bài viết{" "}
+                                  <b>
+                                    {note.title
+                                      ? note.title
+                                      : note.postId.title}
+                                  </b>{" "}
+                                  đã được duyệt và đăng lên trang chủ
                                 </span>
                               )}
                               {note.action === "reject_post" && (
                                 <span>
-                                  Bài viết <b>{note.title ? note.title : note.postId.title}</b> chưa được đăng do
-                                  vi phạm quy định đăng tin. Hãy xem lý do và
-                                  sửa tin
+                                  Bài viết{" "}
+                                  <b>
+                                    {note.title
+                                      ? note.title
+                                      : note.postId.title}
+                                  </b>{" "}
+                                  chưa được đăng do vi phạm quy định đăng tin.
+                                  Hãy xem lý do và sửa tin
                                 </span>
                               )}
                             </NavDropdown.Item>
@@ -124,7 +136,7 @@ const Header = () => {
                       </NavDropdown.Item>
                     )}
                   </NavDropdown>
-                  <p className="mb-0 me-2">
+                  <p className="mb-0 me-2 nav-greet">
                     Xin chào,
                     <Link
                       to={"/me/profile"}
@@ -133,7 +145,10 @@ const Header = () => {
                       {user.username}
                     </Link>
                   </p>
-                  <NavDropdown className="me-4">
+                  <NavDropdown
+                    title={<LuLayoutDashboard className="icon-dashboard" />}
+                    className="me-4 nav-dashboard"
+                  >
                     <NavDropdown.Item className="my-item">
                       <Link to="/me/posts" className="my-posts">
                         <LuClipboardList />

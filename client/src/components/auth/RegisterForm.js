@@ -15,16 +15,16 @@ const RegisterForm = () => {
 
   // State
   const [registerForm, setRegisterForm] = useState({
-    username: '',
-    phone: '',
-    email: '',
-    password: '',
-    confirmPassword: ''
+    username: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [alert, setAlert] = useState(null);
 
-  const {username, phone, email, password, confirmPassword} = registerForm;
+  const { username, phone, email, password, confirmPassword } = registerForm;
 
   const onChangeRegisterForm = (e) => {
     setRegisterForm({
@@ -37,7 +37,7 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (password !== confirmPassword) {
-      setAlert({type: 'danger', message: 'Mật khẩu không khớp'});
+      setAlert({ type: "danger", message: "Mật khẩu không khớp" });
       setTimeout(() => setAlert(null), 5000);
       return;
     }
@@ -45,10 +45,9 @@ const RegisterForm = () => {
     try {
       const registerData = await registerUser(registerForm);
 
-      if (registerData.success) 
-      navigate('/');
+      if (registerData.success) navigate("/");
       else {
-        setAlert({type: 'danger', message: registerData.message});
+        setAlert({ type: "danger", message: registerData.message });
         setTimeout(() => setAlert(null), 5000);
       }
     } catch (error) {
@@ -63,28 +62,32 @@ const RegisterForm = () => {
           ĐĂNG KÝ
         </Card.Header>
         <Card.Body>
-        <AlertMessage info={alert} />
+          <AlertMessage info={alert} />
           <Form className="" onSubmit={register}>
             <Form.Group>
-              <Form.Label>HỌ TÊN <span className="text-danger">*</span></Form.Label>
+              <Form.Label>
+                HỌ TÊN <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Họ và tên"
                 name="username"
                 required
-                className="mb-2"
+                className="mb-2 mt--5"
                 value={username}
                 onChange={onChangeRegisterForm}
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>SỐ ĐIỆN THOẠI <span className="text-danger">*</span></Form.Label>
+              <Form.Label>
+                SỐ ĐIỆN THOẠI <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Số điện thoại"
                 name="phone"
                 required
-                className="mb-2"
+                className="mb-2 mt--5"
                 value={phone}
                 onChange={onChangeRegisterForm}
               />
@@ -95,31 +98,35 @@ const RegisterForm = () => {
                 type="text"
                 placeholder="Email"
                 name="email"
-                className="mb-2"
+                className="mb-2 mt--5"
                 value={email}
                 onChange={onChangeRegisterForm}
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>MẬT KHẨU <span className="text-danger">*</span></Form.Label>
+              <Form.Label>
+                MẬT KHẨU <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Mật khẩu"
                 name="password"
                 required
-                className="mb-2"
+                className="mb-2 mt--5"
                 value={password}
                 onChange={onChangeRegisterForm}
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label>XÁC NHẬN MẬT KHẨU <span className="text-danger">*</span></Form.Label>
+              <Form.Label>
+                XÁC NHẬN MẬT KHẨU <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
                 type="password"
                 placeholder="Nhập lại mật khẩu"
                 name="confirmPassword"
                 required
-                className="mb-3"
+                className="mb-3 mt--5"
                 value={confirmPassword}
                 onChange={onChangeRegisterForm}
               />

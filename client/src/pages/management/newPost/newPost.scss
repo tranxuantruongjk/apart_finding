@@ -2,6 +2,7 @@
 
 .new-post {
   .post-note {
+    margin-top: 1rem;
     color: #856404;
     background-color: #fff3cd !important;
 
@@ -68,6 +69,12 @@
         filter: invert(16%) sepia(100%) saturate(2704%) hue-rotate(187deg)
           brightness(97%) contrast(99%);
       }
+    }
+  }
+
+  .post-map {
+    @include medium {
+      display: none;
     }
   }
 }

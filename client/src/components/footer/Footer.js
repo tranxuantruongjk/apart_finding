@@ -21,8 +21,8 @@ const Footer = () => {
   return (
     <div className="footer">
       <div className="container footer-info">
-        <Row>
-          <Col className="d-flex align-items-center justify-content-center">
+        <Row xs={2} md={4}>
+          <Col className="d-flex align-items-center justify-content-center mb-4">
             <Link
               to={user ? (user.role === 0 ? "/" : "/admin") : "/"}
               className="text-decoration-none"
@@ -33,14 +33,14 @@ const Footer = () => {
               </div>
             </Link>
           </Col>
-          <Col className="d-flex flex-column">
+          <Col className="d-flex flex-column mb-4">
             <div className="col-header">VỀ CHÚNG TÔI</div>
             <Link>Giới thiệu</Link>
             <Link>Quy chế hoạt động</Link>
             <Link>Quy định sử dụng</Link>
             <Link>Chính sách bảo mật</Link>
           </Col>
-          <Col className="d-flex flex-column">
+          <Col className="d-flex flex-column mb-4">
             <div className="col-header">HỆ THỐNG</div>
             {rentTypes &&
               rentTypes.map((rentType) => (
@@ -49,16 +49,16 @@ const Footer = () => {
                   to={
                     user
                       ? user.role === 0
-                        ? `${rentType._id}`
+                        ? `/posts/type/${rentType._id}`
                         : "/admin/postsList"
-                      : `${rentType._id}`
+                      : `/posts/type/${rentType._id}`
                   }
                 >
                   {rentType.name}
                 </Link>
               ))}
           </Col>
-          <Col className="d-flex flex-column">
+          <Col className="d-flex flex-column mb-4">
             <div className="col-header">KẾT NỐI VỚI CHÚNG TÔI</div>
             <div className="hotline">Hotline: 0987654321</div>
             <div className="email">Email: trosv@gmail.com</div>
