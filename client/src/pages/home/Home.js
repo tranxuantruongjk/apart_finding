@@ -46,9 +46,9 @@ const Home = () => {
   }, [type, pathname, page]);
 
   return (
-    <div className="home bg-color pb-4">
+    <div className="home pb-4">
       <HomeTop />
-      <div className="container main-home mt-3">
+      <div className="container main-home mt-2">
         <Row>
           {pathname === "/" ? (
             <>

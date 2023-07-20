@@ -6,6 +6,8 @@ import NewPost from "./newPost/NewPost";
 import Profile from "./profile/Profile";
 import SavedPost from "./savedPost/SavedPost";
 
+import "./management.scss";
+
 const Management = ({ manageRoute }) => {
   const { pathname } = useLocation();
   let body;
@@ -34,30 +36,32 @@ const Management = ({ manageRoute }) => {
   }, [pathname]);
 
   return (
-    <div className="container mt-3 pb-4">
-      <ul className="nav nav-tabs">
-        <li className="nav-item">
-          <Link className="nav-link manage-link" to="/me/posts">
-            Quản lý tin đăng
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link manage-link" to="/me/profile">
-            Thông tin tài khoản
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link manage-link" to="/me/create">
-            Đăng tin mới
-          </Link>
-        </li>
-        <li className="nav-item">
-          <Link className="nav-link manage-link" to="/me/savedPosts">
-            Tin đã lưu
-          </Link>
-        </li>
-      </ul>
-      {body}
+    <div className="management">
+      <div className="container pb-4">
+        <ul className="nav nav-tabs">
+          <li className="nav-item">
+            <Link className="nav-link manage-link" to="/me/posts">
+              Quản lý tin đăng
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link manage-link" to="/me/profile">
+              Thông tin tài khoản
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link manage-link" to="/me/create">
+              Đăng tin mới
+            </Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link manage-link" to="/me/savedPosts">
+              Tin đã lưu
+            </Link>
+          </li>
+        </ul>
+        {body}
+      </div>
     </div>
   );
 };

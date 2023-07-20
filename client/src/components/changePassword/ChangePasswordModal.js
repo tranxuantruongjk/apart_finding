@@ -21,6 +21,24 @@ const ChangePasswordModal = ({ show, setShow, userId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (oldPassword.length < 6) {
+      setAlert({
+        type: "danger",
+        message: "Mật khẩu cũ phải gồm 6 kí tự trở lên",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setAlert({
+        type: "danger",
+        message: "Mật khẩu mới phải gồm 6 kí tự trở lên",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
     if (newPassword !== reEnterNewPassword) {
       setAlert({ type: "danger", message: "Mật khẩu mới không khớp" });
       setTimeout(() => setAlert(null), 5000);

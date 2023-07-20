@@ -1,149 +1,161 @@
 @use "../../assets/scss/style.scss" as *;
 
 .header {
-  padding: 5px 0px;
-  position: relative;
+  height: $header-height;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #fff;
 
-  &__logo {
-    outline: unset;
+  &__wrap {
+    height: 100%;
+    padding: 5px 0px;
+
+    &__logo {
+      outline: unset;
+    }
+
+    &__btn {
+      .btn__login,
+      .btn__logout,
+      .btn__signup,
+      .my-posts,
+      .my-savedPosts,
+      .my-profile {
+        text-decoration: none;
+        color: #000;
+
+        &:hover {
+          color: $main-color;
+        }
+      }
+
+      .btn__logout,
+      .my-posts,
+      .my-savedPosts,
+      .my-profile {
+        display: flex;
+        align-items: center;
+
+        svg {
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+
+        span {
+          margin-left: 5px;
+        }
+      }
+
+      .nav-notification {
+        .dropdown-toggle::after {
+          display: none;
+        }
+
+        .icon-notification {
+          position: relative;
+
+          .notification {
+            width: 1.3rem;
+            height: 1.3rem;
+            margin-right: 10px;
+          }
+
+          .counter {
+            width: 18px;
+            height: 18px;
+            background-color: red;
+            border-radius: 50%;
+            padding: 5px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -5px;
+            right: 3px;
+            color: white;
+          }
+        }
+
+        .dropdown-menu {
+          max-width: 400px;
+          min-width: 400px;
+          max-height: 400px;
+          overflow: auto;
+
+          .dropdown-item {
+            white-space: pre-wrap;
+          }
+
+          div:last-child {
+            hr {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .nav-greet {
+        @include medium {
+          display: none;
+        }
+      }
+
+      .nav-dashboard {
+        .dropdown-toggle::after {
+          display: none;
+        }
+
+        .icon-dashboard {
+          width: 1.3rem;
+          height: 1.3rem;
+        }
+
+        .my-item {
+          background-color: #fff !important;
+        }
+      }
+
+      .auth {
+        display: flex;
+        align-items: center;
+
+        .auth-split {
+          border-right: 2px solid #b4b7b8;
+          display: inline-block;
+          height: 20px;
+        }
+
+        .btn__login,
+        .btn__signup {
+          font-weight: 500;
+        }
+      }
+
+      .btn__post button {
+        background-color: $actived-color;
+        font-weight: 600;
+        border: none;
+        outline: none;
+
+        &:hover {
+          background-color: #f20a32;
+        }
+
+        &:active {
+          background-color: $actived-color;
+        }
+      }
+    }
   }
 
   @include extra-large {
     nav {
       position: absolute;
       left: 60px;
-    }
-  }
-
-  .btn__login,
-  .btn__logout,
-  .btn__signup,
-  .my-posts,
-  .my-savedPosts,
-  .my-profile {
-    text-decoration: none;
-    color: #000;
-
-    &:hover {
-      color: $main-color;
-    }
-  }
-
-  .btn__logout,
-  .my-posts,
-  .my-savedPosts,
-  .my-profile {
-    display: flex;
-    align-items: center;
-
-    svg {
-      width: 1.1rem;
-      height: 1.1rem;
-    }
-
-    span {
-      margin-left: 5px;
-    }
-  }
-
-  .auth {
-    display: flex;
-    align-items: center;
-
-    .auth-split {
-      border-right: 2px solid #b4b7b8;
-      display: inline-block;
-      height: 20px;
-    }
-
-    .btn__login,
-    .btn__signup {
-      font-weight: 500;
-    }
-  }
-
-  .btn__post button {
-    background-color: $actived-color;
-    font-weight: 600;
-    border: none;
-    outline: none;
-
-    &:hover {
-      background-color: #f20a32;
-    }
-
-    &:active {
-      background-color: $actived-color;
-    }
-  }
-
-  .my-item {
-    background-color: #fff !important;
-  }
-
-  .nav-notification {
-    .dropdown-toggle::after {
-      display: none;
-    }
-
-    .icon-notification {
-      position: relative;
-
-      .notification {
-        width: 1.3rem;
-        height: 1.3rem;
-        margin-right: 10px;
-      }
-
-      .counter {
-        width: 18px;
-        height: 18px;
-        background-color: red;
-        border-radius: 50%;
-        padding: 5px;
-        font-size: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: absolute;
-        top: -5px;
-        right: 3px;
-        color: white;
-      }
-    }
-
-    .dropdown-menu {
-      max-width: 400px;
-      min-width: 400px;
-      max-height: 400px;
-      overflow: auto;
-
-      .dropdown-item {
-        white-space: pre-wrap;
-      }
-
-      div:last-child {
-        hr {
-          display: none;
-        }
-      }
-    }
-  }
-
-  .nav-dashboard {
-    .dropdown-toggle::after {
-      display: none;
-    }
-
-    .icon-dashboard {
-      width: 1.3rem;
-      height: 1.3rem;
-    }
-  }
-
-  .nav-greet {
-    @include medium {
-      display: none;
     }
   }
 }

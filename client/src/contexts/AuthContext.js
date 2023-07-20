@@ -89,9 +89,9 @@ const AuthContextProvider = ({ children }) => {
         );
 
       const res = await loadUser();
-      if (res.user.role === 1) {
-        localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
-      }
+      // if (res.user.role === 1) {
+      //   localStorage.removeItem(LOCAL_STORAGE_TOKEN_NAME);
+      // }
       return { ...response.data, user: res.user };
     } catch (error) {
       if (error.response.data) return error.response.data;

@@ -31,6 +31,25 @@ const LoginForm = () => {
   const login = async (e) => {
     e.preventDefault();
 
+    const regexPhoneNumber = /(0[3|5|7|8|9])+([0-9]{8})\b/g;
+    if (!phone.match(regexPhoneNumber)) {
+      setAlert({
+        type: "danger",
+        message: "Không đúng định dạng của số điện thoại",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (password.length < 6) {
+      setAlert({
+        type: "danger",
+        message: "Mật khẩu phải gồm 6 kí tự trở lên",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
     try {
       const loginData = await loginUser(loginForm);
       if (loginData.success) {

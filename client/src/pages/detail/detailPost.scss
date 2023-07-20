@@ -1,5 +1,9 @@
 @use "../../assets/scss/style.scss" as *;
 
+.main-content {
+  background-color: #fff;
+}
+
 .detail-post {
   &__images {
     height: 314px;

@@ -112,8 +112,8 @@ const DetailPost = () => {
   // }, []);
 
   return (
-    <div className="bg-color pb-5">
-      <div className="container mt-3">
+    <div className="pb-5">
+      <div className="container">
         {post && (
           <>
             <Row>

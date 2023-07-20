@@ -102,16 +102,18 @@ router.post("/search", async (req, res) => {
         .lean();
 
       let slicePosts;
+      let total = posts.length;
 
       if (utils && utils.length !== 0) {
         slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+        total = slicePosts.length;
 
         slicePosts = slicePosts.slice(skip, limit * page);
       } else {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      res.json({ success: true, posts: slicePosts, total: posts.length });
+      res.json({ success: true, posts: slicePosts, total: total });
     } catch (error) {
       console.log(error);
       res
@@ -140,16 +142,18 @@ router.post("/search", async (req, res) => {
         .lean();
 
       let slicePosts;
+      let total = posts.length;
 
       if (utils && utils.length !== 0) {
         slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+        total = slicePosts.length;
 
         slicePosts = slicePosts.slice(skip, limit * page);
       } else {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      res.json({ success: true, posts: slicePosts, total: posts.length });
+      res.json({ success: true, posts: slicePosts, total: total });
     } catch (error) {
       console.log(error);
       res
@@ -178,16 +182,18 @@ router.post("/search", async (req, res) => {
         .lean();
 
       let slicePosts;
+      let total = posts.length;
 
       if (utils && utils.length !== 0) {
         slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+        total = slicePosts.length;
 
         slicePosts = slicePosts.slice(skip, limit * page);
       } else {
         slicePosts = posts.slice(skip, limit * page);
       }
 
-      res.json({ success: true, posts: slicePosts, total: posts.length });
+      res.json({ success: true, posts: slicePosts, total: total });
     } catch (error) {
       console.log(error);
       res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });

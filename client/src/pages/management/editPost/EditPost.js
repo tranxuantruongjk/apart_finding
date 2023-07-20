@@ -239,6 +239,28 @@ const EditPost = () => {
 
   const update = async (e) => {
     e.preventDefault();
+
+    if (utils.length === 0) {
+      hideShowLoading();
+      setAlert({ type: "danger", message: "Hãy chọn Tiện ích của phòng" });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (files.length === 0) {
+      hideShowLoading();
+      setAlert({ type: "danger", message: "Hãy thêm Hình ảnh của phòng" });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    } else {
+      if (!files.some((file) => file.type.includes("image"))) {
+        hideShowLoading();
+        setAlert({ type: "danger", message: "Hãy thêm Hình ảnh của phòng" });
+        setTimeout(() => setAlert(null), 5000);
+        return;
+      }
+    }
+
     setShowLoading(true);
 
     try {

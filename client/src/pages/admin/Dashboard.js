@@ -1,11 +1,26 @@
-import { Outlet } from "react-router-dom";
+import { useContext } from "react";
+import { Navigate, Outlet } from "react-router-dom";
+import Spinner from "react-bootstrap/Spinner";
+import { AuthContext } from "../../contexts/AuthContext";
+
 import Sidebar from "../../components/admin/sidebar/Sidebar";
 import Header from "../../components/admin/header/Header";
 import { Container } from "reactstrap";
 import "./dashboard.scss";
 
 const Dashboard = () => {
-  return (
+  const {
+    authState: { authLoading, isAuthenticated, user },
+  } = useContext(AuthContext);
+
+  if (authLoading)
+    return (
+      <div className="spinner-container">
+        <Spinner animation="border" variant="info" />
+      </div>
+    );
+
+  return isAuthenticated && user.role === 1 ? (
     <main className="admin-dashboard">
       <div className="pageWrapper d-lg-flex">
         {/********Sidebar**********/}
@@ -23,6 +38,8 @@ const Dashboard = () => {
         </div>
       </div>
     </main>
+  ) : (
+    <Navigate to="/" />
   );
 };
 

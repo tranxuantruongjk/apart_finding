@@ -36,8 +36,38 @@ const RegisterForm = () => {
   const register = async (e) => {
     e.preventDefault();
 
+    const regexPhoneNumber = /(0[3|5|7|8|9])+([0-9]{8})\b/g;
+    const regexEmail =
+      /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    if (!phone.match(regexPhoneNumber)) {
+      setAlert({
+        type: "danger",
+        message: "Không đúng định dạng của số điện thoại",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (!email.match(regexEmail)) {
+      setAlert({
+        type: "danger",
+        message: "Không đúng định dạng của email",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
     if (password !== confirmPassword) {
       setAlert({ type: "danger", message: "Mật khẩu không khớp" });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (password.length < 6) {
+      setAlert({
+        type: "danger",
+        message: "Mật khẩu phải gồm 6 kí tự trở lên",
+      });
       setTimeout(() => setAlert(null), 5000);
       return;
     }
@@ -95,7 +125,7 @@ const RegisterForm = () => {
             <Form.Group>
               <Form.Label>EMAIL</Form.Label>
               <Form.Control
-                type="text"
+                type="email"
                 placeholder="Email"
                 name="email"
                 className="mb-2 mt--5"
@@ -105,8 +135,10 @@ const RegisterForm = () => {
             </Form.Group>
             <Form.Group>
               <Form.Label>
-                MẬT KHẨU <span className="text-danger">*</span>
+                MẬT KHẨU <span className="text-danger">*</span>{" "}
+                <Form.Text>Mật khẩu phải gồm 6 ký tự trở lên</Form.Text>
               </Form.Label>
+
               <Form.Control
                 type="password"
                 placeholder="Mật khẩu"

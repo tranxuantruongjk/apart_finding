@@ -13,11 +13,11 @@ const FileList = ({ type, files, removeFile }) => {
   return (
     <>
       {files &&
-        files.map((file) => {
+        files.map((file, index) => {
           return file.type.includes("image/") && type === "image" ? (
-            <FileItem type="image" file={file} removeFile={removeFile} />
+            <FileItem key={index} type="image" file={file} removeFile={removeFile} />
           ) : file.type.includes("video/") && type === "video" ? (
-            <FileItem type="video" file={file} removeFile={removeFile} />
+            <FileItem key={index} type="video" file={file} removeFile={removeFile} />
           ) : (
             ""
           );

@@ -1,0 +1,9 @@
+@use "../assets/scss/style.scss" as *;
+
+.main-page {
+  .main-content {
+    margin-top: $header-height;
+    background-color: #f5f5f5;
+    padding-top: 1rem;
+  }
+}

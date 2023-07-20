@@ -60,15 +60,15 @@ const Header = () => {
       {user && user.role === 1 ? (
         <></>
       ) : (
-        <div className="shadow">
-          <Container className="d-flex justify-content-between align-items-center header">
-            <div className="header__logo d-flex justify-content-between">
+        <div className="shadow header">
+          <Container className="header__wrap d-flex justify-content-between align-items-center">
+            <div className="header__wrap__logo d-flex justify-content-between">
               <Link to={"/"} className="text-decoration-none">
                 <Logo />
               </Link>
             </div>
             <NavbarMenu />
-            <div className="header__btn d-flex justify-content-between align-items-center">
+            <div className="header__wrap__btn d-flex justify-content-between align-items-center">
               {isAuthenticated && user ? (
                 <>
                   <NavDropdown

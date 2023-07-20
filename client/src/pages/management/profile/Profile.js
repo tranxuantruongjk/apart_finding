@@ -38,6 +38,18 @@ const Profile = () => {
   const updateUser = async (e) => {
     e.preventDefault();
 
+    const regexEmail =
+      /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+
+    if (!userEmail.match(regexEmail)) {
+      setAlert({
+        type: "danger",
+        message: "Không đúng định dạng của email",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
     if (userName === user.username && userEmail === user.email) {
       setAlert({ type: "secondary", message: "Bạn chưa thay đổi thông tin." });
       setTimeout(() => setAlert(null), 5000);
@@ -110,6 +122,7 @@ const Profile = () => {
                   id="username"
                   value={userName}
                   onChange={handleChangeUserName}
+                  required
                 />
               </InputGroup>
             </Col>
