@@ -11,7 +11,7 @@ const verifyAdminToken = async (req, res, next) => {
       .json({ success: false, message: "Không tìm thấy token" });
 
   try {
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decoded = jwt.verify(token, `${process.env.ACCESS_TOKEN_SECRET}`);
 
     req.userId = decoded.userId;
   } catch (error) {
@@ -23,12 +23,10 @@ const verifyAdminToken = async (req, res, next) => {
     const admin = await User.findById(req.userId).select("-password");
 
     if (!admin)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Không tìm thấy thông tin tài khoản",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Không tìm thấy thông tin tài khoản",
+      });
 
     if (admin.role === 0)
       return res

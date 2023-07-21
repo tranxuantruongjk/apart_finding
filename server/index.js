@@ -17,7 +17,7 @@ const adminNotificationRouter = require("./routes/admin/notification");
 const connectDB = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://truong:vminkook@apartfinding.liwqnyu.mongodb.net/?retryWrites=true&w=majority",
+      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@apartfinding.liwqnyu.mongodb.net/?retryWrites=true&w=majority`,
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,

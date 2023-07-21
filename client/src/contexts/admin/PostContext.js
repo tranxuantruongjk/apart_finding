@@ -128,7 +128,7 @@ const AdminPostContextProvider = ({ children }) => {
   // Get a post
   const getPost = async (postId) => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/posts/${postId}`);
+      const response = await axios.get(`${apiUrl}/posts/${postId}`);
 
       if (response.data.success) return response.data;
     } catch (error) {

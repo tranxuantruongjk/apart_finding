@@ -3,95 +3,25 @@ const router = express.Router();
 
 const verifyToken = require("../middleware/auth");
 
-const Notification = require("../model/Notification");
+const {
+  getNotifications,
+  updateToSeen,
+  createNotification,
+} = require("../controllers/NotificationController");
 
 // @route GET api/notifications/:userId
 // @route Get notifications of user
 // @access Private
-router.get("/:userId", verifyToken, async (req, res) => {
-  try {
-    let notifications = await Notification.find({
-      receiverId: req.params.userId,
-    })
-      .sort("-createdAt")
-      .populate("postId", ["title"]);
-
-    notifications = notifications.filter(
-      (notification) => notification.postId !== null
-    );
-
-    res.json({ success: true, notifications });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
-  }
-});
+router.get("/:userId", verifyToken, getNotifications);
 
 // @route PUT api/notifications/notificationId
 // @route Update notification's state to seen
 // @access Private
-router.put("/:notificationId", verifyToken, async (req, res) => {
-  try {
-    let updatedNotification = {
-      seen: true,
-    };
-
-    const notificationUpdateCondition = {
-      _id: req.params.notificationId,
-      receiverId: req.userId,
-    };
-
-    updatedNotification = await Notification.findOneAndUpdate(
-      notificationUpdateCondition,
-      updatedNotification,
-      { new: true }
-    );
-
-    if (!updatedNotification)
-      return res.status(401).json({
-        success: false,
-        message: "Không tìm thấy thông báo hoặc Người dùng chưa được xác thực",
-      });
-
-    res.json({ success: true, notification: updatedNotification });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
-  }
-});
+router.put("/:notificationId", verifyToken, updateToSeen);
 
 // @route POST api/notifications
 // @route Admin creates notification to send to user
 // @access Private
-router.post("/", verifyToken, async (req, res) => {
-  const { receiverId, postId, action, reason } = req.body;
-
-  if (!receiverId || !postId || !action) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Thông tin về thông báo không đủ" });
-  }
-
-  try {
-    const newNotification = new Notification({
-      senderId: req.userId,
-      receiverId,
-      postId,
-      action,
-      reason,
-    });
-
-    await newNotification.save();
-
-    res.json({
-      success: true,
-      message: "Thông báo được lưu thành công",
-      notification: newNotification,
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
-  }
-});
+router.post("/", verifyToken, createNotification);
 
 module.exports = router;

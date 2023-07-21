@@ -68,7 +68,7 @@ const SearchBar = () => {
     };
 
     window.scrollTo({
-      top: 80,
+      top: 0,
       left: 0,
       behavior: "smooth",
     });
