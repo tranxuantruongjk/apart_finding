@@ -1,10 +1,10 @@
-export const apiUrl = 
-  process.env.NODE_ENV !== "production"
-    ? "http://localhost:5000/api"
-    : "";
+export const apiUrl = "https://trosv-api.vercel.app/api";
+  // process.env.NODE_ENV !== "production"
+  //   ? "http://localhost:5000/api"
+  //   : "https://trosv-api.vercel.app/api";
 
-export const apiPyUrl = "http://127.0.0.1:8001"
-export const LOCAL_STORAGE_TOKEN_NAME = 'apart-finding';
+export const apiPyUrl = "http://127.0.0.1:8001";
+export const LOCAL_STORAGE_TOKEN_NAME = "apart-finding";
 
 export const POSTS_TOTAL_SUCCESS = "POSTS_TOTAL_SUCCESS";
 export const POSTS_TOTAL_FAIL = "POSTS_TOTAL_FAIL";
