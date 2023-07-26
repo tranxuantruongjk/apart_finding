@@ -1,6 +1,7 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 
 import Home from "../pages/home/Home";
+import Search from "../pages/search/Search";
 import Auth from "../pages/Auth";
 import ProtectedRoute from "./ProtectedRoute";
 import DetailPost from "../pages/detail/DetailPost";
@@ -24,7 +25,7 @@ const MainRoutes = () => {
         <Route path="/" element={<Navigate to="/" />} />
         <Route path="/posts/type/:type/:id" element={<DetailPost />} />
         <Route path="/posts/type/:type" element={<Home />} />
-        <Route path="/posts/search" element={<Home />} />
+        <Route path="/posts/search" element={<Search />} />
         <Route path="/login" element={<Auth authRoute="login" />} />
         <Route path="/register" element={<Auth authRoute="register" />} />
 

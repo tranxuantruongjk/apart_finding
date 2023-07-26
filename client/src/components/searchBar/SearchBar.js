@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import "./searchBar.scss";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -14,7 +14,6 @@ import PriceModal from "./priceModal/PriceModal";
 import AcreageModal from "./acreageModal/AcreageModal";
 
 import useSearchContext from "../../hooks/useSearchContext";
-import { PostContext } from "../../contexts/PostContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const SearchBar = () => {
@@ -40,19 +39,14 @@ const SearchBar = () => {
       utils,
       gender,
     },
+    searchPost,
     setSearchState,
     displayAddressModal,
     showAddressModal,
     hideAddressModal,
     setAddressState,
-    setPage,
+    setAddressPage,
   } = useSearchContext();
-
-  const {
-    postState: { page },
-    changePage,
-    searchPost,
-  } = useContext(PostContext);
 
   const handleSubmit = async () => {
     const searchForm = {
@@ -74,7 +68,7 @@ const SearchBar = () => {
     });
 
     try {
-      await searchPost(searchForm);
+      await searchPost(searchForm, 1);
       navigate("/posts/search");
     } catch (error) {
       console.log(error);
@@ -83,7 +77,7 @@ const SearchBar = () => {
 
   useEffect(() => {
     if (pathname !== "/posts/search") {
-      setPage(0);
+      setAddressPage(0);
       setSearchState({
         rentType: {},
         minPriceVal: minPrice,
@@ -100,10 +94,8 @@ const SearchBar = () => {
         wardName: "",
         address: "",
       });
-    } else {
-      handleSubmit();
     }
-  }, [pathname, page]);
+  }, [pathname]);
 
   return (
     <div className="search-bar">

@@ -19,7 +19,7 @@ const utilsChecker = (arr, target) => target.every((t) => arr.includes(t));
 const getPostsCountByType = async (req, res) => {
   try {
     const rentTypes = await RentType.find().lean();
-    const posts = await Post.find().select("rentType");
+    const posts = await Post.find({ state: "active" }).select("rentType");
 
     for (const rentType of rentTypes) {
       const postsCount = posts.filter(
@@ -78,6 +78,7 @@ const searchPosts = async (req, res) => {
               ? { $in: ["any", "male"] }
               : { $in: ["any", "female"] }
             : { $in: ["any", "male", "female"] },
+        state: "active",
       })
         .sort("-createdAt")
         .populate("user", ["username", "phone"])
@@ -118,6 +119,7 @@ const searchPosts = async (req, res) => {
               ? { $in: ["any", "male"] }
               : { $in: ["any", "female"] }
             : { $in: ["any", "male", "female"] },
+        state: "active",
       })
         .sort("-createdAt")
         .populate("user", ["username", "phone"])
@@ -128,6 +130,7 @@ const searchPosts = async (req, res) => {
 
       if (utils && utils.length !== 0) {
         slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
+        console.log(slicePosts.length);
         total = slicePosts.length;
 
         slicePosts = slicePosts.slice(skip, limit * page);
@@ -158,6 +161,7 @@ const searchPosts = async (req, res) => {
               ? { $in: ["any", "male"] }
               : { $in: ["any", "female"] }
             : { $in: ["any", "male", "female"] },
+        state: "active",
       })
         .sort("-createdAt")
         .populate("user", ["username", "phone"])
@@ -208,13 +212,16 @@ const getSavedPostByUser = async (req, res) => {
     }
 
     for (let i = 0; i < savedPostsId.savedPost.length; i++) {
-      const savedPost = await Post.findById(savedPostsId.savedPost[i])
+      const savedPost = await Post.find({
+        _id: savedPostsId.savedPost[i],
+        state: "active",
+      })
         .sort("-createdAt")
         .populate("user", ["username", "phone"])
         .lean();
 
-      if (savedPost) {
-        savedPosts.push(savedPost);
+      if (savedPost && savedPost[0]) {
+        savedPosts.push(savedPost[0]);
       }
     }
 
@@ -230,7 +237,10 @@ const getPostsByType = async (req, res) => {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find({ rentType: req.params.type })
+    const posts = await Post.find({
+      rentType: req.params.type,
+      state: "active",
+    })
       .sort("-createdAt")
       .populate("user", ["username", "phone"])
       .lean();
@@ -263,7 +273,7 @@ const getAllPosts = async (req, res) => {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find()
+    const posts = await Post.find({ state: "active" })
       .sort("-createdAt")
       .populate("user", ["username", "phone"])
       .lean();
@@ -309,13 +319,17 @@ const updatePostInfo = async (req, res) => {
     !gender ||
     !area ||
     !price ||
-    !capacity ||
-    utils.length === 0 ||
-    images.length === 0
+    utils.length === 0
   )
     return res
       .status(400)
       .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
+
+  if (images.length === 0 && files.length === 0) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
+  }
 
   try {
     const districts = Object.values(districtsList);
@@ -346,8 +360,8 @@ const updatePostInfo = async (req, res) => {
     };
 
     const utilsArray = utils.split(",");
-    const imagesArray = images.split(",");
-    const videosArray = videos.split(",");
+    let imagesArray = images.split(",");
+    let videosArray = videos.split(",");
 
     if (files.length !== 0) {
       for (const file of files) {
@@ -366,6 +380,9 @@ const updatePostInfo = async (req, res) => {
         }
       }
     }
+
+    imagesArray = imagesArray.filter((image) => image.trim() !== "");
+    videosArray = videosArray.filter((video) => video.trim() !== "");
 
     let updatedPost = {
       title: req.body.title,
@@ -404,7 +421,7 @@ const updatePostInfo = async (req, res) => {
           const downloadURL = await getDownloadURL(itemRef);
           if (
             !imagesArray.includes(downloadURL) &&
-            !videos.includes(downloadURL)
+            !videosArray.includes(downloadURL)
           ) {
             deleteObject(itemRef);
           }
@@ -485,7 +502,7 @@ const createPost = async (req, res) => {
     !gender ||
     !area ||
     !price ||
-    !capacity ||
+    // !capacity ||
     utils.length === 0 ||
     files.length === 0
   )

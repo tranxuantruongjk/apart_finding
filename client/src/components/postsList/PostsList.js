@@ -1,20 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ListGroup from "react-bootstrap/ListGroup";
 import Card from "react-bootstrap/Card";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
-import { PostContext } from "../../contexts/PostContext";
-
 import PostItem from "../postItem/PostItem";
-import Paging from "../paging/Paging";
 
 import "./postsList.scss";
 
-const PostsList = ({ posts, total }) => {
+const PostsList = ({ posts }) => {
   const navigate = useNavigate();
-  const { postState: { page, limit }, changePage } = useContext(PostContext);
   const [showLoginRequestModal, setShowLoginRequestModal] = useState(false);
 
   const handleClose = () => setShowLoginRequestModal(false);
@@ -37,12 +33,6 @@ const PostsList = ({ posts, total }) => {
           </ListGroup>
         </Card.Body>
       </Card>
-      <Paging
-        page={page}
-        limit={limit}
-        totalPosts={total}
-        changePage={changePage}
-      />
       <Modal
         show={showLoginRequestModal}
         onHide={handleClose}

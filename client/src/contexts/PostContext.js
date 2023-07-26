@@ -116,29 +116,6 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
-  // Search post(s)
-  const searchPost = async (searchForm) => {
-    try {
-      const response = await axios.post(
-        `${apiUrl}/posts/search?page=${page}&limit=${limit}`,
-        searchForm
-      );
-      if (response.data.success) {
-        dispatch({
-          type: POSTS_SEARCHED_SUCCESS,
-          payload: {
-            posts: response.data.posts,
-            total: response.data.total,
-          },
-        });
-      }
-    } catch (error) {
-      dispatch({
-        type: POSTS_SEARCHED_FAIL,
-      });
-    }
-  };
-
   // Get post(s) which a user posted
   const getUserIdPosts = async (userId) => {
     try {
@@ -241,7 +218,6 @@ const PostContextProvider = ({ children }) => {
     rentTypes,
     getPosts,
     createPost,
-    searchPost,
     getUserIdPosts,
     changePage,
     getPostsCountByType,

@@ -7,7 +7,6 @@ import Table from "react-bootstrap/Table";
 import {
   MdOutlineDelete,
   MdOutlineRemoveRedEye,
-  MdOutlinePostAdd,
 } from "react-icons/md";
 
 import { AdminPostContext } from "../../../contexts/admin/PostContext";
@@ -138,7 +137,7 @@ const PostsList = () => {
                 <th>Giá (&#8363;/tháng)</th>
                 <th>Diện tích (m&sup2;)</th>
                 <th>Trạng thái</th>
-                <th className="text-center">Actions</th>
+                <th className="text-center">Hành động</th>
               </tr>
             </thead>
             <tbody>

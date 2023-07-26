@@ -148,7 +148,7 @@ const UsersList = () => {
                 <th>Email</th>
                 <th>Trạng thái</th>
                 <th>Vai trò</th>
-                <th className="text-center">Actions</th>
+                <th className="text-center">Hành động</th>
               </tr>
             </thead>
             <tbody>

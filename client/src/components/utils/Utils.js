@@ -1,10 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import Accordion from "react-bootstrap/Accordion";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
-import { PostContext } from "../../contexts/PostContext";
 import useSearchContext from "../../hooks/useSearchContext";
 
 import { utilities } from "../../utils/post";
@@ -12,8 +11,8 @@ import { utilities } from "../../utils/post";
 import "./utils.scss";
 
 const Utils = () => {
-  const { searchPost } = useContext(PostContext);
   const {
+    searchPost,
     addressState: { district, ward },
     searchState: {
       rentType,

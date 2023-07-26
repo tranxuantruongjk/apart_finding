@@ -3,7 +3,7 @@ import WardsForm from "./WardsForm";
 import useSearchContext from "../../../hooks/useSearchContext";
 
 const FormInputs = () => {
-  const { page } = useSearchContext();
+  const { addressPage } = useSearchContext();
 
   const display = {
     0: <DistrictsForm />,
@@ -12,7 +12,7 @@ const FormInputs = () => {
 
   return (
     <div>
-      {display[page]}
+      {display[addressPage]}
     </div>
   )
 }

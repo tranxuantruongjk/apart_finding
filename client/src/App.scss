@@ -69,3 +69,8 @@
     pointer-events: initial;
   }
 }
+
+.modal-open {
+  overflow: unset !important;
+  padding-right: 0 !important;
+}

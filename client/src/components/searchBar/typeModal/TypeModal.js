@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, memo } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import { PostContext } from "../../../contexts/PostContext";
@@ -14,7 +14,7 @@ const TypeModal = ({ show, setShowTypeModal }) => {
     changeSearchState,
   } = useSearchContext();
 
-  const [typeChecked, setTypeChecked] = useState();
+  const [typeChecked, setTypeChecked] = useState(null);
 
   const { type } = useParams();
 
@@ -35,6 +35,16 @@ const TypeModal = ({ show, setShowTypeModal }) => {
       }
     }
   }, [rentTypes, type, rentType]);
+
+
+  useEffect(() => {
+    if (rentTypes.length !== 0) {
+      if (Object.keys(rentType).length !== 0) {
+        const typeFind = rentTypes.find((rentType1) => rentType1._id === rentType._id);
+        setTypeChecked(typeFind._id);
+      }
+    }
+  }, [rentTypes, rentType, show]);
 
   const closeTypeModal = () => {
     setShowTypeModal(false);

@@ -1,56 +1,75 @@
-import React, { useContext, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import PostsList from "../../components/postsList/PostsList";
-import TypesList from "../../components/typesList/TypesList";
-import PricesList from "../../components/pricesList/PricesList";
-import AcreagesList from "../../components/acreagesList/AcreagesList";
-import DistrictsList from "../../components/districtsList/DistrictsList";
-import Paging from "../../components/paging/Paging";
+import Utils from "../../components/utils/Utils";
 import HomeTop from "../../components/homeTop/HomeTop";
+import Paging from "../../components/paging/Paging";
 
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 
-import { PostContext } from "../../contexts/PostContext";
+import useSearchContext from "../../hooks/useSearchContext";
 
-import "./home.scss";
+import "../home/home.scss";
 
-const Home = () => {
-  const { type } = useParams();
-  const { pathname } = useLocation();
-
+const Search = () => {
   const {
-    postState: { posts, total, page, limit },
-    getPosts,
+    resultState: { posts, page, total, limit },
+    addressState: { district, ward },
+    searchState: {
+      rentType,
+      minPriceVal,
+      maxPriceVal,
+      minAcreageVal,
+      maxAcreageVal,
+      utils,
+      gender,
+    },
     changePage,
-  } = useContext(PostContext);
+    searchPost,
+  } = useSearchContext();
 
   useEffect(() => {
-    changePage(1);
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: "smooth",
-    });
-  }, [pathname]);
+    const searchWithPage = async () => {
+      const searchForm = {
+        typeId: rentType._id,
+        district: district,
+        ward: ward,
+        minPrice: minPriceVal,
+        maxPrice: maxPriceVal,
+        minAcreage: minAcreageVal,
+        maxAcreage: maxAcreageVal,
+        utils,
+        gender,
+      };
 
-  // Start: get all posts
-  useEffect(() => {
-    if (type) {
-      getPosts(type);
-    } else if (pathname === "/") {
-      getPosts();
-    }
-  }, [type, pathname, page]);
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+
+      try {
+        await searchPost(searchForm);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    searchWithPage();
+  }, [page]);
 
   return (
     <div className="home pb-4">
       <HomeTop />
       <div className="container main-home mt-2">
         <Row>
-          <Col md={8}>
+          <Col md={3}>
+            <Utils />
+          </Col>
+          <Col md={9}>
             <PostsList posts={posts} />
             <Paging
               page={page}
@@ -58,12 +77,6 @@ const Home = () => {
               totalPosts={total}
               changePage={changePage}
             />
-          </Col>
-          <Col md={4}>
-            <TypesList />
-            <PricesList />
-            <AcreagesList />
-            <DistrictsList />
           </Col>
         </Row>
         <Row className="mt-4">
@@ -84,4 +97,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Search;
