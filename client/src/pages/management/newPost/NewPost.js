@@ -24,6 +24,8 @@ const NewPost = () => {
   const districts = Object.values(districtsList).sort(compare("code"));
   const [wards, setWards] = useState([]);
   const [districtName, setDistrictName] = useState("");
+  const [districtNameWithType, setDistrictNameWithType] = useState("");
+  const [wardNameWithType, setWardNameWithType] = useState("");
   const [wardName, setWardName] = useState("");
   const [streetName, setStreetName] = useState("");
   const [houseNumber, setHouseNumber] = useState("");
@@ -82,6 +84,7 @@ const NewPost = () => {
       const districtPath = districtsList[e.target.value]["path"];
       setDistrictName(districtName);
       setAddressMap(districtPath);
+      setDistrictNameWithType(districtsList[e.target.value]["name_with_type"])
       fullAddressRef.current.value = districtPath;
       const wardsList = require(`hanhchinhvn/dist/xa-phuong/${e.target.value}.json`);
       setWards(Object.values(wardsList));
@@ -93,6 +96,7 @@ const NewPost = () => {
       setHouseNumber("");
     } else {
       setDistrictName("");
+      setDistrictNameWithType("");
       setAddressMap(province);
       fullAddressRef.current.value = "";
       setWards([]);
@@ -102,6 +106,7 @@ const NewPost = () => {
         wardId: "",
       });
       setWardName("");
+      setWardNameWithType("");
       setStreetName("");
       setHouseNumber("");
     }
@@ -114,6 +119,7 @@ const NewPost = () => {
       const wardPath = wardFind.path;
       setWardName(wardName);
       setAddressMap(wardPath);
+      setWardNameWithType(wardFind.name_with_type);
       fullAddressRef.current.value = wardPath;
       setPostForm({
         ...postForm,
@@ -123,6 +129,7 @@ const NewPost = () => {
       setHouseNumber("");
     } else {
       setWardName("");
+      setWardNameWithType("");
       setAddressMap(`${districtName}, ${province}`);
       fullAddressRef.current.value = `${districtName}, ${province}`;
       setPostForm({
@@ -279,7 +286,9 @@ const NewPost = () => {
       formData.append("content", content);
       formData.append("rentType", rentType);
       formData.append("districtId", districtId);
+      formData.append("districtName", districtNameWithType);
       formData.append("wardId", wardId);
+      formData.append("wardName", wardNameWithType);
       formData.append("streetName", streetName);
       formData.append("houseNumber", houseNumber);
       formData.append("exactAddress", fullAddressRef.current.value);
@@ -331,6 +340,8 @@ const NewPost = () => {
         setWardName("");
         setStreetName("");
         setHouseNumber("");
+        setDistrictNameWithType("");
+        setWardNameWithType("");
         setFiles([]);
         setUtils([]);
         setAddressMap(province);

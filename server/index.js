@@ -16,13 +16,10 @@ const adminNotificationRouter = require("./routes/admin/notification");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(
-      `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@apartfinding.liwqnyu.mongodb.net/test?retryWrites=true&w=majority`,
-      {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      }
-    );
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("Connect to DB successfull!!");
   } catch (err) {
     console.log(err.message);
@@ -54,50 +51,50 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
 
-const io = new Server({
-  cors: {
-    // origin: "https://trosv.vercel.app",
-    origin: "http://localhost:3000",
-  },
-});
+// const io = new Server({
+//   cors: {
+//     // origin: "https://trosv.vercel.app",
+//     origin: "http://localhost:3000",
+//   },
+// });
 
-let onlineUsers = [];
+// let onlineUsers = [];
 
-const addNewUser = (userId, socketId) => {
-  !onlineUsers.some((user) => user.userId === userId) &&
-    onlineUsers.push({ userId, socketId });
-};
+// const addNewUser = (userId, socketId) => {
+//   !onlineUsers.some((user) => user.userId === userId) &&
+//     onlineUsers.push({ userId, socketId });
+// };
 
-const removeUser = (socketId) => {
-  onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
-};
+// const removeUser = (socketId) => {
+//   onlineUsers = onlineUsers.filter((user) => user.socketId !== socketId);
+// };
 
-const getUser = (userId) => {
-  return onlineUsers.find((user) => user.userId === userId);
-};
+// const getUser = (userId) => {
+//   return onlineUsers.find((user) => user.userId === userId);
+// };
 
-io.on("connection", (socket) => {
-  // when connect
-  console.log("someone has connected");
-  //
-  socket.on("addUser", (userId) => {
-    addNewUser(userId, socket.id);
-    console.log(onlineUsers);
-    console.log("someone has logined");
-  });
-  //
-  socket.on("sendNotification", (notification) => {
-    console.log(notification);
-    const user = getUser(notification.receiverId);
-    console.log(user);
-    user && io.to(user.socketId).emit("getNotification", notification);
-  });
+// io.on("connection", (socket) => {
+//   // when connect
+//   console.log("someone has connected");
+//   //
+//   socket.on("addUser", (userId) => {
+//     addNewUser(userId, socket.id);
+//     console.log(onlineUsers);
+//     console.log("someone has logined");
+//   });
+//   //
+//   socket.on("sendNotification", (notification) => {
+//     console.log(notification);
+//     const user = getUser(notification.receiverId);
+//     console.log(user);
+//     user && io.to(user.socketId).emit("getNotification", notification);
+//   });
 
-  socket.on("disconnect", () => {
-    console.log("someone has left");
+//   socket.on("disconnect", () => {
+//     console.log("someone has left");
 
-    removeUser(socket.id);
-  });
-});
+//     removeUser(socket.id);
+//   });
+// });
 
-io.listen(5001);
+// io.listen(5001);

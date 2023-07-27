@@ -478,7 +478,9 @@ const createPost = async (req, res) => {
     content,
     rentType,
     districtId,
+    districtName,
     wardId,
+    wardName,
     streetName,
     houseNumber,
     exactAddress,
@@ -495,7 +497,9 @@ const createPost = async (req, res) => {
     !content ||
     !rentType ||
     !districtId ||
+    !districtName ||
     !wardId ||
+    !wardName ||
     !streetName ||
     !houseNumber ||
     !exactAddress ||
@@ -511,13 +515,33 @@ const createPost = async (req, res) => {
       .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
 
   try {
-    const districts = Object.values(districtsList);
-    const districtFind = districts.find(
-      (district) => district.code === districtId
-    );
-    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
-    const wards = Object.values(wardsList);
-    const wardFind = wards.find((ward) => ward.code === wardId);
+    // const districts = Object.values(districtsList);
+    // const districtFind = districts.find(
+    //   (district) => district.code === districtId
+    // );
+    // const wardsList =
+    //   await require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
+    // const wards = Object.values(wardsList);
+    // const wardFind = wards.find((ward) => ward.code === wardId);
+
+    // const fullAddressObject = {
+    //   city: {
+    //     code: "01",
+    //     text: "Hà Nội",
+    //   },
+    //   district: {
+    //     code: parseInt(districtFind.code),
+    //     text: districtFind.name_with_type,
+    //     cityCode: districtFind.parent_code,
+    //   },
+    //   ward: {
+    //     code: parseInt(wardFind.code),
+    //     text: wardFind.name_with_type,
+    //     districtCode: parseInt(wardFind.parent_code),
+    //   },
+    //   streetName: streetName,
+    //   houseNumber: houseNumber,
+    // };
 
     const fullAddressObject = {
       city: {
@@ -525,19 +549,19 @@ const createPost = async (req, res) => {
         text: "Hà Nội",
       },
       district: {
-        code: parseInt(districtFind.code),
-        text: districtFind.name_with_type,
-        cityCode: districtFind.parent_code,
+        code: parseInt(districtId),
+        text: districtName,
+        cityCode: "01",
       },
       ward: {
-        code: parseInt(wardFind.code),
-        text: wardFind.name_with_type,
-        districtCode: parseInt(wardFind.parent_code),
+        code: parseInt(wardId),
+        text: wardName,
+        districtCode: parseInt(districtId),
       },
       streetName: streetName,
       houseNumber: houseNumber,
     };
-
+    
     const utilsArray = utils.split(",");
 
     const newPost = new Post({
