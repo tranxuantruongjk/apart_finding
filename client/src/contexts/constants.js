@@ -1,4 +1,4 @@
-export const apiUrl = "https://trosv-api.vercel.app/api";
+export const apiUrl = "https://apart-finding.vercel.app/api";
   // process.env.NODE_ENV !== "production"
   //   ? "http://localhost:5000/api"
   //   : "https://trosv-api.vercel.app/api";
