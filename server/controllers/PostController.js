@@ -293,7 +293,9 @@ const updatePostInfo = async (req, res) => {
     content,
     rentType,
     districtId,
+    districtName,
     wardId,
+    wardName,
     streetName,
     houseNumber,
     exactAddress,
@@ -312,7 +314,9 @@ const updatePostInfo = async (req, res) => {
     !content ||
     !rentType ||
     !districtId ||
+    !districtName ||
     !wardId ||
+    !wardName ||
     !streetName ||
     !houseNumber ||
     !exactAddress ||
@@ -332,13 +336,32 @@ const updatePostInfo = async (req, res) => {
   }
 
   try {
-    const districts = Object.values(districtsList);
-    const districtFind = districts.find(
-      (district) => district.code === districtId
-    );
-    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
-    const wards = Object.values(wardsList);
-    const wardFind = wards.find((ward) => ward.code === wardId);
+    // const districts = Object.values(districtsList);
+    // const districtFind = districts.find(
+    //   (district) => district.code === districtId
+    // );
+    // const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
+    // const wards = Object.values(wardsList);
+    // const wardFind = wards.find((ward) => ward.code === wardId);
+
+    // const fullAddressObject = {
+    //   city: {
+    //     code: "01",
+    //     text: "Hà Nội",
+    //   },
+    //   district: {
+    //     code: districtFind.code,
+    //     text: districtFind.name_with_type,
+    //     cityCode: districtFind.parent_code,
+    //   },
+    //   ward: {
+    //     code: wardFind.code,
+    //     text: wardFind.name_with_type,
+    //     districtCode: wardFind.parent_code,
+    //   },
+    //   streetName: streetName,
+    //   houseNumber: houseNumber,
+    // };
 
     const fullAddressObject = {
       city: {
@@ -346,14 +369,14 @@ const updatePostInfo = async (req, res) => {
         text: "Hà Nội",
       },
       district: {
-        code: districtFind.code,
-        text: districtFind.name_with_type,
-        cityCode: districtFind.parent_code,
+        code: parseInt(districtId),
+        text: districtName,
+        cityCode: "01",
       },
       ward: {
-        code: wardFind.code,
-        text: wardFind.name_with_type,
-        districtCode: wardFind.parent_code,
+        code: parseInt(wardId),
+        text: wardName,
+        districtCode: parseInt(districtId),
       },
       streetName: streetName,
       houseNumber: houseNumber,

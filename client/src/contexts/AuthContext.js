@@ -58,7 +58,7 @@ const AuthContextProvider = ({ children }) => {
   // Set socket
   useEffect(() => {
     setSocket(io("http://localhost:5001")); 
-    // setSocket(io("https://trosv-api.vercel.app"));
+    // setSocket(io("https://apart-websocket.vercel.app"));
   }, []);
 
   // Socket event add user

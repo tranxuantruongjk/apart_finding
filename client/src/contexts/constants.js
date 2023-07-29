@@ -3,7 +3,8 @@ export const apiUrl = "https://apart-finding.vercel.app/api";
 //   ? "http://localhost:5000/api"
 //   : "https://trosv-api.vercel.app/api";
 
-export const apiPyUrl = "http://127.0.0.1:8001";
+// export const apiPyUrl = "http://127.0.0.1:8001";
+export const apiPyUrl = "https://apart-recommendation-system.vercel.app";
 export const LOCAL_STORAGE_TOKEN_NAME = "apart-finding";
 
 export const POSTS_TOTAL_SUCCESS = "POSTS_TOTAL_SUCCESS";

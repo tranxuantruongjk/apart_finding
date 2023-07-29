@@ -57,6 +57,12 @@ const EditPost = () => {
   const [wards, setWards] = useState(Object.values(wardsList));
   const [districtName, setDistrictName] = useState("");
   const [wardName, setWardName] = useState("");
+  const [districtNameWithType, setDistrictNameWithType] = useState(
+    state.fullAddressObject.district.text
+  );
+  const [wardNameWithType, setWardNameWithType] = useState(
+    state.fullAddressObject.ward.text
+  );
   const [streetName, setStreetName] = useState(
     state.fullAddressObject.streetName
   );
@@ -121,30 +127,66 @@ const EditPost = () => {
   };
 
   const onChangeDistrict = (e) => {
-    const districtName = districtsList[e.target.value]["name"];
-    const districtPath = districtsList[e.target.value]["path"];
-    setDistrictName(districtName);
-    setAddressMap(districtPath);
-    fullAddressRef.current.value = districtPath;
-    const wardsList = require(`hanhchinhvn/dist/xa-phuong/${e.target.value}.json`);
-    setWards(Object.values(wardsList));
-    setPostForm({
-      ...postForm,
-      districtId: e.target.value,
-    });
+    if (e.target.value !== "") {
+      const districtName = districtsList[e.target.value]["name"];
+      const districtPath = districtsList[e.target.value]["path"];
+      setDistrictName(districtName);
+      setAddressMap(districtPath);
+      setDistrictNameWithType(districtsList[e.target.value]["name_with_type"]);
+      fullAddressRef.current.value = districtPath;
+      const wardsList = require(`hanhchinhvn/dist/xa-phuong/${e.target.value}.json`);
+      setWards(Object.values(wardsList));
+      setPostForm({
+        ...postForm,
+        districtId: e.target.value,
+      });
+      setStreetName("");
+      setHouseNumber("");
+    } else {
+      setDistrictName("");
+      setDistrictNameWithType("");
+      setAddressMap(province);
+      fullAddressRef.current.value = "";
+      setWards([]);
+      setPostForm({
+        ...postForm,
+        districtId: e.target.value,
+        wardId: "",
+      });
+      setWardName("");
+      setWardNameWithType("");
+      setStreetName("");
+      setHouseNumber("");
+    }
   };
 
   const onChangeWard = (e) => {
-    const wardFind = wards.find((ward) => ward.code === e.target.value);
-    const wardName = wardFind.name;
-    const wardPath = wardFind.path;
-    setWardName(wardName);
-    setAddressMap(wardPath);
-    fullAddressRef.current.value = wardPath;
-    setPostForm({
-      ...postForm,
-      wardId: e.target.value,
-    });
+    if (e.target.value !== "") {
+      const wardFind = wards.find((ward) => ward.code === e.target.value);
+      const wardName = wardFind.name;
+      const wardPath = wardFind.path;
+      setWardName(wardName);
+      setAddressMap(wardPath);
+      setWardNameWithType(wardFind.name_with_type);
+      fullAddressRef.current.value = wardPath;
+      setPostForm({
+        ...postForm,
+        wardId: e.target.value,
+      });
+      setStreetName("");
+      setHouseNumber("");
+    } else {
+      setWardName("");
+      setWardNameWithType("");
+      setAddressMap(`${districtName}, ${province}`);
+      fullAddressRef.current.value = `${districtName}, ${province}`;
+      setPostForm({
+        ...postForm,
+        wardId: e.target.value,
+      });
+      setStreetName("");
+      setHouseNumber("");
+    }
   };
 
   const onChangeStreetName = (e) => {
@@ -247,6 +289,37 @@ const EditPost = () => {
       return;
     }
 
+    const regexNumber = /^\d+$/;
+    if (capacity && (parseInt(capacity) <= 0 || !capacity.match(regexNumber))) {
+      hideShowLoading();
+      setAlert({
+        type: "danger",
+        message: "Sức chứa phải là số và lớn hơn 0",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (parseInt(price) <= 0 || !price.match(regexNumber)) {
+      hideShowLoading();
+      setAlert({
+        type: "danger",
+        message: "Giá cho thuê phải là số và lớn hơn 0",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
+    if (parseInt(area) <= 0 || !area.match(regexNumber)) {
+      hideShowLoading();
+      setAlert({
+        type: "danger",
+        message: "Diện tích phải là số và lớn hơn 0",
+      });
+      setTimeout(() => setAlert(null), 5000);
+      return;
+    }
+
     if (images.length === 0) {
       if (files.length === 0) {
         hideShowLoading();
@@ -271,7 +344,9 @@ const EditPost = () => {
       formData.append("content", content);
       formData.append("rentType", rentType);
       formData.append("districtId", districtId);
+      formData.append("districtName", districtNameWithType);
       formData.append("wardId", wardId);
+      formData.append("wardName", wardNameWithType);
       formData.append("streetName", streetName);
       formData.append("houseNumber", houseNumber);
       formData.append("exactAddress", fullAddressRef.current.value);
