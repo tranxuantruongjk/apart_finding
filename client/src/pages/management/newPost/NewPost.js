@@ -175,7 +175,7 @@ const NewPost = () => {
         setAddressMap(
           `${houseNumber} ${streetName}, ${wardName}, ${districtName}, ${province}`
         ),
-      5000
+      3000
     );
   };
 

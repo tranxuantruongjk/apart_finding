@@ -1,7 +1,7 @@
-export const apiUrl = "https://apart-finding.vercel.app/api";
-// process.env.NODE_ENV !== "production"
-//   ? "http://localhost:5000/api"
-//   : "https://trosv-api.vercel.app/api";
+export const apiUrl =
+  process.env.NODE_ENV !== "production"
+    ? "http://localhost:5000/api"
+    : "https://apart-finding.vercel.app/api";
 
 // export const apiPyUrl = "http://127.0.0.1:8001";
 export const apiPyUrl = "https://apart-recommendation-system.vercel.app";

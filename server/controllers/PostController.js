@@ -11,20 +11,21 @@ const {
 } = require("firebase/storage");
 const { storage } = require("../firebase");
 
-const districtsList = require("hanhchinhvn/dist/quan-huyen/01.json");
 const mongoose = require("mongoose");
-
-const utilsChecker = (arr, target) => target.every((t) => arr.includes(t));
 
 const getPostsCountByType = async (req, res) => {
   try {
     const rentTypes = await RentType.find().lean();
-    const posts = await Post.find({ state: "active" }).select("rentType");
+
+    const count = async (type) => {
+      return await Post.find({
+        state: "active",
+        rentType: type,
+      }).countDocuments();
+    };
 
     for (const rentType of rentTypes) {
-      const postsCount = posts.filter(
-        (post) => post.rentType.toString() === rentType._id.toString()
-      ).length;
+      const postsCount = await count(rentType._id);
       rentType.postsCount = postsCount;
     }
 
@@ -72,6 +73,24 @@ const searchPosts = async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
+        utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
+        gender:
+          gender !== "any"
+            ? gender === "male"
+              ? { $in: ["any", "male"] }
+              : { $in: ["any", "female"] }
+            : { $in: ["any", "male", "female"] },
+        state: "active",
+      }).countDocuments();
+
+      const slicePosts = await Post.find({
+        rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
+        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area: {
+          $gte: parseInt(minAcreage),
+          $lte: parseInt(maxAcreage),
+        },
+        utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
             ? gender === "male"
@@ -81,22 +100,11 @@ const searchPosts = async (req, res) => {
         state: "active",
       })
         .sort("-createdAt")
-        .populate("user", ["username", "phone"])
-        .lean();
+        .skip(skip)
+        .limit(limit)
+        .populate("user", ["username", "phone"]);
 
-      let slicePosts;
-      let total = posts.length;
-
-      if (utils && utils.length !== 0) {
-        slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
-        total = slicePosts.length;
-
-        slicePosts = slicePosts.slice(skip, limit * page);
-      } else {
-        slicePosts = posts.slice(skip, limit * page);
-      }
-
-      res.json({ success: true, posts: slicePosts, total: total });
+      res.json({ success: true, posts: slicePosts, total: posts });
     } catch (error) {
       console.log(error);
       res
@@ -113,6 +121,25 @@ const searchPosts = async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
+        utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
+        gender:
+          gender !== "any"
+            ? gender === "male"
+              ? { $in: ["any", "male"] }
+              : { $in: ["any", "female"] }
+            : { $in: ["any", "male", "female"] },
+        state: "active",
+      }).countDocuments();
+
+      const slicePosts = await Post.find({
+        rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
+        "fullAddressObject.district.code": parseInt(district),
+        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area: {
+          $gte: parseInt(minAcreage),
+          $lte: parseInt(maxAcreage),
+        },
+        utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
             ? gender === "male"
@@ -122,23 +149,11 @@ const searchPosts = async (req, res) => {
         state: "active",
       })
         .sort("-createdAt")
-        .populate("user", ["username", "phone"])
-        .lean();
+        .skip(skip)
+        .limit(limit)
+        .populate("user", ["username", "phone"]);
 
-      let slicePosts;
-      let total = posts.length;
-
-      if (utils && utils.length !== 0) {
-        slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
-        console.log(slicePosts.length);
-        total = slicePosts.length;
-
-        slicePosts = slicePosts.slice(skip, limit * page);
-      } else {
-        slicePosts = posts.slice(skip, limit * page);
-      }
-
-      res.json({ success: true, posts: slicePosts, total: total });
+      res.json({ success: true, posts: slicePosts, total: posts });
     } catch (error) {
       console.log(error);
       res
@@ -155,6 +170,25 @@ const searchPosts = async (req, res) => {
           $gte: parseInt(minAcreage),
           $lte: parseInt(maxAcreage),
         },
+        utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
+        gender:
+          gender !== "any"
+            ? gender === "male"
+              ? { $in: ["any", "male"] }
+              : { $in: ["any", "female"] }
+            : { $in: ["any", "male", "female"] },
+        state: "active",
+      }).countDocuments();
+
+      const slicePosts = await Post.find({
+        rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
+        "fullAddressObject.ward.code": parseInt(ward),
+        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area: {
+          $gte: parseInt(minAcreage),
+          $lte: parseInt(maxAcreage),
+        },
+        utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
             ? gender === "male"
@@ -164,22 +198,11 @@ const searchPosts = async (req, res) => {
         state: "active",
       })
         .sort("-createdAt")
-        .populate("user", ["username", "phone"])
-        .lean();
+        .skip(skip)
+        .limit(limit)
+        .populate("user", ["username", "phone"]);
 
-      let slicePosts;
-      let total = posts.length;
-
-      if (utils && utils.length !== 0) {
-        slicePosts = posts.filter((post) => utilsChecker(post.utils, utils));
-        total = slicePosts.length;
-
-        slicePosts = slicePosts.slice(skip, limit * page);
-      } else {
-        slicePosts = posts.slice(skip, limit * page);
-      }
-
-      res.json({ success: true, posts: slicePosts, total: total });
+      res.json({ success: true, posts: slicePosts, total: posts });
     } catch (error) {
       console.log(error);
       res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
@@ -240,14 +263,18 @@ const getPostsByType = async (req, res) => {
     const posts = await Post.find({
       rentType: req.params.type,
       state: "active",
+    }).countDocuments();
+
+    const slicePosts = await Post.find({
+      rentType: req.params.type,
+      state: "active",
     })
       .sort("-createdAt")
-      .populate("user", ["username", "phone"])
-      .lean();
+      .skip(skip)
+      .limit(limit)
+      .populate("user", ["username", "phone"]);
 
-    const slicePosts = posts.slice(skip, limit * page);
-
-    res.json({ success: true, posts: slicePosts, total: posts.length });
+    res.json({ success: true, posts: slicePosts, total: posts });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
@@ -273,14 +300,14 @@ const getAllPosts = async (req, res) => {
     const { page, limit } = req.query;
     const skip = (page - 1) * limit;
 
-    const posts = await Post.find({ state: "active" })
+    const posts = await Post.find({ state: "active" }).countDocuments();
+    const slicePosts = await Post.find({ state: "active" })
       .sort("-createdAt")
-      .populate("user", ["username", "phone"])
-      .lean();
+      .skip(skip)
+      .limit(limit)
+      .populate("user", ["username", "phone"]);
 
-    const slicePosts = posts.slice(skip, limit * page);
-
-    res.json({ success: true, posts: slicePosts, total: posts.length });
+    res.json({ success: true, posts: slicePosts, total: posts });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
@@ -336,33 +363,6 @@ const updatePostInfo = async (req, res) => {
   }
 
   try {
-    // const districts = Object.values(districtsList);
-    // const districtFind = districts.find(
-    //   (district) => district.code === districtId
-    // );
-    // const wardsList = require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
-    // const wards = Object.values(wardsList);
-    // const wardFind = wards.find((ward) => ward.code === wardId);
-
-    // const fullAddressObject = {
-    //   city: {
-    //     code: "01",
-    //     text: "Hà Nội",
-    //   },
-    //   district: {
-    //     code: districtFind.code,
-    //     text: districtFind.name_with_type,
-    //     cityCode: districtFind.parent_code,
-    //   },
-    //   ward: {
-    //     code: wardFind.code,
-    //     text: wardFind.name_with_type,
-    //     districtCode: wardFind.parent_code,
-    //   },
-    //   streetName: streetName,
-    //   houseNumber: houseNumber,
-    // };
-
     const fullAddressObject = {
       city: {
         code: "01",
@@ -529,7 +529,6 @@ const createPost = async (req, res) => {
     !gender ||
     !area ||
     !price ||
-    // !capacity ||
     utils.length === 0 ||
     files.length === 0
   )
@@ -538,34 +537,6 @@ const createPost = async (req, res) => {
       .json({ success: false, message: "Thông tin về phòng trọ không đủ" });
 
   try {
-    // const districts = Object.values(districtsList);
-    // const districtFind = districts.find(
-    //   (district) => district.code === districtId
-    // );
-    // const wardsList =
-    //   await require(`hanhchinhvn/dist/xa-phuong/${districtFind.code}.json`);
-    // const wards = Object.values(wardsList);
-    // const wardFind = wards.find((ward) => ward.code === wardId);
-
-    // const fullAddressObject = {
-    //   city: {
-    //     code: "01",
-    //     text: "Hà Nội",
-    //   },
-    //   district: {
-    //     code: parseInt(districtFind.code),
-    //     text: districtFind.name_with_type,
-    //     cityCode: districtFind.parent_code,
-    //   },
-    //   ward: {
-    //     code: parseInt(wardFind.code),
-    //     text: wardFind.name_with_type,
-    //     districtCode: parseInt(wardFind.parent_code),
-    //   },
-    //   streetName: streetName,
-    //   houseNumber: houseNumber,
-    // };
-
     const fullAddressObject = {
       city: {
         code: "01",
@@ -584,7 +555,7 @@ const createPost = async (req, res) => {
       streetName: streetName,
       houseNumber: houseNumber,
     };
-    
+
     const utilsArray = utils.split(",");
 
     const newPost = new Post({
