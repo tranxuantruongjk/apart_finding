@@ -290,7 +290,10 @@ const EditPost = () => {
     }
 
     const regexNumber = /^\d+$/;
-    if (capacity && (parseInt(capacity) <= 0 || !capacity.match(regexNumber))) {
+    if (
+      capacity &&
+      (parseInt(capacity) <= 0 || !capacity.toString().match(regexNumber))
+    ) {
       hideShowLoading();
       setAlert({
         type: "danger",
@@ -300,7 +303,7 @@ const EditPost = () => {
       return;
     }
 
-    if (parseInt(price) <= 0 || !price.match(regexNumber)) {
+    if (parseInt(price) <= 0 || !price.toString().match(regexNumber)) {
       hideShowLoading();
       setAlert({
         type: "danger",
@@ -310,7 +313,7 @@ const EditPost = () => {
       return;
     }
 
-    if (parseInt(area) <= 0 || !area.match(regexNumber)) {
+    if (parseInt(area) <= 0 || !area.toString().match(regexNumber)) {
       hideShowLoading();
       setAlert({
         type: "danger",

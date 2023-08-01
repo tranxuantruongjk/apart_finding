@@ -57,8 +57,8 @@ const AuthContextProvider = ({ children }) => {
 
   // Set socket
   useEffect(() => {
-    setSocket(io("http://localhost:5001")); 
-    // setSocket(io("https://apart-websocket.vercel.app"));
+    setSocket(io("http://localhost:5001"));
+    // setSocket(io("https://apartsocket.azurewebsites.net"));
   }, []);
 
   // Socket event add user
@@ -183,7 +183,9 @@ const AuthContextProvider = ({ children }) => {
   // Get admin notification
   const getAdminNotifications = async (userId) => {
     try {
-      const response = await axios.get(`${apiUrl}/admin/notifications/${userId}`);
+      const response = await axios.get(
+        `${apiUrl}/admin/notifications/${userId}`
+      );
       if (response.data.success) {
         return response.data;
       }
