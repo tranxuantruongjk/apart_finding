@@ -57,7 +57,7 @@ const AuthContextProvider = ({ children }) => {
 
   // Set socket
   useEffect(() => {
-    setSocket(io("http://localhost:5001"));
+    setSocket(io("http://localhost:5000"));
     // setSocket(io("https://apartsocket.azurewebsites.net"));
   }, []);
 
