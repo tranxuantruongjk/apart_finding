@@ -56,15 +56,15 @@ const AuthContextProvider = ({ children }) => {
   }, []);
 
   // Set socket
-  useEffect(() => {
-    setSocket(io("http://localhost:5000"));
-    // setSocket(io("https://apartsocket.azurewebsites.net"));
-  }, []);
+  // useEffect(() => {
+  //   setSocket(io("http://localhost:5001"));
+  //   // setSocket(io("https://apart-finding.vercel.app"));
+  // }, []);
 
   // Socket event add user
-  useEffect(() => {
-    user && socket?.emit("addUser", user._id);
-  }, [socket, user]);
+  // useEffect(() => {
+  //   user && socket?.emit("addUser", user._id);
+  // }, [socket, user]);
 
   // Get information of a user
   const getUser = async (id) => {

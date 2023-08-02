@@ -44,21 +44,21 @@ const Header = () => {
     user && getAllNotifications();
   }, [user]);
 
-  useEffect(() => {
-    socket?.on("getNotification", (data) => {
-      setNotifications((prev) => {
-        const arr = [data, ...prev];
-        const result = [];
-        result.push(arr[0]);
-        for (let i = 0; i < arr.length - 1; i++) {
-          if (arr[i]._id !== arr[i + 1]._id) {
-            result.push(arr[i+1]);
-          }
-        }
-        return result;
-      });
-    });
-  }, [socket]);
+  // useEffect(() => {
+  //   socket?.on("getNotification", (data) => {
+  //     setNotifications((prev) => {
+  //       const arr = [data, ...prev];
+  //       const result = [];
+  //       result.push(arr[0]);
+  //       for (let i = 0; i < arr.length - 1; i++) {
+  //         if (arr[i]._id !== arr[i + 1]._id) {
+  //           result.push(arr[i+1]);
+  //         }
+  //       }
+  //       return result;
+  //     });
+  //   });
+  // }, [socket]);
 
   const handleClickNotification = async (notificationId) => {
     await updateNotification(notificationId);

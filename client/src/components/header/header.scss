@@ -155,6 +155,27 @@
   @include extra-large {
     nav {
       position: absolute;
+      left: 150px;
+    }
+  }
+
+  @include large {
+    nav {
+      position: absolute;
+      left: 185px;
+    }
+  }
+
+  @include medium {
+    nav {
+      position: absolute;
+      left: 140px;
+    }
+  }
+
+  @include small {
+    nav {
+      position: absolute;
       left: 60px;
     }
   }
