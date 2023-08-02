@@ -84,7 +84,7 @@ const NewPost = () => {
       const districtPath = districtsList[e.target.value]["path"];
       setDistrictName(districtName);
       setAddressMap(districtPath);
-      setDistrictNameWithType(districtsList[e.target.value]["name_with_type"])
+      setDistrictNameWithType(districtsList[e.target.value]["name_with_type"]);
       fullAddressRef.current.value = districtPath;
       const wardsList = require(`hanhchinhvn/dist/xa-phuong/${e.target.value}.json`);
       setWards(Object.values(wardsList));
@@ -311,13 +311,13 @@ const NewPost = () => {
               action: "register_post",
             });
 
-            // if (response.success) {
-            //   socket.emit("sendNotification", {
-            //     ...response.notification,
-            //     user: user.username,
-            //     title: title,
-            //   });
-            // }
+            if (response.success) {
+              socket.emit("sendNotification", {
+                ...response.notification,
+                user: user.username,
+                title: title,
+              });
+            }
           } catch (error) {
             console.log(error);
           }

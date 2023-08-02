@@ -39,7 +39,7 @@ const PostManage = () => {
     };
 
     getPosts();
-  }, []);
+  }, [notifications]);
 
   const handleShowRejectedReason = (post) => {
     setShowReasonModal(true);

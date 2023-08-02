@@ -38,11 +38,11 @@ const Header = () => {
     user && getAllNotifications();
   }, [user]);
 
-  // useEffect(() => {
-  //   socket?.on("getNotification", (data) => {
-  //     setNotifications((prev) => [data, ...prev]);
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotifications((prev) => [data, ...prev]);
+    });
+  }, [socket]);
 
   const logout = async () => {
     await logoutUser();

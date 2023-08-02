@@ -84,12 +84,12 @@ const Post = () => {
     try {
       const response = await sendNotification(message);
 
-      // if (response.success) {
-      //   socket.emit("sendNotification", {
-      //     ...response.notification,
-      //     title: post.title,
-      //   });
-      // }
+      if (response.success) {
+        socket.emit("sendNotification", {
+          ...response.notification,
+          title: post.title,
+        });
+      }
     } catch (error) {
       console.log(error);
     }

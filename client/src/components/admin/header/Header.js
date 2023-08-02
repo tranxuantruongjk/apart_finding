@@ -37,28 +37,28 @@ const Header = () => {
   useEffect(() => {
     const getAllNotifications = async () => {
       const response = await getAdminNotifications(user._id);
-      
+
       setNotifications(response.notifications);
     };
 
     user && getAllNotifications();
   }, [user]);
 
-  // useEffect(() => {
-  //   socket?.on("getNotification", (data) => {
-  //     setNotifications((prev) => {
-  //       const arr = [data, ...prev];
-  //       const result = [];
-  //       result.push(arr[0]);
-  //       for (let i = 0; i < arr.length - 1; i++) {
-  //         if (arr[i]._id !== arr[i + 1]._id) {
-  //           result.push(arr[i+1]);
-  //         }
-  //       }
-  //       return result;
-  //     });
-  //   });
-  // }, [socket]);
+  useEffect(() => {
+    socket?.on("getNotification", (data) => {
+      setNotifications((prev) => {
+        const arr = [data, ...prev];
+        const result = [];
+        result.push(arr[0]);
+        for (let i = 0; i < arr.length - 1; i++) {
+          if (arr[i]._id !== arr[i + 1]._id) {
+            result.push(arr[i + 1]);
+          }
+        }
+        return result;
+      });
+    });
+  }, [socket]);
 
   const handleClickNotification = async (notificationId) => {
     await updateNotification(notificationId);
@@ -88,9 +88,6 @@ const Header = () => {
   return (
     <Navbar color="white" light expand="md" className="fix-header">
       <div className="d-flex align-items-center">
-        {/* <NavbarBrand as={Link} to="/admin">
-          <HomeLogo className="d-lg-none" />
-        </NavbarBrand> */}
         <Button
           color="primary"
           className="d-lg-none"
@@ -111,39 +108,22 @@ const Header = () => {
       </div>
 
       <Collapse navbar isOpen={isOpen} className="d-flex justify-content-end">
-        {/* <Nav className="me-auto" navbar>
-          <NavItem>
-            <Link to="/admin/starter" className="nav-link">
-              Starters
-            </Link>
-          </NavItem>
-          <UncontrolledDropdown inNavbar nav>
-            <DropdownToggle caret nav>
-              DD Menu
-            </DropdownToggle>
-            <DropdownMenu end>
-              <DropdownItem>Option 1</DropdownItem>
-              <DropdownItem>Option 2</DropdownItem>
-              <DropdownItem divider />
-              <DropdownItem>Reset</DropdownItem>
-            </DropdownMenu>
-          </UncontrolledDropdown>
-        </Nav> */}
         <NavDropdown
           title={
             <div className="icon-notification">
               <GrNotification className="notification" />
-              {notifications && notifications.filter(
-                (notification) => notification.seen === false
-              ).length > 0 && (
-                <div className="counter">
-                  {
-                    notifications.filter(
-                      (notification) => notification.seen === false
-                    ).length
-                  }
-                </div>
-              )}
+              {notifications &&
+                notifications.filter(
+                  (notification) => notification.seen === false
+                ).length > 0 && (
+                  <div className="counter">
+                    {
+                      notifications.filter(
+                        (notification) => notification.seen === false
+                      ).length
+                    }
+                  </div>
+                )}
             </div>
           }
           className="nav-notification"

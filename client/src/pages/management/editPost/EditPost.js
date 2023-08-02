@@ -376,13 +376,13 @@ const EditPost = () => {
               action: "update_post",
             });
 
-            // if (response.success) {
-            //   socket.emit("sendNotification", {
-            //     ...response.notification,
-            //     user: user.username,
-            //     title: title,
-            //   });
-            // }
+            if (response.success) {
+              socket.emit("sendNotification", {
+                ...response.notification,
+                user: user.username,
+                title: title,
+              });
+            }
           } catch (error) {
             console.log(error);
           }
