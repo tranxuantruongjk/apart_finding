@@ -48,6 +48,7 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
     const btnRangesList = Object.values(
       document.getElementsByClassName("acreage-range-item")
     );
+    const btnRangeAll = document.querySelector(".acreage-range-item-all");
     if (btnRangesList.length !== 0) {
       if (minAcreageVal === 0 && maxAcreageVal === ACREAGE_RANGE[0]) {
         btnRangesList[0].classList.add("active");
@@ -55,6 +56,7 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
           (btnRange) => btnRange !== btnRangesList[0]
         );
         for (let btnRange of btnRangesFilter) {
+          btnRangeAll.classList.remove("active");
           btnRange.classList.remove("active");
         }
       } else if (
@@ -66,6 +68,7 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
           (btnRange) => btnRange !== btnRangesList[btnRangesList.length - 1]
         );
         for (let btnRange of btnRangesFilter) {
+          btnRangeAll.classList.remove("active");
           btnRange.classList.remove("active");
         }
       } else if (
@@ -80,13 +83,27 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
             (btnRange) => btnRange !== btnRangesList[minIndex + 1]
           );
           for (let btnRange of btnRangesFilter) {
+            btnRangeAll.classList.remove("active");
             btnRange.classList.remove("active");
           }
         }
       } else {
         for (let btnRange of btnRangesList) {
+          btnRangeAll.classList.remove("active");
           btnRange.classList.remove("active");
         }
+      }
+      if (minAcreageVal === maxAcreageVal && maxAcreageVal === 0) {
+        changeSearchState("minAcreageVal", minAcreage);
+        changeSearchState("maxAcreageVal", maxAcreage);
+        btnRangeAll.classList.add("active");
+      }
+      if (
+        btnRangeAll &&
+        minAcreageVal === minAcreage &&
+        maxAcreageVal === maxAcreage
+      ) {
+        btnRangeAll.classList.add("active");
       }
     }
   }, [show, minAcreageVal, maxAcreageVal]);
@@ -103,7 +120,12 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
         </Modal.Header>
         <Modal.Body>
           <div className="acreage-result">
-            {`${minAcreageVal} - ${maxAcreageVal} `}m&sup2;
+            {minAcreageVal === maxAcreageVal && maxAcreageVal === 0
+              ? "Không hợp lệ"
+              : minAcreageVal === maxAcreageVal && maxAcreageVal === maxAcreage
+              ? `Trên ${maxAcreageVal} `
+              : `${minAcreageVal} - ${maxAcreageVal} `}
+            m&sup2;
           </div>
           <MultiRangeSlider
             min={minAcreage}
@@ -169,6 +191,17 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
                   );
                 }
               })}
+              <Col className="acreage-range-col">
+                <Button
+                  variant="light"
+                  className="acreage-range-item-all"
+                  onClick={(e) =>
+                    handleClick(e, 0, ACREAGE_RANGE[ACREAGE_RANGE.length - 1])
+                  }
+                >
+                  Tất cả
+                </Button>
+              </Col>
             </Row>
           </div>
           <Button

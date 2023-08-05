@@ -48,6 +48,7 @@ const PriceModal = ({ show, setShowPriceModal }) => {
     const btnRangesList = Object.values(
       document.getElementsByClassName("price-range-item")
     );
+    const btnRangeAll = document.querySelector(".price-range-item-all");
     if (btnRangesList.length !== 0) {
       if (minPriceVal === 0 && maxPriceVal === PRICE_RANGE[0]) {
         btnRangesList[0].classList.add("active");
@@ -55,6 +56,7 @@ const PriceModal = ({ show, setShowPriceModal }) => {
           (btnRange) => btnRange !== btnRangesList[0]
         );
         for (let btnRange of btnRangesFilter) {
+          btnRangeAll.classList.remove("active");
           btnRange.classList.remove("active");
         }
       } else if (
@@ -66,6 +68,7 @@ const PriceModal = ({ show, setShowPriceModal }) => {
           (btnRange) => btnRange !== btnRangesList[btnRangesList.length - 1]
         );
         for (let btnRange of btnRangesFilter) {
+          btnRangeAll.classList.remove("active");
           btnRange.classList.remove("active");
         }
       } else if (
@@ -80,13 +83,23 @@ const PriceModal = ({ show, setShowPriceModal }) => {
             (btnRange) => btnRange !== btnRangesList[minIndex + 1]
           );
           for (let btnRange of btnRangesFilter) {
+            btnRangeAll.classList.remove("active");
             btnRange.classList.remove("active");
           }
         }
       } else {
         for (let btnRange of btnRangesList) {
+          btnRangeAll.classList.remove("active");
           btnRange.classList.remove("active");
         }
+      }
+      if (minPriceVal === maxPriceVal && maxPriceVal === 0) {
+        changeSearchState("minPriceVal", minPrice);
+        changeSearchState("maxPriceVal", maxPrice);
+        btnRangeAll.classList.add("active");
+      }
+      if (btnRangeAll && minPriceVal === minPrice && maxPriceVal === maxPrice) {
+        btnRangeAll.classList.add("active");
       }
     }
   }, [show, minPriceVal, maxPriceVal]);
@@ -94,7 +107,7 @@ const PriceModal = ({ show, setShowPriceModal }) => {
   const closePriceModal = () => {
     setShowPriceModal(false);
   };
-  
+
   return (
     <>
       <Modal show={show} onHide={closePriceModal}>
@@ -102,7 +115,13 @@ const PriceModal = ({ show, setShowPriceModal }) => {
           <Modal.Title>Chọn giá</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <div className="price-result">{`${minPriceVal} - ${maxPriceVal} triệu`}</div>
+          <div className="price-result">
+            {minPriceVal === maxPriceVal && maxPriceVal === 0
+              ? "Không hợp lệ"
+              : minPriceVal === maxPriceVal && maxPriceVal === maxPrice
+              ? `Trên ${maxPriceVal} triệu`
+              : `${minPriceVal} - ${maxPriceVal} triệu`}
+          </div>
           <MultiRangeSlider
             min={minPrice}
             max={maxPrice}
@@ -167,6 +186,17 @@ const PriceModal = ({ show, setShowPriceModal }) => {
                   );
                 }
               })}
+              <Col className="price-range-col">
+                <Button
+                  variant="light"
+                  className="price-range-item-all"
+                  onClick={(e) =>
+                    handleClick(e, 0, PRICE_RANGE[PRICE_RANGE.length - 1])
+                  }
+                >
+                  Tất cả
+                </Button>
+              </Col>
             </Row>
           </div>
           <Button

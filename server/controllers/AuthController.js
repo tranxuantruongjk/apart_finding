@@ -11,6 +11,12 @@ const getUserInfo = async (req, res) => {
         .status(400)
         .json({ success: false, message: "User not found" });
 
+    if (user && user.state === "blocked")
+      return res.status(401).json({
+        success: false,
+        message: "Tài khoản của bạn đã bị khóa. Liên hệ hotline để được hỗ trợ",
+      });
+
     res.json({ success: true, user });
   } catch (error) {
     console.log(error);
@@ -187,6 +193,12 @@ const loginUser = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Incorrect username and/or password",
+      });
+
+    if (user && user.state === "blocked")
+      return res.status(401).json({
+        success: false,
+        message: "Tài khoản của bạn đã bị khóa. Liên hệ hotline để được hỗ trợ",
       });
 
     // Username found

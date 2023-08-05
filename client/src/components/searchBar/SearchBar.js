@@ -39,6 +39,7 @@ const SearchBar = () => {
       utils,
       gender,
     },
+    changePage,
     searchPost,
     setSearchState,
     displayAddressModal,
@@ -69,6 +70,7 @@ const SearchBar = () => {
 
     try {
       await searchPost(searchForm, 1);
+      changePage(1);
       navigate("/posts/search");
     } catch (error) {
       console.log(error);
@@ -122,7 +124,11 @@ const SearchBar = () => {
         >
           <IoPricetagOutline className="icon-price" />
           {minPriceVal !== minPrice || maxPriceVal !== maxPrice ? (
-            <span className="item-price">{`${minPriceVal} - ${maxPriceVal} triệu`}</span>
+            <span className="item-price">
+              {minPriceVal === maxPriceVal && maxPriceVal === maxPrice
+                ? `Trên ${maxPriceVal} triệu`
+                : `${minPriceVal} - ${maxPriceVal} triệu`}
+            </span>
           ) : (
             <span className="price-default">Chọn giá</span>
           )}
@@ -134,7 +140,9 @@ const SearchBar = () => {
           <BiArea className="icon-area" />
           {minAcreageVal !== minAcreage || maxAcreageVal !== maxAcreage ? (
             <span className="item-area">
-              {`${minAcreageVal} - ${maxAcreageVal} m`}&sup2;
+              {minAcreageVal === maxAcreageVal && maxAcreageVal === maxAcreage ?
+              `Trên ${maxAcreageVal} m`
+              : `${minAcreageVal} - ${maxAcreageVal} m`}&sup2;
             </span>
           ) : (
             <span className="area-default">Chọn diện tích</span>

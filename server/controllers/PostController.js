@@ -13,6 +13,11 @@ const { storage } = require("../firebase");
 
 const mongoose = require("mongoose");
 
+const minPriceSearch = 0;
+const minAcreageSearch = 0;
+const maxPriceSearch = 10000000;
+const maxAcreageSearch = 50;
+
 const getPostsCountByType = async (req, res) => {
   try {
     const rentTypes = await RentType.find().lean();
@@ -68,11 +73,21 @@ const searchPosts = async (req, res) => {
     try {
       const posts = await Post.find({
         rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
-        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
-        area: {
-          $gte: parseInt(minAcreage),
-          $lte: parseInt(maxAcreage),
-        },
+        price:
+          minPriceFind === minPriceSearch && maxPriceFind === maxPriceSearch
+            ? { $ne: null }
+            : minPriceFind === maxPriceFind && maxPriceFind === maxPriceSearch
+            ? { $gte: maxPriceFind }
+            : { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area:
+          minAcreage === minAcreageSearch && maxAcreage === maxAcreageSearch
+            ? { $ne: null }
+            : minAcreage === maxAcreage && maxAcreage === maxAcreageSearch
+            ? { $gte: maxAcreage }
+            : {
+                $gte: parseInt(minAcreage),
+                $lte: parseInt(maxAcreage),
+              },
         utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
@@ -85,11 +100,21 @@ const searchPosts = async (req, res) => {
 
       const slicePosts = await Post.find({
         rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
-        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
-        area: {
-          $gte: parseInt(minAcreage),
-          $lte: parseInt(maxAcreage),
-        },
+        price:
+          minPriceFind === minPriceSearch && maxPriceFind === maxPriceSearch
+            ? { $ne: null }
+            : minPriceFind === maxPriceFind && maxPriceFind === maxPriceSearch
+            ? { $gte: maxPriceFind }
+            : { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area:
+          minAcreage === minAcreageSearch && maxAcreage === maxAcreageSearch
+            ? { $ne: null }
+            : minAcreage === maxAcreage && maxAcreage === maxAcreageSearch
+            ? { $gte: maxAcreage }
+            : {
+                $gte: parseInt(minAcreage),
+                $lte: parseInt(maxAcreage),
+              },
         utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
@@ -116,11 +141,21 @@ const searchPosts = async (req, res) => {
       const posts = await Post.find({
         rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         "fullAddressObject.district.code": parseInt(district),
-        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
-        area: {
-          $gte: parseInt(minAcreage),
-          $lte: parseInt(maxAcreage),
-        },
+        price:
+          minPriceFind === minPriceSearch && maxPriceFind === maxPriceSearch
+            ? { $ne: null }
+            : minPriceFind === maxPriceFind && maxPriceFind === maxPriceSearch
+            ? { $gte: maxPriceFind }
+            : { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area:
+          minAcreage === minAcreageSearch && maxAcreage === maxAcreageSearch
+            ? { $ne: null }
+            : minAcreage === maxAcreage && maxAcreage === maxAcreageSearch
+            ? { $gte: maxAcreage }
+            : {
+                $gte: parseInt(minAcreage),
+                $lte: parseInt(maxAcreage),
+              },
         utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
@@ -134,11 +169,21 @@ const searchPosts = async (req, res) => {
       const slicePosts = await Post.find({
         rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         "fullAddressObject.district.code": parseInt(district),
-        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
-        area: {
-          $gte: parseInt(minAcreage),
-          $lte: parseInt(maxAcreage),
-        },
+        price:
+          minPriceFind === minPriceSearch && maxPriceFind === maxPriceSearch
+            ? { $ne: null }
+            : minPriceFind === maxPriceFind && maxPriceFind === maxPriceSearch
+            ? { $gte: maxPriceFind }
+            : { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area:
+          minAcreage === minAcreageSearch && maxAcreage === maxAcreageSearch
+            ? { $ne: null }
+            : minAcreage === maxAcreage && maxAcreage === maxAcreageSearch
+            ? { $gte: maxAcreage }
+            : {
+                $gte: parseInt(minAcreage),
+                $lte: parseInt(maxAcreage),
+              },
         utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
@@ -165,11 +210,21 @@ const searchPosts = async (req, res) => {
       const posts = await Post.find({
         rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         "fullAddressObject.ward.code": parseInt(ward),
-        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
-        area: {
-          $gte: parseInt(minAcreage),
-          $lte: parseInt(maxAcreage),
-        },
+        price:
+          minPriceFind === minPriceSearch && maxPriceFind === maxPriceSearch
+            ? { $ne: null }
+            : minPriceFind === maxPriceFind && maxPriceFind === maxPriceSearch
+            ? { $gte: maxPriceFind }
+            : { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area:
+          minAcreage === minAcreageSearch && maxAcreage === maxAcreageSearch
+            ? { $ne: null }
+            : minAcreage === maxAcreage && maxAcreage === maxAcreageSearch
+            ? { $gte: maxAcreage }
+            : {
+                $gte: parseInt(minAcreage),
+                $lte: parseInt(maxAcreage),
+              },
         utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"
@@ -183,11 +238,21 @@ const searchPosts = async (req, res) => {
       const slicePosts = await Post.find({
         rentType: typeId ? mongoose.Types.ObjectId(typeId) : { $ne: null },
         "fullAddressObject.ward.code": parseInt(ward),
-        price: { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
-        area: {
-          $gte: parseInt(minAcreage),
-          $lte: parseInt(maxAcreage),
-        },
+        price:
+          minPriceFind === minPriceSearch && maxPriceFind === maxPriceSearch
+            ? { $ne: null }
+            : minPriceFind === maxPriceFind && maxPriceFind === maxPriceSearch
+            ? { $gte: maxPriceFind }
+            : { $gte: parseInt(minPriceFind), $lte: parseInt(maxPriceFind) },
+        area:
+          minAcreage === minAcreageSearch && maxAcreage === maxAcreageSearch
+            ? { $ne: null }
+            : minAcreage === maxAcreage && maxAcreage === maxAcreageSearch
+            ? { $gte: maxAcreage }
+            : {
+                $gte: parseInt(minAcreage),
+                $lte: parseInt(maxAcreage),
+              },
         utils: utils.length !== 0 ? { $all: utils } : { $ne: null },
         gender:
           gender !== "any"

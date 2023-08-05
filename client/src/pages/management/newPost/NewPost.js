@@ -753,8 +753,8 @@ const NewPost = () => {
                   <li>
                     <Card.Text>
                       Các ảnh đại diện và ảnh chi tiết phải đúng là ảnh của
-                      phòng trọ/nhà trọ, các tin vi phạm sẽ không được duyệt lên
-                      website.
+                      phòng trọ/nhà trọ, mô tả đúng về trạng thái, tiện ích của
+                      phòng; các tin vi phạm sẽ không được duyệt lên website.
                     </Card.Text>
                   </li>
                   <li>

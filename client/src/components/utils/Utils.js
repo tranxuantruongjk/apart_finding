@@ -23,6 +23,7 @@ const Utils = () => {
       utils,
       gender,
     },
+    changePage,
     changeSearchState,
   } = useSearchContext();
 
@@ -60,7 +61,8 @@ const Utils = () => {
         utils,
         gender,
       };
-      await searchPost(searchForm);
+      changePage(1);
+      await searchPost(searchForm, 1);
     } catch (error) {
       console.log(error);
     }
