@@ -116,7 +116,7 @@ const AcreageModal = ({ show, setShowAcreageModal }) => {
     <>
       <Modal show={show} onHide={closeAcreageModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Chọn giá</Modal.Title>
+          <Modal.Title>Chọn diện tích</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="acreage-result">

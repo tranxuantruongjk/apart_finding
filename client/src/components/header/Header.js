@@ -7,6 +7,9 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import { AiOutlinePlusCircle } from "react-icons/ai";
 import Logo from "../logo/Logo";
 import NavbarMenu from "../navbarMenu/NavbarMenu";
+import TimeAgo from "timeago-react";
+import * as timeago from "timeago.js";
+import vi from "timeago.js/lib/lang/vi";
 
 import { LuClipboardList } from "react-icons/lu";
 import { BsBookmarkHeartFill } from "react-icons/bs";
@@ -18,6 +21,7 @@ import { LuLayoutDashboard } from "react-icons/lu";
 import "./header.scss";
 
 const Header = () => {
+  timeago.register("vi", vi);
   const {
     authState: { isAuthenticated, user },
     logoutUser,
@@ -110,7 +114,13 @@ const Header = () => {
                                       ? note.title
                                       : note.postId.title}
                                   </b>{" "}
-                                  đã được duyệt và đăng lên trang chủ
+                                  đã được duyệt và đăng lên trang chủ (
+                                  <TimeAgo
+                                    datetime={note.createdAt}
+                                    locale="vi"
+                                    className="time-ago"
+                                  />
+                                  )
                                 </span>
                               )}
                               {note.action === "reject_post" && (
@@ -122,7 +132,13 @@ const Header = () => {
                                       : note.postId.title}
                                   </b>{" "}
                                   chưa được đăng do vi phạm quy định đăng tin.
-                                  Hãy xem lý do và sửa tin
+                                  Hãy xem lý do và sửa tin (
+                                  <TimeAgo
+                                    datetime={note.createdAt}
+                                    locale="vi"
+                                    className="time-ago"
+                                  />
+                                  )
                                 </span>
                               )}
                             </NavDropdown.Item>

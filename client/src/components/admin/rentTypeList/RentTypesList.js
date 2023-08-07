@@ -56,7 +56,7 @@ const RentTypesList = () => {
                 <th>Loại phòng</th>
                 <th>Tên</th>
                 <th>Số lượng bài đăng</th>
-                <th className="text-center">Actions</th>
+                <th className="text-center">Hành động</th>
               </tr>
             </thead>
             <tbody>

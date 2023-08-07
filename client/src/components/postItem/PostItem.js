@@ -72,7 +72,7 @@ const PostItem = ({ post, handleShow }) => {
               <div className="d-flex justify-content-between align-items-center">
                 <div className="post-item__detail-price">
                   <Badge bg="info" className="price">
-                    {`${post.price}/tháng`}
+                    {`${post.price.toLocaleString('de-DE')}/tháng`}
                   </Badge>
                 </div>
                 <div className="post-item__detail-area d-inline-flex align-items-center">
@@ -151,7 +151,7 @@ export const SmallPostItem = ({ post }) => {
             <div className="d-flex justify-content-between align-items-center">
               <div className="small-post-item__price">
                 <Badge bg="info" className="price">
-                  {`${post.price}/tháng`}
+                  {`${post.price.toLocaleString('de-DE')}/tháng`}
                 </Badge>
               </div>
               <div className="small-post-item__area d-inline-flex align-items-center">

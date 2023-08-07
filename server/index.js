@@ -52,8 +52,10 @@ app.use("/api/admin/notifications", adminNotificationRouter);
 const io = new Server(server, {
   perMessageDeflate: false,
   cors: {
-    origin: "http://localhost:3000",
-    // origin: "https://trosv.vercel.app",
+    origin:
+      process.env.NODE_ENV !== "production"
+        ? "http://localhost:3000"
+        : "https://trosv.vercel.app",
   },
 });
 

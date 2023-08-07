@@ -156,7 +156,7 @@ const DetailPost = () => {
                           </tr>
                           <tr>
                             <td>Giá</td>
-                            <td className="info">{`${post.price} VND/tháng`}</td>
+                            <td className="info">{`${post.price.toLocaleString('de-DE')} VND/tháng`}</td>
                           </tr>
                           <tr>
                             <td>Chuyên mục</td>

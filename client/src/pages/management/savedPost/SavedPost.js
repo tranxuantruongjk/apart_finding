@@ -19,8 +19,7 @@ const SavedPost = () => {
   const [total, setTotal] = useState(limit);
   const [savedPosts, setSavedPost] = useState([]);
   const [posts, setPosts] = useState([]);
-  console.log(savedPosts);
-
+  
   useEffect(() => {
     if (user) {
       const getAllSavedPosts = async () => {

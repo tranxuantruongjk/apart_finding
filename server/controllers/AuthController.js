@@ -123,7 +123,6 @@ const updateUserInfo = async (req, res) => {
 
 const registerUser = async (req, res) => {
   const { username, phone, email, password, role } = req.body;
-  console.log(req.body);
 
   // Simple validation
   if (!username || !phone || !password)
@@ -151,8 +150,6 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      createdAt: new Date(2023, 5, 1),
-      updatedAt: new Date(2023, 5, 1),
     });
 
     await newUser.save();

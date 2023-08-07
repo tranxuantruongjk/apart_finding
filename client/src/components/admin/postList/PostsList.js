@@ -152,7 +152,7 @@ const PostsList = () => {
                     </Link>
                   </td>
                   <td>{tdata.rentType.name}</td>
-                  <td>{tdata.price}</td>
+                  <td>{tdata.price.toLocaleString('de-DE')}</td>
                   <td>{tdata.area}</td>
                   <td>
                     <span

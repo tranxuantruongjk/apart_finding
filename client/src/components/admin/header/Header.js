@@ -22,8 +22,12 @@ import { GrNotification } from "react-icons/gr";
 import "./header.scss";
 
 import { AuthContext } from "../../../contexts/AuthContext";
+import TimeAgo from "timeago-react";
+import * as timeago from "timeago.js";
+import vi from "timeago.js/lib/lang/vi";
 
 const Header = () => {
+  timeago.register("vi", vi);
   const {
     authState: { user },
     logoutUser,
@@ -146,7 +150,13 @@ const Header = () => {
                         <b>{note.user ? note.user : note.senderId.username}</b>{" "}
                         vừa gửi đăng ký bài viết{" "}
                         <b>{note.title ? note.title : note.postId.title}</b>.
-                        Hãy vào xét duyệt đi.
+                        Hãy vào xét duyệt đi. (
+                        <TimeAgo
+                          datetime={note.createdAt}
+                          locale="vi"
+                          className="time-ago"
+                        />
+                        )
                       </span>
                     )}
                     {note.action === "update_post" && (
@@ -155,7 +165,13 @@ const Header = () => {
                         <b>{note.user ? note.user : note.senderId.username}</b>{" "}
                         vừa cập nhật lại bài viết{" "}
                         <b>{note.title ? note.title : note.postId.title}</b>.
-                        Hãy vào xét duyệt đi.
+                        Hãy vào xét duyệt đi. (
+                        <TimeAgo
+                          datetime={note.createdAt}
+                          locale="vi"
+                          className="time-ago"
+                        />
+                        )
                       </span>
                     )}
                   </NavDropdown.Item>

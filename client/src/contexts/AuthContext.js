@@ -57,13 +57,31 @@ const AuthContextProvider = ({ children }) => {
 
   // Set socket
   useEffect(() => {
-    setSocket(io("http://localhost:5000"));
-    // setSocket(io("https://apart-finding.vercel.app"));
+    setSocket(
+      io(
+        process.env.NODE_ENV !== "production"
+          ? "http://localhost:5000"
+          : "https://apart-finding.vercel.app"
+      )
+    );
   }, []);
 
   // Socket event add user
   useEffect(() => {
     user && socket?.emit("addUser", user._id);
+  }, [socket, user]);
+
+  useEffect(() => {
+    user &&
+      socket?.io.on("reconnect", () => {
+        // console.log("reconnected");
+        // Emit "addUser" event to update the recorded socket ID with user
+        socket.emit("addUser", user._id, (error) => {
+          if (error) {
+            console.error(error);
+          }
+        });
+      });
   }, [socket, user]);
 
   // Get information of a user

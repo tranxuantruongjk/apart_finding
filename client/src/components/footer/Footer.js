@@ -60,8 +60,8 @@ const Footer = () => {
           </Col>
           <Col className="d-flex flex-column mb-4">
             <div className="col-header">KẾT NỐI VỚI CHÚNG TÔI</div>
-            <div className="hotline">Hotline: 0987654321</div>
-            <div className="email">Email: trosv@gmail.com</div>
+            <div className="hotline">Hotline: 0971803568</div>
+            <div className="email">Email: xuantruonghy823@gmail.com</div>
             <div className="social-media d-flex">
               <img src={FacebookIcon} alt="facebook" />
               <img src={ZaloIcon} alt="zalo" />

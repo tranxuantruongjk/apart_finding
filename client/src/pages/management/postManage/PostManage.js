@@ -81,7 +81,7 @@ const PostManage = () => {
             <tr>
               <th>Tiêu đề</th>
               <th className="text-center">Ngày tạo</th>
-              <th className="text-center">Ngày đăng</th>
+              <th className="text-center">Ngày cập nhật mới nhất</th>
               <th className="text-center">Trạng thái</th>
               <th className="text-center">Thao tác</th>
             </tr>
@@ -176,7 +176,7 @@ const PostManage = () => {
           </Modal.Body>
           <Modal.Footer>
             <Link
-              to={`/me/posts/${rejectedPost.rentType}/${rejectedPost._id}/edit`}
+              to={`/me/posts/${rejectedPost._id}/edit`}
               state={rejectedPost}
               style={{ width: "100%" }}
             >
@@ -201,7 +201,12 @@ const PostManage = () => {
             </span>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary">Hủy</Button>
+            <Button
+              variant="secondary"
+              onClick={() => setShowDeleteModal(false)}
+            >
+              Hủy
+            </Button>
             <Button className="delete-button" onClick={handleDeletePost}>
               Xóa
             </Button>
