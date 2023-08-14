@@ -673,6 +673,38 @@ const createPost = async (req, res) => {
   }
 };
 
+const hideOrShowPost = async (req, res) => {
+  try {
+    let updatedPost;
+    if (req.params.action === "hide") {
+      updatedPost = { state: "hided" };
+    }
+    if (req.params.action === "active") {
+      updatedPost = { state: "active" };
+    }
+
+    const updateCondition = { _id: req.params.id, user: req.userId };
+
+    updatedPost = await Post.findOneAndUpdate(updateCondition, updatedPost, {
+      new: true,
+    });
+
+    if (!updatedPost) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Không tìm thấy bài viết" });
+    }
+
+    res.json({
+      success: true,
+      post: updatedPost,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: "Đã xảy ra lỗi" });
+  }
+};
+
 module.exports = {
   createPost,
   deletePost,
@@ -685,4 +717,5 @@ module.exports = {
   getPostsCountByType,
   getRentTypes,
   searchPosts,
+  hideOrShowPost,
 };

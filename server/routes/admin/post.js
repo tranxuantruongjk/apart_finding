@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { statistic, getAllPosts, approvePost, deletePost } = require("../../controllers/admin/PostController");
+const { statistic, getAllPosts, updateStatePost, deletePost } = require("../../controllers/admin/PostController");
 
 const verifyAdminToken = require("../../middleware/authAdmin");
 // const test = require("./test1.json");
@@ -111,7 +111,7 @@ router.get("/", verifyAdminToken, getAllPosts);
 // @route PUT api/admin/posts/:action/:id
 // @route Admin accepts/rejects a post
 // @route Private
-router.put("/:action/:id", verifyAdminToken, approvePost);
+router.put("/:action/:id", verifyAdminToken, updateStatePost);
 
 // @route DELETE api/admin/posts/:id
 // @route Admin deletes a post

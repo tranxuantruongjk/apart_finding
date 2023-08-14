@@ -20,6 +20,7 @@ const {
   updatePostInfo,
   deletePost,
   createPost,
+  hideOrShowPost,
 } = require("../controllers/PostController");
 
 // @route GET api/posts/postsCount
@@ -61,6 +62,11 @@ router.get("/:id", getPostInfo);
 // @route Get all posts
 // @access Public
 router.get("/", getAllPosts);
+
+// @route PUT api/posts/:id/:action 
+// @route Hide/Show 
+// @access Private
+router.put("/:id/:action", verifyToken, hideOrShowPost);
 
 // @route PUT api/posts/
 // @route Update/Edit a post

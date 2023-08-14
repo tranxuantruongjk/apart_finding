@@ -69,7 +69,7 @@ const getAllPosts = async (req, res) => {
   }
 };
 
-const approvePost = async (req, res) => {
+const updateStatePost = async (req, res) => {
   try {
     let updatedPost;
     if (req.params.action === "accept") {
@@ -77,6 +77,12 @@ const approvePost = async (req, res) => {
     }
     if (req.params.action === "reject") {
       updatedPost = { state: "rejected", reason: req.body.reason };
+    }
+    if (req.params.action === "hide") {
+      updatedPost = { state: "hided" };
+    }
+    if (req.params.action === "active") {
+      updatedPost = { state: "active" };
     }
     const updateCondition = { _id: req.params.id };
 
@@ -134,4 +140,9 @@ const deletePost = async (req, res) => {
   }
 };
 
-module.exports = { statistic, getAllPosts, approvePost, deletePost };
+module.exports = {
+  statistic,
+  getAllPosts,
+  updateStatePost,
+  deletePost,
+};

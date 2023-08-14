@@ -681,6 +681,12 @@ const NewPost = () => {
               <h3>
                 Hình ảnh <span className="text-danger">*</span>
               </h3>
+              <Form.Text className="text-muted mt-0">
+                Giới hạn tối thiểu 3 ảnh, tối đa 12 ảnh <br />
+                Mỗi ảnh giới hạn kích thước tối đa 10MB <br />
+                Hãy dùng ảnh thật, không trùng, không chứa đường link liên kết,
+                chữ, số điện thoại, tên cửa hàng/công ty <br />
+              </Form.Text>
             </Row>
             <Row className="mb-2">
               <FileUpload type="image" uploadHandler={uploadHandler} />
@@ -690,6 +696,9 @@ const NewPost = () => {
             </Row>
             <Row className="mb-2">
               <h3>Video</h3>
+              <Form.Text className="text-muted mt-0">
+                Giới hạn tối đa 1 video, kích thước tối đa 20MB <br />
+              </Form.Text>
             </Row>
             <Row className="mb-2">
               <FileUpload type="video" uploadHandler={uploadHandler} />

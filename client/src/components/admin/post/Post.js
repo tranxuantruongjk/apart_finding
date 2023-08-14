@@ -31,8 +31,15 @@ const Post = () => {
     socket,
   } = useContext(AuthContext);
 
-  const { getPost, acceptPost, rejectPost, deletePost, sendNotification } =
-    useContext(AdminPostContext);
+  const {
+    getPost,
+    acceptPost,
+    rejectPost,
+    deletePost,
+    sendNotification,
+    hidePost,
+    activatePost,
+  } = useContext(AdminPostContext);
 
   useEffect(() => {
     const getPostInfo = async (id) => {
@@ -74,6 +81,30 @@ const Post = () => {
       object: postId,
       action: deletePost,
       message: "Bạn chắc chắn muốn xóa bài đăng này?",
+      button: "Xác nhận",
+      setPost: setPost,
+      success: false,
+    });
+  };
+
+  const handleActionHide = (postId) => {
+    setShowActionModal(true);
+    setAction({
+      object: postId,
+      action: hidePost,
+      message: "Bạn chắc chắn muốn ẩn bài đăng này?",
+      button: "Xác nhận",
+      setPost: setPost,
+      success: false,
+    });
+  };
+
+  const handleActionActivate = (postId) => {
+    setShowActionModal(true);
+    setAction({
+      object: postId,
+      action: activatePost,
+      message: "Bạn chắc chắn muốn hiện bài đăng này?",
       button: "Xác nhận",
       setPost: setPost,
       success: false,
@@ -140,6 +171,8 @@ const Post = () => {
                     ? "pending"
                     : post.state === "active"
                     ? "active"
+                    : post.state === "hided"
+                    ? "hided"
                     : "rejected"
                 } ms-2`}
               >
@@ -147,6 +180,8 @@ const Post = () => {
                   ? "Đang chờ duyệt"
                   : post.state === "active"
                   ? "Đang hiển thị"
+                  : post.state === "hided"
+                  ? "Đã ẩn"
                   : "Bị từ chối"}
               </span>
             </span>
@@ -191,7 +226,9 @@ const Post = () => {
                         </tr>
                         <tr>
                           <td>Giá</td>
-                          <td className="info">{`${post.price.toLocaleString('de-DE')} VND/tháng`}</td>
+                          <td className="info">{`${post.price.toLocaleString(
+                            "de-DE"
+                          )} VND/tháng`}</td>
                         </tr>
                         <tr>
                           <td>Chuyên mục</td>
@@ -328,13 +365,32 @@ const Post = () => {
                 </Button>
               </>
             ) : (
-              <Button
-                variant="secondary"
-                className="post-action"
-                onClick={() => handleActionDelete(post._id)}
-              >
-                Xóa
-              </Button>
+              <>
+                {post.state === "hided" ? (
+                  <Button
+                    variant="info"
+                    className="post-action"
+                    onClick={() => handleActionActivate(post._id)}
+                  >
+                    Hiện
+                  </Button>
+                ) : (
+                  <Button
+                    variant="info"
+                    className="post-action"
+                    onClick={() => handleActionHide(post._id)}
+                  >
+                    Ẩn
+                  </Button>
+                )}
+                <Button
+                  variant="secondary"
+                  className="post-action ms-3"
+                  onClick={() => handleActionDelete(post._id)}
+                >
+                  Xóa
+                </Button>
+              </>
             )}
           </div>
           <ActionModal

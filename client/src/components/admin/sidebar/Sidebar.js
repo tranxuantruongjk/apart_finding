@@ -5,6 +5,7 @@ import HomeLogo from "../../logo/Logo";
 
 import "./sideBar.scss";
 
+import { AiFillSetting } from "react-icons/ai";
 import { BsX } from "react-icons/bs";
 import {
   MdDashboard,
@@ -33,6 +34,11 @@ const navigation = [
     title: "Loại phòng",
     href: "/admin/rentTypesList",
     icon: <MdTypeSpecimen />,
+  },
+  {
+    title: "Tiện ích",
+    href: "/admin/utilitiesList",
+    icon: <AiFillSetting />,
   },
 ];
 

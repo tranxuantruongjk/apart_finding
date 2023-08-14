@@ -174,6 +174,7 @@ const PostsList = () => {
                       </Link>
                       <MdOutlineDelete
                         className="btn-action"
+                        title="Xóa tin"
                         onClick={() => handleActionDelete(tdata._id)}
                       />
                     </div>

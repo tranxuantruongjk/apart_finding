@@ -25,6 +25,10 @@
       color: red;
     }
 
+    .stt-hided {
+      font-weight: 600;
+    }
+
     .rejected-reason {
       cursor: pointer;
       font-weight: 600;
@@ -42,6 +46,13 @@
     width: 18px;
     height: 18px;
     color: #f29339;
+    margin-right: 15px;
+    cursor: pointer;
+  }
+
+  .hide-icon {
+    width: 18px;
+    height: 18px;
     margin-right: 15px;
     cursor: pointer;
   }

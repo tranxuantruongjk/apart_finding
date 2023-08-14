@@ -178,6 +178,44 @@ const AdminPostContextProvider = ({ children }) => {
     }
   };
 
+  // Hide a post
+  const hidePost = async (postId) => {
+    try {
+      const response = await axios.put(`${apiUrl}/admin/posts/hide/${postId}`);
+      if (response.data.success) {
+        dispatch({
+          type: UPDATE_POST,
+          payload: response.data.post,
+        });
+      }
+      return response.data;
+    } catch (error) {
+      return error.response.data
+        ? error.response.data
+        : { success: false, message: error.message };
+    }
+  };
+
+  // Activate a post
+  const activatePost = async (postId) => {
+    try {
+      const response = await axios.put(
+        `${apiUrl}/admin/posts/active/${postId}`
+      );
+      if (response.data.success) {
+        dispatch({
+          type: UPDATE_POST,
+          payload: response.data.post,
+        });
+      }
+      return response.data;
+    } catch (error) {
+      return error.response.data
+        ? error.response.data
+        : { success: false, message: error.message };
+    }
+  };
+
   // Accept a post
   const deletePost = async (postId) => {
     try {
@@ -242,6 +280,8 @@ const AdminPostContextProvider = ({ children }) => {
     sendNotification,
     statisticPost,
     getRentTypes,
+    hidePost,
+    activatePost,
   };
 
   // Return provider

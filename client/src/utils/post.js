@@ -187,3 +187,10 @@ export const fillWardCode = (wardCode) => {
     }
   }
 };
+
+export const maskNumber = (phone) => {
+  const first7Digits = phone.toString().slice(0, 7);
+  const maskedNumber = first7Digits.padEnd(phone.toString().length, "*");
+
+  return maskedNumber;
+};

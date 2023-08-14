@@ -14,6 +14,7 @@ import Starter from "../components/admin/starter/Starter";
 import PostsList from "../components/admin/postList/PostsList";
 import Post from "../components/admin/post/Post";
 import RentTypesList from "../components/admin/rentTypeList/RentTypesList";
+import UtilitiesList from "../components/admin/utility/UtilitiesList";
 
 import MainPage from "../pages/MainPage";
 
@@ -55,6 +56,7 @@ const MainRoutes = () => {
           <Route path="/admin/postsList/:id" element={<Post />} />
           <Route path="/admin/postsList" element={<PostsList />} />
           <Route path="/admin/rentTypesList" element={<RentTypesList />} />
+          <Route path="/admin/utilitiesList" element={<UtilitiesList />} />
         </Route>
       </Route>
     </Routes>

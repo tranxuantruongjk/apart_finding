@@ -10,22 +10,27 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { MdDelete } from "react-icons/md";
-import { BiEdit } from "react-icons/bi";
+import { BiEdit, BiHide, BiShow } from "react-icons/bi";
 
 import "./postManage.scss";
 
 const PostManage = () => {
   const [posts, setPosts] = useState([]);
 
-  const { getUserIdPosts, deletePost } = useContext(PostContext);
+  const { getUserIdPosts, deletePost, hidePost, activatePost } =
+    useContext(PostContext);
   const {
     authState: { user },
     notifications,
   } = useContext(AuthContext);
 
   const [showReasonModal, setShowReasonModal] = useState(false);
+  const [showHideModal, setShowHideModal] = useState(false);
+  const [showActivateModal, setShowActivateModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [rejectedPost, setRejectedPost] = useState(null);
+  const [hidedPost, setHidedPost] = useState(null);
+  const [activatedPost, setActivatedPost] = useState(null);
   const [deletedPost, setDeletedPost] = useState(null);
   const [alert, setAlert] = useState(null);
 
@@ -46,9 +51,53 @@ const PostManage = () => {
     setRejectedPost(post);
   };
 
+  const handleShowHideModal = (post) => {
+    setShowHideModal(true);
+    setHidedPost(post);
+  };
+
+  const handleShowActivateModal = (post) => {
+    setShowActivateModal(true);
+    setActivatedPost(post);
+  };
+
   const handleShowDeleteModal = (post) => {
     setShowDeleteModal(true);
     setDeletedPost(post);
+  };
+
+  const handleHidePost = async () => {
+    const result = await hidePost(hidedPost._id);
+    if (result.success) {
+      setShowHideModal(false);
+      setAlert({ type: "success", message: "Tin đăng đã được ẩn thành công" });
+      setTimeout(() => setAlert(null), 5000);
+      const res = await getUserIdPosts(user._id);
+      if (res.posts.length !== 0) {
+        setPosts(res.posts);
+      }
+    } else {
+      setShowHideModal(false);
+      setAlert({ type: "danger", message: result.message });
+      setTimeout(() => setAlert(null), 5000);
+    }
+  };
+
+  const handleActivatePost = async () => {
+    const result = await activatePost(activatedPost._id);
+    if (result.success) {
+      setShowActivateModal(false);
+      setAlert({ type: "success", message: "Tin đăng đã được hiện thành công" });
+      setTimeout(() => setAlert(null), 5000);
+      const res = await getUserIdPosts(user._id);
+      if (res.posts.length !== 0) {
+        setPosts(res.posts);
+      }
+    } else {
+      setShowActivateModal(false);
+      setAlert({ type: "danger", message: result.message });
+      setTimeout(() => setAlert(null), 5000);
+    }
   };
 
   const handleDeletePost = async () => {
@@ -106,14 +155,15 @@ const PostManage = () => {
                     {getDetailDateTime(post.createdAt)}
                   </td>
                   <td className="text-center">
-                    {post.state === "active" &&
-                      getDetailDateTime(post.updatedAt)}
+                    {getDetailDateTime(post.updatedAt)}
                   </td>
                   <td className="text-center">
                     {post.state === "pending" ? (
                       <span className="stt-pending">Đang chờ duyệt</span>
                     ) : post.state === "active" ? (
                       <span className="stt-active">Đã đăng</span>
+                    ) : post.state === "hided" ? (
+                      <span className="stt-hided">Đã ẩn</span>
                     ) : (
                       <>
                         <span className="stt-rejected">Bị từ chối</span>
@@ -136,6 +186,27 @@ const PostManage = () => {
                     >
                       <BiEdit className="edit-icon" title="Sửa tin" />
                     </Link>
+                    {post.state !== "hided" ? (
+                      <BiHide
+                        className={
+                          post.state === "pending"
+                            ? "hide-icon disabled-link"
+                            : "hide-icon"
+                        }
+                        title="Ẩn tin"
+                        onClick={() => handleShowHideModal(post)}
+                      />
+                    ) : (
+                      <BiShow
+                        className={
+                          post.state === "pending"
+                            ? "hide-icon disabled-link"
+                            : "hide-icon"
+                        }
+                        title="Hiện tin"
+                        onClick={() => handleShowActivateModal(post)}
+                      />
+                    )}
                     <MdDelete
                       className={
                         post.state === "pending"
@@ -182,6 +253,54 @@ const PostManage = () => {
             >
               <Button className="edit-button">Sửa tin</Button>
             </Link>
+          </Modal.Footer>
+        </Modal>
+      )}
+      {hidedPost && (
+        <Modal
+          show={showHideModal}
+          onHide={() => setShowHideModal(false)}
+          className="hide-modal"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Ẩn tin đăng</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="detailed-reason">
+            <span>
+              Bạn có chắc chắn muốn ẩn tin đăng <b>{hidedPost.title}</b> không?
+            </span>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowHideModal(false)}>
+              Hủy
+            </Button>
+            <Button className="hide-button" onClick={handleHidePost}>
+              Ẩn
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+      {activatedPost && (
+        <Modal
+          show={showActivateModal}
+          onHide={() => setShowActivateModal(false)}
+          className="activate-modal"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Hiện tin đăng</Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="detailed-reason">
+            <span>
+              Bạn có chắc chắn muốn hiện tin đăng <b>{activatedPost.title}</b> không?
+            </span>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={() => setShowActivateModal(false)}>
+              Hủy
+            </Button>
+            <Button className="hide-button" onClick={handleActivatePost}>
+              Hiện
+            </Button>
           </Modal.Footer>
         </Modal>
       )}

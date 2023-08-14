@@ -174,6 +174,28 @@ const PostContextProvider = ({ children }) => {
     }
   };
 
+  // Hide a post
+  const hidePost = async (postId) => {
+    try {
+      const response = await axios.put(`${apiUrl}/posts/${postId}/hide`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
+  // Activate a post
+  const activatePost = async (postId) => {
+    try {
+      const response = await axios.put(`${apiUrl}/posts/${postId}/active`);
+      if (response.data.success) return response.data;
+    } catch (error) {
+      if (error.response.data) return error.response.data;
+      else return { success: false, message: error.message };
+    }
+  };
+
   // Delete a post
   const deletePost = async (postId) => {
     try {
@@ -228,6 +250,8 @@ const PostContextProvider = ({ children }) => {
     deletePost,
     getAdminRole,
     sendNotification,
+    hidePost,
+    activatePost,
   };
 
   // Return provider

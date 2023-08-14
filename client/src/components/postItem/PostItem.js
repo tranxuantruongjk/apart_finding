@@ -10,7 +10,7 @@ import { FaSearchLocation } from "react-icons/fa";
 import { FaPhoneAlt } from "react-icons/fa";
 import { AuthContext } from "../../contexts/AuthContext";
 
-import { getDate } from "../../utils/post";
+import { getDate, maskNumber } from "../../utils/post";
 import avatar from "../../assets/images/default-user.png";
 
 import "./postItem.scss";
@@ -110,7 +110,7 @@ const PostItem = ({ post, handleShow }) => {
               <div className="post-item__contact-phone">
                 <Badge bg="success" className="p-2">
                   <FaPhoneAlt className="me-1" />
-                  {post.owner ? post.owner.phone : post.user.phone}
+                  {post.owner ? maskNumber(post.owner.phone) : maskNumber(post.user.phone)}
                 </Badge>
               </div>
             </div>
